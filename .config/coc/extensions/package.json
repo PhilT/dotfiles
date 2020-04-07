@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "coc-fsharp": ">=0.1.63"
+  }
+}
