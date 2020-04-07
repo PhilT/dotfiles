@@ -1,25 +1,23 @@
 call plug#begin()
-Plug 'editorconfig/editorconfig-vim' " Use a project's .editorconfig file for formatting
-Plug 'mhinz/vim-signify'        " Git icons in the gutter vim-gitgutter had problems
-Plug 'dbeniamine/todo.txt-vim'  " \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
-Plug 'jiangmiao/auto-pairs'     " ALT-n - Next bracket pair - Auto-pair brackets.
-Plug 'jremmen/vim-ripgrep'      " :Rg <regex> - Folder-wide search
-Plug 'junegunn/fzf'             " CTRL+P - Fast fuzzy file finder
-Plug 'mtth/scratch.vim'         " go - Scratchpad
+Plug 'ayu-theme/ayu-vim'        " Theme
+
+Plug 'editorconfig/editorconfig-vim'  " Use a project's .editorconfig file for formatting
+Plug 'mhinz/vim-signify'              " Git icons in the gutter. vim-gitgutter doesn't seem to work
+Plug 'dbeniamine/todo.txt-vim'        " \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
+Plug 'jiangmiao/auto-pairs'           " ALT-n - Next bracket pair - Auto-pair brackets.
+Plug 'jremmen/vim-ripgrep'            " :Rg <regex> - Folder-wide search
+Plug 'junegunn/fzf'                   " CTRL+P - Fast fuzzy file finder
+Plug 'mtth/scratch.vim'               " go/gp - Scratchpad
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense engine with support for VSCode plugins
-" Plug 'arcticicestudio/nord-vim', { 'branch': 'develop' } " The only theme that seems to work with spell highlighting
-Plug 'ayu-theme/ayu-vim'
-Plug 'itchyny/lightline.vim'    " Simple statusline
-Plug 'scrooloose/nerdtree'      " CTRL+B - open file tree
-Plug 'sheerun/vim-polyglot'     " Syntax, indent, compilers for various languages
-Plug 'tpope/vim-fugitive'       " Git plugin - :G for enhanced status. See plugin section below for more
-Plug 'tpope/vim-surround'       " cs'<q> - change from single quotes to xml tags
-Plug 'tpope/vim-repeat'       " Repeat plugin commands such as surround with `.`
+Plug 'itchyny/lightline.vim'          " Simple statusline
+Plug 'scrooloose/nerdtree'            " CTRL+B - open file tree
+Plug 'sheerun/vim-polyglot'           " Syntax, indent, compilers for various languages
+Plug 'tpope/vim-fugitive'             " Git plugin - :G for enhanced status. See plugin section below for more
+Plug 'tpope/vim-surround'             " cs'<q> - change from single quotes to xml tags
+Plug 'tpope/vim-repeat'               " Repeat plugin commands such as surround with `.`
 Plug 'pangloss/vim-javascript'
 
 call plug#end()
-
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ General settings
@@ -47,7 +45,6 @@ set number              " line numbers
 set scrolloff=2         " Scroll the page up/down with 2 extra lines showing above/below cursor position
 set shiftwidth=2
 set shortmess+=c        " Don't give |ins-completion-menu| messages (coc-nvim)
-set signcolumn=yes      " Git Gutter
 set smartcase           " Case insensitive search when characters in pattern are lowercase
 set softtabstop=2
 set splitbelow
@@ -65,17 +62,11 @@ map <C-z> <Nop>
 map <C-s> <Nop>
 map <C-q> <Nop>
 
-" Set highlight colour for over 80 columns
-" For some reason it doesn't work unless we wait for vim to start
-" autocmd VimEnter * call timer_start(200, { tid -> execute('hi ColorColumn guibg=#282d37')})
-
 " Python providers
-"let g:python_host_prog = 'C:\Python27\python'
 let g:python3_host_prog = 'C:\Python38\python'
 
 " Spellcheck Markdown files
 nnoremap <F6> :setlocal spell!<CR>
-
 
 " Move up and down single lines when wrapped
 nnoremap j gj
@@ -189,21 +180,11 @@ nnoremap <C-l> <C-w>l
 """ Plugin config
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" editorconfig-vim
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-gitgutter
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" todo.txt-vim
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " auto-pairs
 au FileType fsharp let b:AutoPairs = AutoPairsDefine({'(*' : "*)//n"})
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-ripgrep
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " fzf
@@ -211,33 +192,6 @@ set wildmenu " display files with TAB
 set wildignore+=.git/**,tmp/**,coverage/**,log/**,db/migrate/**,node_modules/**,bin/**,**/*.min.js
 set path+=** " recursively search files
 nnoremap <C-p> :FZF<CR>
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" LanguageClient
-
-"let g:LanguageClient_serverCommands = {
-"  \ 'fsharp': ['dotnet', 'C:\Users\Claudia\.config\nvim\plugged\Ionide-vim\fsac\fsautocomplete.dll', '--background-service-enabled']
-"  \ }
-"
-"autocmd BufReadPost *.fs setlocal filetype=fsharp
-"autocmd BufReadPost *.fsx setlocal filetype=fsharp
-"let g:LanguageClient_autoStart = 1
-"let g:fsharp#automatic_workspace_init = 0
-"
-"" Selecting from context menu doesn't seem to do anything
-"nnoremap <silent> gl :call LanguageClient_contextMenu()<CR>
-"nnoremap <silent> gt :call LanguageClient#textDocument_typeDefinition()<CR>
-"nnoremap <silent> ga :call LanguageClient#textDocument_codeAction()<CR>
-"
-"" Tested, working and useful
-"inoremap <C-Space> <C-x><C-o>| " Map Omnifunc (autocomplete) to CTRL+SPACE
-"nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-"nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-"nnoremap <silent> gr :call LanguageClient#textDocument_references()<CR>
-"nnoremap <silent> gc :call LanguageClient#textDocument_rename()<CR>
-"nnoremap <silent> gs :call LanguageClient#workspace_symbol()<CR>
-
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -291,6 +245,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " project)
 nnoremap <silent> <F12> :CocRestart<CR>
 
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " scratch.vim
 let g:scratch_persistence_file = '.scratch.vim'
@@ -298,6 +253,7 @@ let g:scratch_horizontal = 1
 let g:scratch_height = 20
 nmap go :Scratch<CR>
 nmap gp :ScratchPreview<CR>
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ayu-theme/ayu-vim
@@ -308,7 +264,8 @@ function! ThemeLoad(theme)
   colorscheme ayu
 endfunction
 
-call ThemeLoad("light")
+call ThemeLoad("mirage")
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " lightline.vim
@@ -336,8 +293,13 @@ endfunction
 " nerdtree
 
 nnoremap <C-b> :NERDTreeToggle<CR>
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif " quit vim if NERDTree is last window
-let NERDTreeQuitOnOpen=1 "close NERDTree after opening file
+
+" quit vim if NERDTree is last window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif 
+
+"close NERDTree after opening file
+let NERDTreeQuitOnOpen=1 
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-polyglot
