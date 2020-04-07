@@ -31,18 +31,17 @@ set expandtab           " Tabs to spaces
 set fileformat=unix     " Ensure lf line-endings are used on Windows
 set fileformats=unix,dos " Recognise unix or dos line-endings, save new files as unix
 set fillchars=vert:\ ,eob:\ |
-set guicursor=n-v-c-sm:blinkon1-block,i-ci-ve:ver25,r-cr-o:hor20 " Blinks cursor
 set hidden              " hide buffers instead of closing
 set ignorecase          " See smartcase
-set incsearch           " show matches as you type
+set incsearch           " Show matches as you type
 set laststatus=2
-set nobackup
-set nowritebackup
+set nobackup            " Don't create backups
+set nowritebackup       " Don't create backups
 set nofoldenable        " Turn off code folding
 set noshowmode          " Turn off -- INSERT -- in statusline (lightline already shows it)
 set noswapfile          " Don't create temporary swap files
 set number              " line numbers
-set scrolloff=2         " Scroll the page up/down with 2 extra lines showing above/below cursor position
+set scrolloff=2         " Page up/down with 2 extra lines showing above/below cursor position
 set shiftwidth=2
 set shortmess+=c        " Don't give |ins-completion-menu| messages (coc-nvim)
 set smartcase           " Case insensitive search when characters in pattern are lowercase
@@ -52,9 +51,7 @@ set splitright
 set tabstop=2
 set updatetime=300      " Bring down delay for diagnostic messages (coc-nvim)
 
-" Search/Replace
-hi Search guibg=#61AFEF
-hi WildMenu guifg=#333333 guibg=#61AFEF
+" SPACE to turn off search highlight
 nnoremap <silent> <Space> :nohlsearch<CR>
 
 " Turn off stupid CTRL keys
@@ -65,7 +62,7 @@ map <C-q> <Nop>
 " Python providers
 let g:python3_host_prog = 'C:\Python38\python'
 
-" Spellcheck Markdown files
+" Toggle spellcheck
 nnoremap <F6> :setlocal spell!<CR>
 
 " Move up and down single lines when wrapped
