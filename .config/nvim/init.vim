@@ -259,9 +259,14 @@ set termguicolors
 function! ThemeLoad(theme)
   let g:ayucolor=a:theme
   colorscheme ayu
+
+  " Redisplay error underlines that disappear when switching themes
+  highlight CocUnderline cterm=underline gui=underline
 endfunction
 
-call ThemeLoad("mirage")
+" let g:ayucolor=theme is done on nvim load (through bin\vim.cmd or bin\vimlt.cmd)
+" Calling colorscheme here loads the prevously selected theme.
+colorscheme ayu
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
