@@ -19,7 +19,6 @@ Plug 'ayu-theme/ayu-vim'                                                        
 Plug 'neoclide/coc.nvim', {'branch': 'release'}                                 " Intellisense engine with support for VSCode plugins
 Plug 'editorconfig/editorconfig-vim'                                            " Use a project's .editorconfig file for formatting
 Plug 'tpope/vim-fugitive'                                                       " Git plugin - :G for enhanced status. See plugin section below for more
-Plug 'junegunn/fzf'                                                             " CTRL+P - Fast fuzzy file finder
 Plug 'itchyny/lightline.vim'                                                    " Simple statusline
 Plug 'scrooloose/nerdtree'                                                      " CTRL+B - open file tree
 Plug 'sheerun/vim-polyglot'                                                     " Syntax, indent, compilers for various languages
@@ -74,7 +73,7 @@ set wildmenu                                                                    
 syntax on                                                                       " Turn on syntax highlighting
 colorscheme ayu                                                                 " Uses g:ayucolor=<theme> from ~/bin/vim.cmd or ~/bin/vimlt.cmd to set mirage/light colorscheme
 execute "set colorcolumn=".join(range(81,335), ',')|                            " Grey out everything past 80 columns
-
+hi! link CursorLine Visual
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -96,15 +95,21 @@ let powershell = "term://powershell -NoLogo"                                    
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key Mappings
 
+inoremap <silent><expr> <Tab> RunCompletionOrNextItem()|                        " Potentially open completion list by pressing TAB
+inoremap <expr><S-TAB> PreviousCompletionItem()|                                " Go to previous item in completion list if open
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"|                  " Use <cr> to confirm completion, otherwise Vim inserts a CR. `<C-g>u` breaks undo chain
+
 nnoremap <silent> <Space> :nohlsearch<CR>|                                      " SPACE to turn off search highlight
-nnoremap <C-p> :FZF<CR>|                                                        " CTRL+p to open Fuzzy File Finder FZF
-nnoremap <C-b> :NERDTreeToggle<CR>|                                             " CTRL+b to open NERDTree file browser
+nnoremap <C-p> :CocList files<CR>|                                              " CTRL+p to open Fuzzy File Finder with Coc-List
+nnoremap <C-f> :NERDTreeToggle<CR>|                                             " CTRL+f to open NERDTree file browser
+nnoremap <C-u> :UndotreeToggle<CR>|                                             " Show undo tree
+nnoremap <C-b> :CocList buffers<CR>|                                            " CTRL+b to open buffer list
+nnoremap <C-d> :CocList diagnostics<CR>|                                        " CTRL+d to open diagnostics, a list of errors, warnings and hints to correct
 nnoremap j gj|                                                                  " Move down single lines when wrapped
 nnoremap k gk|                                                                  " Move down single lines when wrapped
 nmap go :Scratch<CR>
 nmap gp :ScratchPreview<CR>
 
-nnoremap <silent> <F5> :UndotreeToggle<CR>|                                     " Show undo tree
 nnoremap <F6> :setlocal spell!<CR>|                                             " Toggle spellcheck
 nnoremap <silent> <F7> :call DeleteTermBuffer()<CR>|                            " Close build/test terminal split
 nnoremap <silent> <F8> :call Run('build')<CR>|                                  " Runs ./build in a terminal split
@@ -121,9 +126,10 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)|                                   
 nmap <silent> ]g <Plug>(coc-diagnostic-next)|                                   " Coc: Navigate diagnostics
 nmap <silent> gd <Plug>(coc-definition)|                                        " Coc: Goto function definition
 nmap <silent> gr <Plug>(coc-references)|                                        " Coc: List references to function
-nmap <silent> gy <Plug>(coc-type-definition)|                                   " Coc: Show type definition
-nmap <silent> gi <Plug>(coc-implementation)|                                    " Coc: Show implementation
-nnoremap <silent> K :call CocShowDocumentation()<CR>|                           " Coc: Show documentation for item under cursor (FSLS Feature: Hover)
+nmap <silent> gy <Plug>(coc-type-definition)|                                   " Coc: Show type definition - Doesn't seem to work for F#
+nmap <silent> gi <Plug>(coc-implementation)|                                    " Coc: Show implementation - Doesn't seem to work for F#
+nmap <silent> rn <Plug>(coc-rename)|                                            " Coc: Rename symbol under cursor"
+nnoremap <silent> K :call ShowDocumentation()<CR>|                              " Coc: Show documentation for item under cursor (FSLS Feature: Hover)
 
 tnoremap <A-e> <C-\><C-n>|                                                      " ALT+e switches to NORMAL mode from TERMINAL mode
 tnoremap <A-h> <C-\><C-n><C-w>h|                                                " 
@@ -164,37 +170,19 @@ nnoremap <Leader>do :sp<CR>:e $USERPROFILE/Dropbox/todo/todo.txt<CR>|           
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Auto Commands
 
-augroup ForceLightlineUpdate
-  autocmd!
+augroup mygroup
+  autocmd!|                                                                     " Clear out all autocmds for this augroup
+  
   autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()      " Force lightline update
-augroup END
-
-augroup QuickfixSelect                                                          " Ensure Enter is not remapped in Quickfix so found files can be selected for example
-  autocmd!
-  autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
-augroup END
-
-augroup CursorLine                                                              " Highlight current line while in insert mode
-  autocmd!
-  autocmd InsertEnter * setlocal cursorline
+  autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>|                     " Ensure Enter is not remapped in Quickfix so found files can be selected for example
+  autocmd InsertEnter * setlocal cursorline                                     " Highlight current line while in insert mode
   autocmd InsertLeave * setlocal nocursorline
-augroup END
-
-augroup AutoPairs
-  autocmd!
   autocmd FileType fsharp let b:AutoPairs = AutoPairsDefine({'(*' : "*)//n"})|  " Define auto-pair for F# multiline comments
-augroup END
 
-augroup FsMultilineSpell                                                        " Enable spell checking in multi-line F# comments
-  autocmd!
-  autocmd bufread *.fsx,*.fs syn region fsharpMultiLineComment start='(\*' end='\*)' contains=fsharpTodo,@Spell
-augroup END
-
-augroup SetQuitNERDTree
-  autocmd!
+  autocmd bufread *.fsx,*.fs syn region fsharpMultiLineComment 
+        \ start='(\*' end='\*)' contains=fsharpTodo,@Spell                      " Enable spell checking in multi-line F# comments
   autocmd bufenter * call QuitNERDTree()|                                       " quit vim if NERDTree is last window
 augroup END
-
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -267,22 +255,15 @@ function IsSpaceBehind() abort
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-function CocRunCompletionOrNextItem()                                           " Open completion list as long there is a non-whitespace character 
+function RunCompletionOrNextItem()                                              " Open completion list as long there is a non-whitespace character 
   return pumvisible() ? "\<C-n>" : IsSpaceBehind() ? "\<Tab>" : coc#refresh()   " behind the current position, otherwise send a TAB.
 endfunction                                                                     " If completion list is open then go to the next item in the list
 
-function CocPreviousCompletionItem()                                            " If completion list is open to to the previous item in the list
+function PreviousCompletionItem()                                               " If completion list is open to to the previous item in the list
   return pumvisible() ? "\<C-p>" : "\<S-Tab>"                                   " otherwise send SHIFT+TAB
 endfunction
 
-inoremap <silent><expr> <Tab> CocRunCompletionOrNextItem()|                     " Potentially open completion list by pressing TAB
-inoremap <expr><S-TAB> CocPreviousCompletionItem()|                             " Go to previous item in completion list if open
-inoremap <silent><expr> <c-space> coc#refresh()|                                " CTRL+SPACEBAR to trigger completion
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"|                  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Or use `complete_info` if your vim support it, like:
-"inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-function CocShowDocumentation()
+function ShowDocumentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
   else
