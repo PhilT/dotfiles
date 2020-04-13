@@ -1,4 +1,10 @@
 {
   "suggest.minTriggerInputLength": 2,
+  "suggest.autoTrigger": "trigger",
+  "suggest.noselect": false,
   "diagnostic.signOffset": 9999999,
+  "diagnostic.errorSign": "XX",
+  "diagnostic.warningSign": "??",
+  "diagnostic.infoSign": ">>",
+  "diagnostic.hintSign": ">>"
 }
