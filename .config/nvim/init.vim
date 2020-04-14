@@ -73,7 +73,7 @@ set wildmenu                                                                    
 syntax on                                                                       " Turn on syntax highlighting
 colorscheme ayu                                                                 " Uses g:ayucolor=<theme> from ~/bin/vim.cmd or ~/bin/vimlt.cmd to set mirage/light colorscheme
 execute "set colorcolumn=".join(range(81,335), ',')|                            " Grey out everything past 80 columns
-hi! link CursorLine Visual
+hi! link CursorLine Visual|                                                     " Make CursorLine highlight more visible (also used by coc lists)
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -121,10 +121,6 @@ nnoremap <silent> <F10> :call Run('run')<CR>|                                   
 nnoremap <silent> <F11> :call Run('clean')<CR>|                                 " Clean the project
 nnoremap <silent> <F12> :CocRestart<CR>|                                        " Restart Coc (when error marks get out of sync - e.g. when adding files to project)
 
-map <C-z> <Nop>|                                                                " Turn off stupid CTRL keys
-map <C-s> <Nop>|                                                                " Turn off stupid CTRL keys
-map <C-q> <Nop>|                                                                " Turn off stupid CTRL keys
-
 nmap <silent> [g <Plug>(coc-diagnostic-prev)|                                   " Coc: Navigate diagnostics
 nmap <silent> ]g <Plug>(coc-diagnostic-next)|                                   " Coc: Navigate diagnostics
 nmap <silent> gd <Plug>(coc-definition)|                                        " Coc: Goto function definition
@@ -167,6 +163,10 @@ nnoremap <silent> <Leader>o :set paste!<CR>|                                    
 nnoremap <silent> <Leader>p :bp<CR>|                                            " previous buffer
 nnoremap <silent> <Leader>vim :e $XDG_CONFIG_HOME/nvim/init.vim<CR>|            " edit vimrc
 nnoremap <Leader>do :sp<CR>:e $USERPROFILE/Dropbox/todo/todo.txt<CR>|           " Open TODO list
+
+map <C-z> <Nop>|                                                                " Turn off stupid CTRL keys
+map <C-s> <Nop>|                                                                " Turn off stupid CTRL keys
+map <C-q> <Nop>|                                                                " Turn off stupid CTRL keys
 
 
 
@@ -274,10 +274,3 @@ function ShowDocumentation()
   endif
 endfunction
 
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * call CocActionAsync('highlight')
-
-" FSLS: Hover - shows documentation - CTRL+K in normal mode
-" FSLS: Autocomplete - Show list of methods/function - TAB in insert mode
-" FSLS: Method signature help - 
