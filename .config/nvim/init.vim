@@ -15,7 +15,7 @@
 call plug#begin()
 
 Plug 'jiangmiao/auto-pairs'                                                     " ALT-n - Next bracket pair - Auto-pair brackets.
-Plug 'ayu-theme/ayu-vim'                                                        " Color scheme
+Plug 'ayu-theme/ayu-vim'                                                        " Color scheme with light/dark/mirage modes
 Plug 'neoclide/coc.nvim', {'branch': 'release'}                                 " Intellisense engine with support for VSCode plugins
 Plug 'editorconfig/editorconfig-vim'                                            " Use a project's .editorconfig file for formatting
 Plug 'tpope/vim-fugitive'                                                       " Git plugin - :G for enhanced status. See plugin section below for more
