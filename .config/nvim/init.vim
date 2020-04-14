@@ -110,6 +110,9 @@ nnoremap k gk|                                                                  
 nmap go :Scratch<CR>
 nmap gp :ScratchPreview<CR>
 
+noremap zz <c-w>_ \| <c-w>\||                                                   " Zoom in and maximize current window
+noremap zo <c-w>=|                                                              " Zoom out and equalize windows
+
 nnoremap <F6> :setlocal spell!<CR>|                                             " Toggle spellcheck
 nnoremap <silent> <F7> :call DeleteTermBuffer()<CR>|                            " Close build/test terminal split
 nnoremap <silent> <F8> :call Run('build')<CR>|                                  " Runs ./build in a terminal split
@@ -211,7 +214,7 @@ function Run(command)                                                           
     autocmd TermOpen * call SwitchOutOfTerm()
   augroup END
   
-  execute ':botright split '.powershell.' ./'.a:command
+  execute ':botright split '.g:powershell.' ./'.a:command
 endfunction
 
 function DeleteTermBuffer()                                                     " Removes the terminal buffer used to run commands
