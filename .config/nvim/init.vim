@@ -74,6 +74,7 @@ syntax on                                                                       
 colorscheme ayu                                                                 " Uses g:ayucolor=<theme> from ~/bin/vim.cmd or ~/bin/vimlt.cmd to set mirage/light colorscheme
 execute "set colorcolumn=".join(range(81,335), ',')|                            " Grey out everything past 80 columns
 hi! link CursorLine Visual|                                                     " Make CursorLine highlight more visible (also used by coc lists)
+hi Search guibg=#1271a1|                                                         " More subtle color for search highlighting and fuzzy search in coc
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -83,7 +84,7 @@ let g:python3_host_prog = 'C:\Python38\python'                                  
 let NERDTreeQuitOnOpen=1                                                        "close NERDTree after opening file
 let g:scratch_persistence_file = '.scratch.vim'                                 " Store scratch text in project .scratch.vim file
 let g:scratch_horizontal = 1                                                    " Open scratch split horizontally 
-let g:scratch_height = 20                                                       " with height of 20 rows
+let g:scratch_height = 15                                                       " with height of 20 rows
 let g:lightline = { 'colorscheme': 'ayu' }                                      " Set same theme as colorscheme for lightline.vim
 let g:lightline.component_function = { 'filename': 'FilenameForLightline' }     " Calls FilenameForLightline function to show full path name in statusline
 let g:lightline.active={ 'left': [['mode', 'paste'], ['cocstatus', 'readonly', 'filename', 'modified']] }
@@ -103,8 +104,9 @@ nnoremap <silent> <Space> :nohlsearch<CR>|                                      
 nnoremap <C-p> :CocList files<CR>|                                              " CTRL+p to open Fuzzy File Finder with Coc-List
 nnoremap <C-f> :NERDTreeToggle<CR>|                                             " CTRL+f to open NERDTree file browser
 nnoremap <C-u> :UndotreeToggle<CR>|                                             " Show undo tree
-nnoremap <C-b> :CocList buffers<CR>|                                            " CTRL+b to open buffer list
-nnoremap <C-d> :CocList diagnostics<CR>|                                        " CTRL+d to open diagnostics, a list of errors, warnings and hints to correct
+nnoremap <C-b> :CocList buffers<CR>|                                            " CTRL+b to open buffer list - currently open files
+nnoremap <C-d> :CocList --normal diagnostics<CR>|                               " CTRL+d to open diagnostics - errors, warnings and hints to correct
+nnoremap <C-s> :CocList symbols<CR>|                                            " CTRL+s to open symbol list - Fuzzy find types, functions, etc
 nnoremap j gj|                                                                  " Move down single lines when wrapped
 nnoremap k gk|                                                                  " Move down single lines when wrapped
 nmap go :Scratch<CR>
@@ -165,7 +167,7 @@ nnoremap <silent> <Leader>vim :e $XDG_CONFIG_HOME/nvim/init.vim<CR>|            
 nnoremap <Leader>do :sp<CR>:e $USERPROFILE/Dropbox/todo/todo.txt<CR>|           " Open TODO list
 
 map <C-z> <Nop>|                                                                " Turn off stupid CTRL keys
-map <C-s> <Nop>|                                                                " Turn off stupid CTRL keys
+" map <C-s> <Nop>                                                               " Turn off stupid CTRL keys - Overriden by CocList symbols, above
 map <C-q> <Nop>|                                                                " Turn off stupid CTRL keys
 
 
