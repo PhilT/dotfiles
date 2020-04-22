@@ -29,10 +29,16 @@ Plug 'mhinz/vim-signify'                                                        
 Plug 'tpope/vim-surround'                                                       " cs'<q> - change from single quotes to xml tags
 Plug 'dbeniamine/todo.txt-vim'                                                  " \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
 Plug 'mbbill/undotree'                                                          " :UndotreeToggle/F5 - Visualise the undo tree
+"Plug 'plasticboy/vim-markdown'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 
 call plug#end()
 
-
+let g:vim_markdown_conceal = 0
+let g:vim_markdown_folding_disabled = 1
+augroup pandoc_syntax
+    au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc|hi! link pandocStrong Operator|hi! link pandocEmphasis Delimiter
+augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General settings (sorted)
