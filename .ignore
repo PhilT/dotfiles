@@ -7,3 +7,5 @@ output
 *.svg
 vendor
 .paket
+paket.lock
+spikes
