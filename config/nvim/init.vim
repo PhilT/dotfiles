@@ -1,22 +1,27 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Contents
 " --------
-"   
+"
 "   Plugins
 "   General settings
 "   Plugin settings
 "   Key mappings
 "   Auto commands
 "   Functions
-"   
+"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins (sorted by plugin name minus any vim prefix)
+
+" Install VimPlug if not already installed
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | ni "~/.config/nvim/autoload/plug.vim" -Force
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
 call plug#begin()
 
 Plug 'jiangmiao/auto-pairs'                                                     " ALT-n - Next bracket pair - Auto-pair brackets.
 Plug 'ayu-theme/ayu-vim'                                                        " Color scheme with light/dark/mirage modes
-Plug 'neoclide/coc.nvim', {'branch': 'release'}                                 " Intellisense engine with support for VSCode plugins
 Plug 'editorconfig/editorconfig-vim'                                            " Use a project's .editorconfig file for formatting
 Plug 'tpope/vim-fugitive'                                                       " Git plugin - :G for enhanced status. See plugin section below for more
 Plug 'itchyny/lightline.vim'                                                    " Simple statusline
@@ -89,7 +94,7 @@ hi Search guibg=#1271a1|                                                        
 let g:python3_host_prog = 'C:\Python38\python'                                  " Python providers
 let NERDTreeQuitOnOpen=1                                                        "close NERDTree after opening file
 let g:scratch_persistence_file = '.scratch.vim'                                 " Store scratch text in project .scratch.vim file
-let g:scratch_horizontal = 1                                                    " Open scratch split horizontally 
+let g:scratch_horizontal = 1                                                    " Open scratch split horizontally
 let g:scratch_height = 15                                                       " with height of 20 rows
 let g:lightline = { 'colorscheme': 'ayu' }                                      " Set same theme as colorscheme for lightline.vim
 let g:lightline.component_function = { 'filename': 'FilenameForLightline' }     " Calls FilenameForLightline function to show full path name in statusline
@@ -139,22 +144,22 @@ nmap <silent> rn <Plug>(coc-rename)|                                            
 nnoremap <silent> K :call ShowDocumentation()<CR>|                              " Coc: Show documentation for item under cursor (FSLS Feature: Hover)
 
 tnoremap <A-e> <C-\><C-n>|                                                      " ALT+e switches to NORMAL mode from TERMINAL mode
-tnoremap <A-h> <C-\><C-n><C-w>h|                                                " 
+tnoremap <A-h> <C-\><C-n><C-w>h|                                                "
 tnoremap <A-j> <C-\><C-n><C-w>j|                                                " ALT+(hjkl) to navigate splits from any mode
 tnoremap <A-k> <C-\><C-n><C-w>k|                                                " including TERMINAL mode.
-tnoremap <A-l> <C-\><C-n><C-w>l|                                                " 
+tnoremap <A-l> <C-\><C-n><C-w>l|                                                "
 inoremap <A-h> <C-\><C-n><C-w>h|                                                " CTRL+(hjkl) to navigate splits from NORMAL mode
-inoremap <A-j> <C-\><C-n><C-w>j|                                                " 
-inoremap <A-k> <C-\><C-n><C-w>k|                                                " 
-inoremap <A-l> <C-\><C-n><C-w>l|                                                " 
-nnoremap <A-h> <C-w>h|                                                          " 
-nnoremap <A-j> <C-w>j|                                                          "  
-nnoremap <A-k> <C-w>k|                                                          " 
-nnoremap <A-l> <C-w>l|                                                          " 
-nnoremap <C-h> <C-w>h|                                                          " 
-nnoremap <C-j> <C-w>j|                                                          " 
-nnoremap <C-k> <C-w>k|                                                          " 
-nnoremap <C-l> <C-w>l|                                                          " 
+inoremap <A-j> <C-\><C-n><C-w>j|                                                "
+inoremap <A-k> <C-\><C-n><C-w>k|                                                "
+inoremap <A-l> <C-\><C-n><C-w>l|                                                "
+nnoremap <A-h> <C-w>h|                                                          "
+nnoremap <A-j> <C-w>j|                                                          "
+nnoremap <A-k> <C-w>k|                                                          "
+nnoremap <A-l> <C-w>l|                                                          "
+nnoremap <C-h> <C-w>h|                                                          "
+nnoremap <C-j> <C-w>j|                                                          "
+nnoremap <C-k> <C-w>k|                                                          "
+nnoremap <C-l> <C-w>l|                                                          "
 
 nnoremap <Leader>a :source $XDG_CONFIG_HOME/nvim/init.vim<CR>|                  " Reload Vim config
 nnoremap <silent> <Leader>d :bd<CR>|                                            " delete buffer
@@ -183,14 +188,14 @@ map <C-q> <Nop>|                                                                
 
 augroup mygroup
   autocmd!|                                                                     " Clear out all autocmds for this augroup
-  
+
   autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()      " Force lightline update
   autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>|                     " Ensure Enter is not remapped in Quickfix so found files can be selected for example
   autocmd InsertEnter * setlocal cursorline                                     " Highlight current line while in insert mode
   autocmd InsertLeave * setlocal nocursorline
   autocmd FileType fsharp let b:AutoPairs = AutoPairsDefine({'(*' : "*)//n"})|  " Define auto-pair for F# multiline comments
 
-  autocmd bufread *.fsx,*.fs syn region fsharpMultiLineComment 
+  autocmd bufread *.fsx,*.fs syn region fsharpMultiLineComment
         \ start='(\*' end='\*)' contains=fsharpTodo,@Spell                      " Enable spell checking in multi-line F# comments
   autocmd bufenter * call QuitNERDTree()|                                       " quit vim if NERDTree is last window
 augroup END
@@ -200,7 +205,7 @@ augroup END
 " Functions
 
 function SetTermInsert()                                                        " Turn on insert mode
-  augroup TermInsert                                                            
+  augroup TermInsert
     autocmd!
     autocmd TermOpen * startinsert
   augroup END
@@ -221,12 +226,12 @@ function Run(command)                                                           
     autocmd!
     autocmd TermOpen * call SwitchOutOfTerm()
   augroup END
-  
+
   execute ':botright split '.g:powershell.' ./'.a:command
 endfunction
 
 function DeleteTermBuffer()                                                     " Removes the terminal buffer used to run commands
-  if exists('g:termbuffer') 
+  if exists('g:termbuffer')
     execute g:termbuffer.'bd!'
     unlet g:termbuffer
   endif
@@ -241,7 +246,7 @@ endfunction
 function ThemeLoad(theme)                                                       " Set the passed in theme variation and reinit colorscheme
   let g:ayucolor=a:theme
   colorscheme ayu
-  
+
   highlight CocUnderline cterm=underline gui=underline|                         " Redisplay error underlines that disappear when switching themes
 endfunction
 
@@ -266,7 +271,7 @@ function IsSpaceBehind() abort
   return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-function RunCompletionOrNextItem()                                              " Open completion list as long there is a non-whitespace character 
+function RunCompletionOrNextItem()                                              " Open completion list as long there is a non-whitespace character
   return pumvisible() ? "\<C-n>" : IsSpaceBehind() ? "\<Tab>" : coc#refresh()   " behind the current position, otherwise send a TAB.
 endfunction                                                                     " If completion list is open then go to the next item in the list
 

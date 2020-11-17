@@ -1,8 +1,8 @@
 [apply]
-        whitespace = nowarn
+  whitespace = nowarn
 [user]
-        name = Phil Thompson
-        email = phil@electricvisions.com
+  name = Phil Thompson
+  email = phil@electricvisions.com
 [color]
   ui = true
 [alias]
@@ -30,19 +30,25 @@
   x = update-index --chmod=+x
 
 [branch]
-        autosetupmerge = true
-        autosetuprebase = always
+  autosetupmerge = true
+  autosetuprebase = always
+
 [push]
-        default = current
+  default = current
+
 [core]
-        whitespace = -trailing-space
-        pager = less -R
-        excludesfile = ~/.gitignore
+  whitespace = -trailing-space
+  pager = less -R
+  excludesfile = ~/.gitignore
 	autocrlf = false
+  eol = lf
+
 [github]
-        user = PhilT
+  user = PhilT
+
 [merge]
-        tool = vimdiff
+  tool = vimdiff
+
 [mergetool]
-        path = nvim
+  path = nvim
 

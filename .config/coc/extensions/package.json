@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "coc-fsharp": ">=0.1.65",
-    "coc-lists": ">=1.3.8"
-  }
-}
