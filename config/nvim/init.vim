@@ -21,7 +21,7 @@ endif
 let g:polyglot_disabled = ['fsharp']
 
 call plug#begin()
-Plug 'SirVer/ultisnips'                                                         " Handle snippets
+"Plug 'SirVer/ultisnips'                                                         " Handle snippets
 Plug 'PhilT/vim-fs'                                                             " F# Syntax and Indent
 Plug 'neovim/nvim-lspconfig'                                                    " Language server client settings
 Plug 'nvim-lua/diagnostic-nvim'                                                 " Useful additions to display diagnostic info aka errors and warnings for LSP
@@ -44,6 +44,7 @@ Plug 'dbeniamine/todo.txt-vim'                                                  
 Plug 'mbbill/undotree'                                                          " :UndotreeToggle/F5 - Visualise the undo tree
 "Plug 'plasticboy/vim-markdown'
 Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'OmniSharp/omnisharp-vim'
 
 call plug#end()
 
@@ -67,7 +68,8 @@ augroup END
 set autoread                                                                    " Reload file if changed by external program
 set backspace=2                                                                 " Go back 2 sapces when pressing backspace
 set clipboard=unnamed                                                           " Use the OS clipboard
-"set cmdheight=2                                                                 " Better display for messages in coc-nvim
+set switchbuf=useopen                                                           " Use `:sbuf filepattern` to switch to a buffer and use the available window if already visible
+set cmdheight=2                                                                 " Better display for messages
 set completeopt=menuone,noinsert,noselect                                       " Set completeopt to have a better completion experience
 set expandtab                                                                   " Tabs to spaces
 set fileformat=unix                                                             " Ensure lf line-endings are used on Windows
@@ -77,6 +79,7 @@ set ignorecase                                                                  
 set incsearch                                                                   " Show matches as you type
 set laststatus=2                                                                " Always show the statusline
 set nobackup                                                                    " Don't create backups
+set noequalalways                                                               " Stop windows being resized (to stop todo.txt from being resized)
 set nofoldenable                                                                " Turn off code folding
 set noshowmode                                                                  " Turn off -- INSERT -- in statusline (lightline already shows it)
 set noswapfile                                                                  " Don't create temporary swap files
@@ -85,7 +88,7 @@ set number                                                                      
 set path+=**                                                                    " recursively search files
 set scrolloff=2                                                                 " Page up/down with 2 extra lines showing above/below cursor position
 set shiftwidth=2                                                                " Default tabs for when there is no .editorconfig
-set shortmess+=c                                                                " Don't give |ins-completion-menu| messages (coc-nvim)
+"set shortmess+=c                                                                " Don't give |ins-completion-menu| messages (coc-nvim)
 set signcolumn=yes                                                              " Keeps sign column from jumping around when fixing errors
 set smartcase                                                                   " Case insensitive search when characters in pattern are lowercase
 set softtabstop=2                                                               " Default tabs for when there is no .editorconfig
@@ -101,13 +104,14 @@ set wildmenu                                                                    
 syntax on                                                                       " Turn on syntax highlighting
 colorscheme ayu                                                                 " Uses g:ayucolor=<theme> from ~/bin/vim.cmd or ~/bin/vimlt.cmd to set mirage/light colorscheme
 execute "set colorcolumn=".join(range(81,335), ',')|                            " Grey out everything past 80 columns
-hi! link CursorLine Visual|                                                     " Make CursorLine highlight more visible (also used by coc lists)
-hi Search guibg=#1271a1|                                                         " More subtle color for search highlighting and fuzzy search in coc
+"hi! link CursorLine Visual|                                                     " Make CursorLine highlight more visible (also used by coc lists)
+"hi Search guibg=#1271a1|                                                         " More subtle color for search highlighting and fuzzy search in coc
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin settings
 
-let g:python3_host_prog = 'C:\Python38\python'                                  " Python providers
+let g:python3_host_prog = 'C:\Python39\python.exe'                              " Python providers
+let g:python_host_prog = 'C:\Python27\python.exe'                               " Python providers
 let NERDTreeQuitOnOpen=1                                                        "close NERDTree after opening file
 let g:scratch_persistence_file = '.scratch.vim'                                 " Store scratch text in project .scratch.vim file
 let g:scratch_horizontal = 1                                                    " Open scratch split horizontally
@@ -133,10 +137,10 @@ if not configs.fsharp then
     default_config = {
       cmd = {"C:/Users/Phil/code/fsharp-language-server/src/FSharpLanguageServer/bin/Release/netcoreapp3.1/FSharpLanguageServer"};
       filetypes = {"fsharp"};
-      root_dir = function(fname)
-        return lspconfig.util.find_git_ancestor(fname) or vim.loop.os_homedir()
-      end;      
-      --root_dir = lspconfig.util.root_pattern("*.fsproj");
+      --root_dir = function(fname)
+      --  return lspconfig.util.find_git_ancestor(fname) or vim.loop.os_homedir()
+      --end;      
+      root_dir = lspconfig.util.root_pattern("*.fsproj");
     };
   }
 end
@@ -146,7 +150,7 @@ local nvim_command = vim.api.nvim_command
 local on_attach = function(client)
   require'completion'.on_attach(client)
   require'diagnostic'.on_attach(client)
-  nvim_command('autocmd CursorHold <buffer> lua vim.lsp.util.show_line_diagnostics()')
+  nvim_command('autocmd CursorHold <buffer> lua lspconfig.util.show_line_diagnostics()')
 end
 
 lspconfig.fsharp.setup{on_attach = on_attach}
@@ -157,7 +161,7 @@ EOF
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key Mappings
 
-inoremap <silent><expr>  <Tab> RunCompletionOrNextItemOrSnippet()|               " Potentially open completion list by pressing TAB
+inoremap <silent><expr>  <Tab> RunCompletionOrNextItemOrSnippet()|              " Potentially open completion list by pressing TAB
 inoremap <silent><expr> <S-Tab> PreviousCompletionItem()|                       " Go to previous item in completion list if open
 
 nnoremap <silent> <Space> :nohlsearch<CR>|                                      " SPACE to turn off search highlight
@@ -192,10 +196,10 @@ nnoremap <silent> <F8> :call Run('build')<CR>|                                  
 nnoremap <silent> <F9> :call Run('test')<CR>|                                   " Run tests in a terminal
 nnoremap <silent> <S-F9> :call Run('test', 'GRAPH')<CR>|                        " Run tests in a terminal with GRAPH directive
 nnoremap <silent> <F10> :call Run('run')<CR>|                                   " Run the project
+nnoremap <silent> <S-F10> :call Run('run_release')<CR>|                         " Run the project
 nnoremap <silent> <Leader><F10> :call Run('bench')<CR>|                         " Run BenchmarkDotNet
 nnoremap <silent> <F11> :call Run('clean')<CR>|                                 " Clean the project
-nnoremap <F12> :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>|      " Reload clients to rebuild project (when error marks get out of sync - e.g. when adding files to project)
-nnoremap <silent> <F12> :CocRestart<CR>|                                        " Restart Coc (when error marks get out of sync - e.g. when adding files to project)
+nnoremap <F12> :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>:edit<CR>|" Reload clients to rebuild project (when error marks get out of sync - e.g. when adding files to project)
 
 nnoremap <silent> [g :PrevDiagnosticCycle|                                      " diagnostic-nvim: Navigate diagnostics
 nnoremap <silent> ]g :NextDiagnosticCycle|                                      " diagnostic-nvim: Navigate diagnostics
@@ -205,10 +209,6 @@ nnoremap <silent>K <cmd>lua vim.lsp.buf.hover()<CR>|                            
 inoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>|              " LSP: Show signature (only works when opening parens)
 
 nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>|              " LSP: Not supported by F# LS
-
-autocmd Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc
-autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
-
 
 tnoremap <A-e> <C-\><C-n>|                                                      " ALT+e switches to NORMAL mode from TERMINAL mode
 tnoremap <A-h> <C-\><C-n><C-w>h|                                                "
@@ -242,7 +242,7 @@ nnoremap <silent> <Leader>n :bn<CR>|                                            
 nnoremap <silent> <Leader>o :set paste!<CR>|                                    " Toggle paste formatting
 nnoremap <silent> <Leader>p :bp<CR>|                                            " previous buffer
 nnoremap <silent> <Leader>v :tabe<CR>:e $XDG_CONFIG_HOME/nvim/init.vim<CR>|     " edit vimrc
-nnoremap <Leader>do :sp<CR>:e $USERPROFILE/todo/todo.txt<CR>|                   " Open TODO list
+nnoremap <Leader>do :topleft split $USERPROFILE\todo\todo.txt<CR>:resize 20<CR>|" Open TODO list
 
 " map <C-z> <Nop>                                                               " Turn off stupid CTRL keys - Overriden by edit snippets
 " map <C-s> <Nop>                                                               " Turn off stupid CTRL keys - Overriden by symbols, above
@@ -264,6 +264,11 @@ augroup mygroup
   autocmd bufread *.fsx,*.fs syn region fsharpMultiLineComment
         \ start='(\*' end='\*)' contains=fsharpTodo,@Spell                      " Enable spell checking in multi-line F# comments
   autocmd bufenter * call QuitNERDTree()|                                       " quit vim if NERDTree is last window
+  autocmd BufLeave todo.txt resize 2 | normal gg                                " Resize todo window on leaving
+  autocmd BufEnter todo.txt resize 20                                           " Resize todo window on entering
+  
+  autocmd Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc
+  autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
 augroup END
 
 
@@ -340,8 +345,6 @@ endfunction
 function RunCompletionOrNextItemOrSnippet()
   if pumvisible()
     return "\<C-n>"
-  "elseif coc#expandableOrJumpable()                                             " Jump to next position in snippet if open
-  "  return "\<C-r>=coc#rpc#request('doKeymap',['snippets-expand-jump',''])\<CR>"
   elseif IsSpaceBehind()                                                        " Insert a Tab if there is a space behind the cursor
     return "\<Tab>"
   else
