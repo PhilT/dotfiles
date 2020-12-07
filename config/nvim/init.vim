@@ -24,7 +24,6 @@ call plug#begin()
 "Plug 'SirVer/ultisnips'                                                         " Handle snippets
 Plug 'PhilT/vim-fs'                                                             " F# Syntax and Indent
 Plug 'neovim/nvim-lspconfig'                                                    " Language server client settings
-Plug 'nvim-lua/diagnostic-nvim'                                                 " Useful additions to display diagnostic info aka errors and warnings for LSP
 Plug 'nvim-lua/completion-nvim'                                                 " Useful defaults to make completion work
 Plug 'jiangmiao/auto-pairs'                                                     " ALT-n - Next bracket pair - Auto-pair brackets.
 Plug 'junegunn/vader.vim'                                                       " Vimscript test framework
@@ -149,8 +148,7 @@ end
 local nvim_command = vim.api.nvim_command
 local on_attach = function(client)
   require'completion'.on_attach(client)
-  require'diagnostic'.on_attach(client)
-  nvim_command('autocmd CursorHold <buffer> lua lspconfig.util.show_line_diagnostics()')
+--  nvim_command('autocmd CursorHold <buffer> lua lspconfig.util.show_line_diagnostics()')
 end
 
 lspconfig.fsharp.setup{on_attach = on_attach}
