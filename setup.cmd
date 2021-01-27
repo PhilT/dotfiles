@@ -4,8 +4,7 @@ echo Install apps and configure Windows 10
 echo -----------------------------------------
 echo This script needs to Run As Administrator
 echo.
-echo Uninstall any default Windows apps before
-echo continuing.
+echo Turn on Virtualization in the BIOS.
 echo.
 echo Press a key to start
 pause
@@ -15,13 +14,29 @@ rem Format for env.cmd
 rem @ECHO OFF
 rem SETX <key> <value>
 rem SETX <key> <value>
-call env.cmd
+call .\env.cmd
 
 mkdir %ChocolateyToolsLocation%
 mkdir C:\tools
 
 rem install chocolatey
 powershell -NoProfile -ExecutionPolicy Bypass -Command "iex (new-object net.webclient).downloadstring('https://chocolatey.org/install.ps1')"
+
+rem Remove some built-in apps
+powershell -NoProfile -Command "Get-AppxPackage Microsoft.YourPhone -AllUsers | Remove-AppxPackage"
+powershell -NoProfile -Command "Get-AppxPackage *officehub* | Remove-AppxPackage"
+powershell -NoProfile -Command "Get-AppxPackage *zunemusic* | Remove-AppxPackage"
+powershell -NoProfile -Command "Get-AppxPackage *onenote* | Remove-AppxPackage"
+powershell -NoProfile -Command "Get-AppxPackage *people* | Remove-AppxPackage"
+powershell -NoProfile -Command ""
+powershell -NoProfile -Command ""
+powershell -NoProfile -Command ""
+
+%ALLUSERSPROFILE%\chocolatey\bin\choco feature enable --name=allowGlobalConfirmation
+call RefreshEnv
+
+echo About to install apps from Chocolatey. Continue?
+pause
 
 %ALLUSERSPROFILE%\chocolatey\bin\choco feature enable --name=allowGlobalConfirmation
 RefreshEnv
@@ -30,6 +45,7 @@ choco install^
  7zip^
  audacity-lame^
  audacity^
+ autoit^
  blender^
  brave^
  calibre^
@@ -60,11 +76,12 @@ choco install^
  telegram^
  treesizefree^
  vlc^
+ wsl-ubuntu-2004^
  xnview^
  zeal^
  zoom^
 
-rem nordvpn^
+rem nordvpn
 
 RefreshEnv
 
@@ -74,8 +91,9 @@ choco install superposition-benchmark heaven-benchmark valley-benchmark
 rem --- Install Latest Powershell --
 dotnet tool install -g powershell
 
-rem --- Install Neovim nightly
+rem --- Install Neovim nightly and VimPlug
 choco install neovim --pre
+powershell "iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | ni \"$env:LOCALAPPDATA/nvim-data/site/autoload/plug.vim\" -Force"
 
 rem --- Install the neovim language integrations
 
@@ -107,14 +125,14 @@ echo SysGauge
 echo Unigine SDK
 
 
-RefreshEnv
+call RefreshEnv
 
 
-mklink /D %USERPROFILE%\.config\nvim %USERPROFILE%\code\dotfiles\.config\nvim
-mklink %USERPROFILE%\.gitconfig %USERPROFILE%\code\dotfiles\.gitconfig
-mklink %USERPROFILE%\.gitignore %USERPROFILE%\code\dotfiles\.gitignore
-
+mklink /D %USERPROFILE%\.config\nvim\after d:\code\dotfiles\files\config\nvim\after
+mklink %USERPROFILE%\.config\nvim\init.vim d:\code\dotfiles\files\config\nvim\init.vim
+mklink %USERPROFILE%\.gitconfig d:\code\dotfiles\files\gitconfig
+mklink %USERPROFILE%\.gitignore d:\code\dotfiles\files\gitignore
+mklink %USERPROFILE%\.ignore d:\code\dotfiles\files\ignore
 
 rem Update man help
 powershell -command "Update-Help -Force -ErrorAction SilentlyContinue"
-

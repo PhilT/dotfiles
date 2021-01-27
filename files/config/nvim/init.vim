@@ -12,22 +12,16 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins (sorted by plugin name minus any vim prefix)
 
-" Install VimPlug if not already installed
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
-  silent !iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | ni "~/.config/nvim/autoload/plug.vim" -Force
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
 let g:polyglot_disabled = ['fsharp']
 
 call plug#begin()
-"Plug 'SirVer/ultisnips'                                                         " Handle snippets
+Plug 'SirVer/ultisnips'                                                         " Handle snippets
 Plug 'PhilT/vim-fs'                                                             " F# Syntax and Indent
 Plug 'neovim/nvim-lspconfig'                                                    " Language server client settings
 Plug 'nvim-lua/completion-nvim'                                                 " Useful defaults to make completion work
 Plug 'jiangmiao/auto-pairs'                                                     " ALT-n - Next bracket pair - Auto-pair brackets.
 Plug 'junegunn/vader.vim'                                                       " Vimscript test framework
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }                             " Fuzzy finder
+Plug 'junegunn/fzf'                                                             " Fuzzy finder
 Plug 'junegunn/fzf.vim'
 Plug 'ayu-theme/ayu-vim'                                                        " Color scheme with light/dark/mirage modes
 Plug 'editorconfig/editorconfig-vim'                                            " Use a project's .editorconfig file for formatting
@@ -41,7 +35,6 @@ Plug 'tpope/vim-surround'                                                       
 Plug 'tpope/vim-scriptease'                                                     " Some helpers for developing Vim plugins
 Plug 'dbeniamine/todo.txt-vim'                                                  " \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
 Plug 'mbbill/undotree'                                                          " :UndotreeToggle/F5 - Visualise the undo tree
-"Plug 'plasticboy/vim-markdown'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'OmniSharp/omnisharp-vim'
 
@@ -66,7 +59,6 @@ augroup END
 
 set autoread                                                                    " Reload file if changed by external program
 set backspace=2                                                                 " Go back 2 sapces when pressing backspace
-set clipboard=unnamed                                                           " Use the OS clipboard
 set switchbuf=useopen                                                           " Use `:sbuf filepattern` to switch to a buffer and use the available window if already visible
 set cmdheight=2                                                                 " Better display for messages
 set completeopt=menuone,noinsert,noselect                                       " Set completeopt to have a better completion experience
@@ -87,7 +79,6 @@ set number                                                                      
 set path+=**                                                                    " recursively search files
 set scrolloff=2                                                                 " Page up/down with 2 extra lines showing above/below cursor position
 set shiftwidth=2                                                                " Default tabs for when there is no .editorconfig
-"set shortmess+=c                                                                " Don't give |ins-completion-menu| messages (coc-nvim)
 set signcolumn=yes                                                              " Keeps sign column from jumping around when fixing errors
 set smartcase                                                                   " Case insensitive search when characters in pattern are lowercase
 set softtabstop=2                                                               " Default tabs for when there is no .editorconfig
@@ -101,6 +92,7 @@ set wildignore+=node_modules/**,bin/**,**/*.min.js                              
 set wildmenu                                                                    " TAB completion in COMMAND mode
 
 syntax on                                                                       " Turn on syntax highlighting
+let ayucolor='mirage'                                                           " Setup mirage colour scheme for Ayu
 colorscheme ayu                                                                 " Uses g:ayucolor=<theme> from ~/bin/vim.cmd or ~/bin/vimlt.cmd to set mirage/light colorscheme
 execute "set colorcolumn=".join(range(81,335), ',')|                            " Grey out everything past 80 columns
 "hi! link CursorLine Visual|                                                     " Make CursorLine highlight more visible (also used by coc lists)
@@ -117,7 +109,7 @@ let g:scratch_horizontal = 1                                                    
 let g:scratch_height = 15                                                       " with height of 20 rows
 let g:lightline = { 'colorscheme': 'ayu' }                                      " Set same theme as colorscheme for lightline.vim
 let g:lightline.component_function = { 'filename': 'FilenameForLightline' }     " Calls FilenameForLightline function to show full path name in statusline
-let powershell = "term://powershell -NoLogo"                                    " Used by terminal split mappings to use PowerShell as the terminal shell
+let powershell = "term://pwsh -C"                                          " Used by terminal split mappings to use PowerShell as the terminal shell
 let g:diagnostic_insert_delay = 1
 let g:completion_enable_auto_popup = 0                                          " completion-nvim: Disable auto popup of completion
 let g:completion_enable_snippet = 'UltiSnips'                                   " completion-nvim: Enable UltiSnips integration
@@ -136,21 +128,17 @@ if not configs.fsharp then
     default_config = {
       cmd = {"C:/Users/Phil/code/fsharp-language-server/src/FSharpLanguageServer/bin/Release/netcoreapp3.1/FSharpLanguageServer"};
       filetypes = {"fsharp"};
-      --root_dir = function(fname)
-      --  return lspconfig.util.find_git_ancestor(fname) or vim.loop.os_homedir()
-      --end;      
       root_dir = lspconfig.util.root_pattern("*.fsproj");
     };
   }
 end
 
 -- Show diagnostics in a popup window instead of after source code
-local nvim_command = vim.api.nvim_command
+--local nvim_command = vim.api.nvim_command
 local on_attach = function(client)
   require'completion'.on_attach(client)
---  nvim_command('autocmd CursorHold <buffer> lua lspconfig.util.show_line_diagnostics()')
+  --nvim_command('autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()')
 end
-
 lspconfig.fsharp.setup{on_attach = on_attach}
 lspconfig.tsserver.setup{}
 EOF
@@ -197,13 +185,13 @@ nnoremap <silent> <F10> :call Run('run')<CR>|                                   
 nnoremap <silent> <S-F10> :call Run('run_release')<CR>|                         " Run the project
 nnoremap <silent> <Leader><F10> :call Run('bench')<CR>|                         " Run BenchmarkDotNet
 nnoremap <silent> <F11> :call Run('clean')<CR>|                                 " Clean the project
-nnoremap <F12> :lua vim.lsp.stop_client(vim.lsp.get_active_clients())<CR>:edit<CR>|" Reload clients to rebuild project (when error marks get out of sync - e.g. when adding files to project)
 
 nnoremap <silent> [g :PrevDiagnosticCycle|                                      " diagnostic-nvim: Navigate diagnostics
 nnoremap <silent> ]g :NextDiagnosticCycle|                                      " diagnostic-nvim: Navigate diagnostics
 nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>|                     " LSP: Goto definition
 nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>|                     " LSP: List references - ENTER to go to next
 nnoremap <silent>K <cmd>lua vim.lsp.buf.hover()<CR>|                            " LSP: Show documentation
+nnoremap <silent>X <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>|     " LSP: Show errors in floating window (in case of long lines)
 inoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>|              " LSP: Show signature (only works when opening parens)
 
 nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>|              " LSP: Not supported by F# LS
@@ -263,8 +251,8 @@ augroup mygroup
         \ start='(\*' end='\*)' contains=fsharpTodo,@Spell                      " Enable spell checking in multi-line F# comments
   autocmd bufenter * call QuitNERDTree()|                                       " quit vim if NERDTree is last window
   autocmd BufLeave todo.txt resize 2 | normal gg                                " Resize todo window on leaving
-  autocmd BufEnter todo.txt resize 20                                           " Resize todo window on entering
-  
+  autocmd BufEnter todo.txt resize 20 | set wfh                                 " Resize todo window on entering
+
   autocmd Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc
   autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
 augroup END
