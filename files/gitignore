@@ -1,0 +1,11 @@
+.fake
+.ionide
+.vscode
+Thumbs.db
+node_modules
+.git
+.tags
+.scratch.vim
+.ionide
+AppData/
+Local Settings/
