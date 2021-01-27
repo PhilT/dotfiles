@@ -4,8 +4,6 @@ echo Install apps and configure Windows 10
 echo -----------------------------------------
 echo This script needs to Run As Administrator
 echo.
-echo Uninstall any default Windows apps.
-echo.
 echo Turn on Virtualization in the BIOS.
 echo.
 echo Press a key to start
@@ -24,7 +22,6 @@ mkdir C:\tools
 rem install chocolatey
 powershell -NoProfile -ExecutionPolicy Bypass -Command "iex (new-object net.webclient).downloadstring('https://chocolatey.org/install.ps1')"
 
-
 rem Remove some built-in apps
 powershell -NoProfile -Command "Get-AppxPackage Microsoft.YourPhone -AllUsers | Remove-AppxPackage"
 powershell -NoProfile -Command "Get-AppxPackage *officehub* | Remove-AppxPackage"
@@ -35,13 +32,14 @@ powershell -NoProfile -Command ""
 powershell -NoProfile -Command ""
 powershell -NoProfile -Command ""
 
-
-
 %ALLUSERSPROFILE%\chocolatey\bin\choco feature enable --name=allowGlobalConfirmation
 call RefreshEnv
 
 echo About to install apps from Chocolatey. Continue?
 pause
+
+%ALLUSERSPROFILE%\chocolatey\bin\choco feature enable --name=allowGlobalConfirmation
+RefreshEnv
 
 choco install^
  7zip^
@@ -85,7 +83,7 @@ choco install^
 
 rem nordvpn
 
-call RefreshEnv
+RefreshEnv
 
 rem --- Benchmarks ---
 choco install superposition-benchmark heaven-benchmark valley-benchmark
@@ -136,8 +134,5 @@ mklink %USERPROFILE%\.gitconfig d:\code\dotfiles\files\gitconfig
 mklink %USERPROFILE%\.gitignore d:\code\dotfiles\files\gitignore
 mklink %USERPROFILE%\.ignore d:\code\dotfiles\files\ignore
 
-
-
 rem Update man help
 powershell -command "Update-Help -Force -ErrorAction SilentlyContinue"
-
