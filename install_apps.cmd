@@ -28,6 +28,7 @@ choco install^
  nvidia-display-driver^
  python2^
  python^
+ ripgrep^
  ruby^
  slack^
  spotify^
@@ -41,6 +42,7 @@ choco install^
  xnview^
  zeal^
  zoom^
+
 
 rem nordvpn
 
