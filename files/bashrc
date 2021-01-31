@@ -120,7 +120,9 @@ eval "$(rbenv init -)"
 PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
 PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
 
-alias nvim=~/nvim.appimage
-EDITOR=nvim
+VISUAL=$HOME/nvim.appimage
+EDITOR="$VISUAL"
+alias nvim=$VISUAL
+
 export CODE_DIR=~/code
 cd $CODE_DIR

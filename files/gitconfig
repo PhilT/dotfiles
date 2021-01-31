@@ -42,6 +42,7 @@
   excludesfile = ~/.gitignore
 	autocrlf = false
   eol = lf
+  editor = ~/nvim.appimage
 
 [github]
   user = PhilT
