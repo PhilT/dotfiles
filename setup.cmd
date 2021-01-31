@@ -40,7 +40,7 @@ call install_neovim.cmd
 
 call RefreshEnv
 
-call link_to_config_files.cmd
+call create_links.cmd
 
 rem Update man help
 powershell -command "Update-Help -Force -ErrorAction SilentlyContinue"
