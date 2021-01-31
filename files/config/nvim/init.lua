@@ -9,36 +9,49 @@
 --   Auto commands
 --   Functions
 --
+
+local cmd = vim.cmd                                                             -- Shortcuts
+local fn = vim.fn
+local g = vim.g
+
+local scopes = {o = vim.o, b = vim.bo, w = vim.wo}                              -- Workaround to enable simple option interface until 
+local function opt(scope, key, value)                                           -- https://github.com/neovim/neovim/pull/13479 is complete
+  scopes[scope][key] = value
+  if scope ~= 'o' then scopes['o'][key] = value end
+end
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Plugins (sorted by plugin name)
+-- Plugins
 
-vim.g.polyglot_disabled = {'fsharp'}
+g.polyglot_disabled = {'fsharp'}
 
-vim.call('plug#begin')
-vim.cmd("Plug 'SirVer/ultisnips'")                                            -- Handle snippets
-vim.cmd("Plug 'PhilT/vim-fs'")                                                -- F# Syntax and Indent
-vim.cmd("Plug 'neovim/nvim-lspconfig'")                                       -- Language server client settings
-vim.cmd("Plug 'nvim-lua/completion-nvim'")                                    -- Useful defaults to make completion work
-vim.cmd("Plug 'jiangmiao/auto-pairs'")                                        -- ALT-n - Next bracket pair - Auto-pair brackets.
-vim.cmd("Plug 'junegunn/vader.vim'")                                          -- Vimscript test framework
-vim.cmd("Plug 'junegunn/fzf'")                                                -- Fuzzy finder
-vim.cmd("Plug 'junegunn/fzf.vim'")
-vim.cmd("Plug 'ayu-theme/ayu-vim'")                                           -- Color scheme with light/dark/mirage modes
-vim.cmd("Plug 'editorconfig/editorconfig-vim'")                               -- Use a project's .editorconfig file for formatting
-vim.cmd("Plug 'tpope/vim-fugitive'")                                          -- Git plugin - :G for enhanced status. See plugin section below for more
-vim.cmd("Plug 'itchyny/lightline.vim'")                                       -- Simple statusline
-vim.cmd("Plug 'scrooloose/nerdtree'")                                         -- CTRL+B - open file tree
-vim.cmd("Plug 'tpope/vim-repeat'")                                            -- Repeat plugin commands such as surround with `.`
-vim.cmd("Plug 'mtth/scratch.vim'")                                            -- go/gp - Scratchpad
-vim.cmd("Plug 'mhinz/vim-signify'")                                           -- Git icons in the gutter. vim-gitgutter doesn't seem to work
-vim.cmd("Plug 'tpope/vim-surround'")                                          -- cs'<q> - change from single quotes to xml tags
-vim.cmd("Plug 'tpope/vim-scriptease'")                                        -- Some helpers for developing Vim plugins
-vim.cmd("Plug 'dbeniamine/todo.txt-vim'")                                     -- \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
-vim.cmd("Plug 'mbbill/undotree'")                                             -- :UndotreeToggle/F5 - Visualise the undo tree
-vim.cmd("Plug 'vim-pandoc/vim-pandoc-syntax'")
-vim.cmd("Plug 'OmniSharp/omnisharp-vim'")
+cmd 'packadd paq-nvim'
+local paq = require('paq-nvim').paq
 
-vim.call('plug#end')
+paq {'savq/paq-nvim', opt = true}                                               -- manages itself
+paq {'SirVer/ultisnips'}                                                        -- Handle snippets
+paq {'PhilT/vim-fs'}                                                            -- F# Syntax and Indent
+paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
+paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
+paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
+paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
+paq {'junegunn/fzf'}                                                            -- Fuzzy finder
+paq {'junegunn/fzf.vim'}
+paq {'ayu-theme/ayu-vim'}                                                       -- Color scheme with light/dark/mirage modes
+paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
+paq {'tpope/vim-fugitive'}                                                      -- Git plugin - :G for enhanced status. See plugin section below for more
+paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
+paq {'scrooloose/nerdtree'}                                                     -- CTRL+B - open file tree
+paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
+paq {'mtth/scratch.vim'}                                                        -- go/gp - Scratchpad
+paq {'mhinz/vim-signify'}                                                       -- Git icons in the gutter. vim-gitgutter doesn't seem to work
+paq {'tpope/vim-surround'}                                                      -- cs'<q> - change from single quotes to xml tags
+paq {'tpope/vim-scriptease'}                                                    -- Some helpers for developing Vim plugins
+paq {'dbeniamine/todo.txt-vim'}                                                 -- \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
+paq {'mbbill/undotree'}                                                         -- :UndotreeToggle/F5 - Visualise the undo tree
+paq {'vim-pandoc/vim-pandoc-syntax'}
+paq {'OmniSharp/omnisharp-vim'}
+paq {'nvim-treesitter/nvim-treesitter'}
 
 --[[
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -59,44 +72,52 @@ augroup END
 -- General settings (sorted)
 --]]
 
+local indent = 2
+
 vim.o.switchbuf = 'useopen'                                                     -- `:sbuf filepattern` switch to buffer and use available window if visible
+vim.o.cmdheight = 2                                                             -- Doesn't halt nvim for 2 line messages
+vim.o.completeopt = 'menuone,noinsert,noselect'                                 -- popup on 1 item, don't auto-insert selection, don't auto-select a match
 
+
+opt('b', 'expandtab', true)                                                     -- Use spaces instead of tabs
+opt('b', 'shiftwidth', indent)                                                  -- Size of an indent
+opt('b', 'smartindent', true)                                                   -- Insert indents automatically
+opt('b', 'softtabstop', indent)                                                 -- Default tab size for when there is no .editorconfig
+opt('b', 'tabstop', indent)                                                     -- Default tab size for when there is no .editorconfig
+opt('b', 'fileformat', 'unix')                                                  -- Ensure lf line-endings are used on Windows
+
+opt('o', 'backup', false)                                                       -- Don't create backups
+opt('o', 'equalalways', false)                                                  -- Stop windows being resized (to stop todo.txt from being resized)
+opt('o', 'fileformats', 'unix,dos')                                             -- Recognise unix or dos line-endings, save new files as unix
+opt('o', 'foldenable', false)                                                   -- Turn off code folding
+opt('o', 'hidden', true)                                                        -- hide buffers instead of closing
+opt('o', 'ignorecase', true)                                                    -- See smartcase
+opt('o', 'incsearch', true)                                                     -- Show matches as you type
+opt('o', 'laststatus', 2)                                                       -- Always show the statusline
+opt('o', 'number', true)                                                        -- line numbers
+opt('o', 'path', vim.o.path..'**')                                              -- recursively search files
+opt('o', 'scrolloff', 2)                                                        -- Page up/down with 2 extra lines showing above/below cursor position
+opt('o', 'showmode', false)                                                     -- Turn off -- INSERT -- in statusline (lightline already shows it)
+opt('o', 'signcolumn', 'yes')                                                   -- Keeps sign column from jumping around when fixing errors
+opt('o', 'smartcase', true)                                                     -- Case insensitive search when characters in pattern are lowercase
+opt('o', 'splitbelow', true)                                                    -- Open new horizontal splits below the current one
+opt('o', 'splitright', true)                                                    -- Open new vertical splits to the right of the current one
+opt('o', 'swapfile', false)                                                     -- Don't create temporary swap files
+opt('o', 'termguicolors', true)                                                 -- True color support
+opt('o', 'updatetime', 100)                                                     -- Bring down delay for diagnostic messages
+opt('o', 'wildignore', vim.o.wildignore..'.git/**,tmp/**,coverage/**,log/**,db/migrate/**,node_modules/**,bin/**,**/*.min.js')
+opt('o', 'wildmenu', true)                                                      -- TAB completion in COMMAND mode
+opt('o', 'writebackup', false)                                                  -- Don't create backups
+
+g.ayucolor = 'mirage'                                                           -- Sub-theme for Ayu theme
+cmd 'colorscheme ayu'                                                           -- Set theme
+
+local a = {}; for i=0,500 do a[i]=i+81 end                                      -- Grey out everything past 80 columns
+opt('w', 'colorcolumn', table.concat(a, ','))
+
+--
+--syntax on                                                                       -- Turn on syntax highlighting
 --[[
-set cmdheight=2                                                                 -- Better display for messages
-set completeopt=menuone,noinsert,noselect                                       -- Set completeopt to have a better completion experience
-set expandtab                                                                   -- Tabs to spaces
-set fileformat=unix                                                             -- Ensure lf line-endings are used on Windows
-set fileformats=unix,dos                                                        -- Recognise unix or dos line-endings, save new files as unix
-set hidden                                                                      -- hide buffers instead of closing
-set ignorecase                                                                  -- See smartcase
-set incsearch                                                                   -- Show matches as you type
-set laststatus=2                                                                -- Always show the statusline
-set nobackup                                                                    -- Don't create backups
-set noequalalways                                                               -- Stop windows being resized (to stop todo.txt from being resized)
-set nofoldenable                                                                -- Turn off code folding
-set noshowmode                                                                  -- Turn off -- INSERT -- in statusline (lightline already shows it)
-set noswapfile                                                                  -- Don't create temporary swap files
-set nowritebackup                                                               -- Don't create backups
-set number                                                                      -- line numbers
-set path+=**                                                                    -- recursively search files
-set scrolloff=2                                                                 -- Page up/down with 2 extra lines showing above/below cursor position
-set shiftwidth=2                                                                -- Default tabs for when there is no .editorconfig
-set signcolumn=yes                                                              -- Keeps sign column from jumping around when fixing errors
-set smartcase                                                                   -- Case insensitive search when characters in pattern are lowercase
-set softtabstop=2                                                               -- Default tabs for when there is no .editorconfig
-set splitbelow                                                                  -- Open new horizontal splits below the current one
-set splitright                                                                  -- Open new vertical splits to the right of the current one
-set tabstop=2                                                                   -- Default tabs for when there is no .editorconfig
-set termguicolors                                                               -- Enable 24-bit RGB colors
-set updatetime=100                                                              -- Bring down delay for diagnostic messages
-set wildignore+=.git/**,tmp/**,coverage/**,log/**,db/migrate/**                 -- Set ignore paths for wildmenu
-set wildignore+=node_modules/**,bin/**,**/*.min.js                              -- Set ignore paths for wildmenu
-set wildmenu                                                                    -- TAB completion in COMMAND mode
-
-syntax on                                                                       -- Turn on syntax highlighting
-let ayucolor='mirage'                                                           -- Setup mirage colour scheme for Ayu
-colorscheme ayu                                                                 -- Uses g:ayucolor=<theme> from ~/bin/vim.cmd or ~/bin/vimlt.cmd to set mirage/light colorscheme
-execute 'set colorcolumn='.join(range(81,335), ',')|                            -- Grey out everything past 80 columns
 -- hi! link CursorLine Visual|                                                     -- Make CursorLine highlight more visible (also used by coc lists)
 -- hi Search guibg=#1271a1|                                                         -- More subtle color for search highlighting and fuzzy search in coc
 
