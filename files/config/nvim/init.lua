@@ -1,17 +1,18 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Contents
-" --------
-"
-"   Plugins
-"   General settings
-"   Plugin settings
-"   Key mappings
-"   Auto commands
-"   Functions
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugins (sorted by plugin name minus any vim prefix)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Contents
+-- --------
+--
+--   Plugins
+--   General settings
+--   Plugin settings
+--   Key mappings
+--   Auto commands
+--   Functions
+--
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Plugins (sorted by plugin name)
 
+--[[
 let g:polyglot_disabled = ['fsharp']
 
 call plug#begin()
@@ -40,10 +41,10 @@ Plug 'OmniSharp/omnisharp-vim'
 
 call plug#end()
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Temporary settings for testing - move once confirmed working
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Temporary settings for testing - move once confirmed working
 
-" Configure RipGrep to also search hidden files (.likethis)
+-- Configure RipGrep to also search hidden files (.likethis)
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --hidden --ignore-file ~/.ignore --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
@@ -54,10 +55,13 @@ augroup pandoc_syntax
     au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc|hi! link pandocStrong Operator|hi! link pandocEmphasis Delimiter
 augroup END
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" General settings (sorted)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- General settings (sorted)
+--]]
 
-set switchbuf=useopen                                                           " Use `:sbuf filepattern` to switch to a buffer and use the available window if already visible
+vim.o.switchbuf = 'useopen'                                                     -- `:sbuf filepattern` switch to buffer and use available window if visible
+
+--[[
 set cmdheight=2                                                                 " Better display for messages
 set completeopt=menuone,noinsert,noselect                                       " Set completeopt to have a better completion experience
 set expandtab                                                                   " Tabs to spaces
@@ -96,8 +100,8 @@ execute "set colorcolumn=".join(range(81,335), ',')|                            
 "hi! link CursorLine Visual|                                                     " Make CursorLine highlight more visible (also used by coc lists)
 "hi Search guibg=#1271a1|                                                         " More subtle color for search highlighting and fuzzy search in coc
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin settings
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Plugin settings
 
 "let g:python3_host_prog = 'C:\Python39\python.exe'                              " Python providers
 "let g:python_host_prog = 'C:\Python27\python.exe'                               " Python providers
@@ -118,6 +122,7 @@ augroup pandoc_syntax
 augroup END
 
 lua << EOF
+
 local lspconfig = require 'lspconfig'
 local configs = require 'lspconfig/configs'
 
@@ -161,8 +166,8 @@ lspconfig.solargraph.setup{on_attach = on_attach}
 EOF
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Key Mappings
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Key Mappings
 
 inoremap <silent><expr>  <Tab> RunCompletionOrNextItemOrSnippet()|              " Potentially open completion list by pressing TAB
 inoremap <silent><expr> <S-Tab> PreviousCompletionItem()|                       " Go to previous item in completion list if open
@@ -247,14 +252,14 @@ nnoremap <silent> <Leader>p :bp<CR>|                                            
 nnoremap <silent> <Leader>v :tabe<CR>:e $CODE_DIR/dotfiles/files/config/nvim/init.vim<CR>|" edit vimrc
 nnoremap <Leader>do :topleft split $CODE_DIR/../todo/todo.txt<CR>:resize 20<CR>|" Open TODO list
 
-" map <C-z> <Nop>                                                               " Turn off stupid CTRL keys - Overriden by edit snippets
-" map <C-s> <Nop>                                                               " Turn off stupid CTRL keys - Overriden by symbols, above
+-- map <C-z> <Nop>                                                               " Turn off stupid CTRL keys - Overriden by edit snippets
+-- map <C-s> <Nop>                                                               " Turn off stupid CTRL keys - Overriden by symbols, above
 map <C-q> <Nop>|                                                                " Turn off stupid CTRL keys
 
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Auto Commands
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Auto Commands
 
 augroup mygroup
   autocmd!|                                                                     " Clear out all autocmds for this augroup
@@ -275,8 +280,8 @@ augroup mygroup
 augroup END
 
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Functions
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- Functions
 
 function SetTermInsert()                                                        " Turn on insert mode
   augroup TermInsert
@@ -359,3 +364,4 @@ function PreviousCompletionItem()                                               
   return pumvisible() ? "\<C-p>" : "\<S-Tab>"                                   " otherwise send SHIFT+TAB
 endfunction
 
+--]]
