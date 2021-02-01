@@ -1,15 +1,3 @@
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Contents
--- --------
---
---   Plugins
---   General settings
---   Plugin settings
---   Key mappings
---   Auto commands
---   Functions
---
-
 local cmd = vim.cmd                                                             -- Shortcuts
 local fn = vim.fn
 local g = vim.g
@@ -20,8 +8,8 @@ local function opt(scope, key, value)                                           
   if scope ~= 'o' then scopes['o'][key] = value end
 end
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Plugins
+-- Plugins ----------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 g.polyglot_disabled = {'fsharp'}
 
@@ -37,14 +25,14 @@ paq {'jiangmiao/auto-pairs'}                                                    
 paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
 paq {'junegunn/fzf'}                                                            -- Fuzzy finder
 paq {'junegunn/fzf.vim'}
-paq {'ayu-theme/ayu-vim'}                                                       -- Color scheme with light/dark/mirage modes
+paq {'jacoborus/tender.vim'}                                                    -- Colorscheme
 paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
 paq {'tpope/vim-fugitive'}                                                      -- Git plugin - :G for enhanced status. See plugin section below for more
 paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
 paq {'scrooloose/nerdtree'}                                                     -- CTRL+B - open file tree
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
 paq {'mtth/scratch.vim'}                                                        -- go/gp - Scratchpad
-paq {'mhinz/vim-signify'}                                                       -- Git icons in the gutter. vim-gitgutter doesn't seem to work
+paq {'mhinz/vim-signify'}                                                       -- Git icons in the gutter
 paq {'tpope/vim-surround'}                                                      -- cs'<q> - change from single quotes to xml tags
 paq {'tpope/vim-scriptease'}                                                    -- Some helpers for developing Vim plugins
 paq {'dbeniamine/todo.txt-vim'}                                                 -- \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
@@ -67,17 +55,15 @@ let g:vim_markdown_folding_disabled = 1
 augroup pandoc_syntax
     au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc|hi! link pandocStrong Operator|hi! link pandocEmphasis Delimiter
 augroup END
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- General settings (sorted)
 --]]
+
+-- General settings -------------------------------------------------------------------------------------------------------------------------------------------
 
 local indent = 2
 
 vim.o.switchbuf = 'useopen'                                                     -- `:sbuf filepattern` switch to buffer and use available window if visible
 vim.o.cmdheight = 2                                                             -- Doesn't halt nvim for 2 line messages
 vim.o.completeopt = 'menuone,noinsert,noselect'                                 -- popup on 1 item, don't auto-insert selection, don't auto-select a match
-
 
 opt('b', 'expandtab', true)                                                     -- Use spaces instead of tabs
 opt('b', 'shiftwidth', indent)                                                  -- Size of an indent
@@ -96,6 +82,7 @@ opt('o', 'incsearch', true)                                                     
 opt('o', 'laststatus', 2)                                                       -- Always show the statusline
 opt('o', 'path', vim.o.path..'**')                                              -- recursively search files
 opt('o', 'scrolloff', 2)                                                        -- Page up/down with 2 extra lines showing above/below cursor position
+opt('o', 'shortmess', vim.o.shortmess..'c')                                     -- Don't show extra completion status messages
 opt('o', 'showmode', false)                                                     -- Turn off -- INSERT -- in statusline (lightline already shows it)
 opt('o', 'smartcase', true)                                                     -- Case insensitive search when characters in pattern are lowercase
 opt('o', 'splitbelow', true)                                                    -- Open new horizontal splits below the current one
@@ -106,23 +93,20 @@ opt('o', 'wildignore', vim.o.wildignore..'.git/**,tmp/**,coverage/**,log/**,db/m
 opt('o', 'wildmenu', true)                                                      -- TAB completion in COMMAND mode
 opt('o', 'writebackup', false)                                                  -- Don't create backups
 
+opt('w', 'cursorline', true)                                                    -- Turn on highlight on cursor line (Uses color of CursorLine)
 opt('w', 'foldenable', false)                                                   -- Turn off code folding
 opt('w', 'number', true)                                                        -- line numbers
-opt('w', 'signcolumn', 'yes')                                                   -- Keeps sign column from jumping around when fixing errors
+opt('w', 'signcolumn', 'yes')                                                   -- Keeps sign column visable to stop edit window shifting left and right
 
-g.ayucolor = 'mirage'                                                           -- Sub-theme for Ayu theme
-cmd 'colorscheme ayu'                                                           -- Set theme
+cmd('syntax enable')                                                            -- Ensures error pop ups correctly show red text
+cmd('colorscheme tender')                                                       -- Set theme
+cmd('hi! Search guifg=#333333 guibg=#c9d05c ctermbg=NONE gui=NONE cterm=NONE')  -- Remove underline from search highlight and use some inverted color instead
+cmd('hi! CursorLine guibg=#333333')
 
-local a = {}; for i=0,500 do a[i]=i+81 end                                      -- Grey out everything past 80 columns
+local a = {}; for i=0,500 do a[i]=i+80 end                                      -- Grey out everything past 80 columns
 opt('w', 'colorcolumn', table.concat(a, ','))
 
---
---syntax on                                                                       -- Turn on syntax highlighting
--- hi! link CursorLine Visual|                                                     -- Make CursorLine highlight more visible (also used by coc lists)
--- hi Search guibg=#1271a1|                                                         -- More subtle color for search highlighting and fuzzy search in coc
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Plugin settings
+-- Plugin settings --------------------------------------------------------------------------------------------------------------------------------------------
 
 if package.config:sub(1,1) == '\\' then
   g.python3_host_prog = 'C:\\Python39\\python.exe'                              -- Python providers
@@ -133,7 +117,7 @@ g.NERDTreeQuitOnOpen = 1                                                        
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
-g.lightline = { colorscheme = 'ayu' }                                           -- Set same theme as colorscheme for lightline.vim
+g.lightline = { colorscheme = 'powerline' }                                     -- Set theme for lightline.vim
 g.lightline.component_function = { filename = 'FilenameForLightline' }          -- Calls FilenameForLightline function to show full path name in statusline
 
 local powershell = 'term://pwsh -C'                                             -- Used by terminal split mappings to use PowerShell as the terminal shell
@@ -143,15 +127,14 @@ g.completion_enable_snippet = 'UltiSnips'                                       
 --g.vim_markdown_conceal = 0              -- Using pandoc so not sure if these lines are needed
 --g.vim_markdown_folding_disabled = 1
 
--- No support for autocommands yet
--- Waiting on https://github.com/neovim/neovim/pull/12378
+-- Markdown formatting/styling
+-- No support for autocommands until https://github.com/neovim/neovim/pull/12378
 cmd [[augroup pandoc_syntax
         au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc|hi! link pandocStrong Operator|hi! link pandocEmphasis Delimiter
       augroup END]]
 
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- LSP Client
+-- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
 
 local lspconfig = require 'lspconfig'
 local configs = require 'lspconfig/configs'
@@ -166,12 +149,8 @@ if not configs.fsharp then
   }
 end
 
--- Show diagnostics in a popup window instead of after source code
-local nvim_command = vim.api.nvim_command
-local on_attach = function(client)
-  require'completion'.on_attach(client)
-  nvim_command('autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()')
-end
+cmd('autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()')      -- Show diagnostics in a popup window instead of after source code
+cmd("autocmd BufEnter * lua require'completion'.on_attach()")                   -- Load completion provider
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -181,15 +160,20 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   }
 )
 
-lspconfig.fsharp.setup{on_attach = on_attach}
-lspconfig.tsserver.setup{on_attach = on_attach}
-lspconfig.solargraph.setup{on_attach = on_attach}
+lspconfig.fsharp.setup{}
+lspconfig.tsserver.setup{}
+lspconfig.solargraph.setup{}
+
+-- Key Mappings -----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+local function map(mode, lhs, rhs, opts)
+  local options = {noremap = true}
+  if opts then options = vim.tbl_extend('force', options, opts) end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
 
 --[[
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Key Mappings
-
 inoremap <silent><expr>  <Tab> RunCompletionOrNextItemOrSnippet()|              -- Potentially open completion list by pressing TAB
 inoremap <silent><expr> <S-Tab> PreviousCompletionItem()|                       -- Go to previous item in completion list if open
 
@@ -278,9 +262,7 @@ nnoremap <Leader>do :topleft split $CODE_DIR/../todo/todo.txt<CR>:resize 20<CR>|
 map <C-q> <Nop>|                                                                -- Turn off stupid CTRL keys
 
 
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Auto Commands
+-- Auto Commands ----------------------------------------------------------------------------------------------------------------------------------------------
 
 augroup mygroup
   autocmd!|                                                                     -- Clear out all autocmds for this augroup
@@ -301,8 +283,7 @@ augroup mygroup
 augroup END
 
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Functions
+-- Functions --------------------------------------------------------------------------------------------------------------------------------------------------
 
 function SetTermInsert()                                                        -- Turn on insert mode
   augroup TermInsert
