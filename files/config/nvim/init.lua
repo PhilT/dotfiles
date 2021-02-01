@@ -85,29 +85,30 @@ opt('b', 'smartindent', true)                                                   
 opt('b', 'softtabstop', indent)                                                 -- Default tab size for when there is no .editorconfig
 opt('b', 'tabstop', indent)                                                     -- Default tab size for when there is no .editorconfig
 opt('b', 'fileformat', 'unix')                                                  -- Ensure lf line-endings are used on Windows
+opt('b', 'swapfile', false)                                                     -- Don't create temporary swap files
 
 opt('o', 'backup', false)                                                       -- Don't create backups
 opt('o', 'equalalways', false)                                                  -- Stop windows being resized (to stop todo.txt from being resized)
 opt('o', 'fileformats', 'unix,dos')                                             -- Recognise unix or dos line-endings, save new files as unix
-opt('o', 'foldenable', false)                                                   -- Turn off code folding
 opt('o', 'hidden', true)                                                        -- hide buffers instead of closing
 opt('o', 'ignorecase', true)                                                    -- See smartcase
 opt('o', 'incsearch', true)                                                     -- Show matches as you type
 opt('o', 'laststatus', 2)                                                       -- Always show the statusline
-opt('o', 'number', true)                                                        -- line numbers
 opt('o', 'path', vim.o.path..'**')                                              -- recursively search files
 opt('o', 'scrolloff', 2)                                                        -- Page up/down with 2 extra lines showing above/below cursor position
 opt('o', 'showmode', false)                                                     -- Turn off -- INSERT -- in statusline (lightline already shows it)
-opt('o', 'signcolumn', 'yes')                                                   -- Keeps sign column from jumping around when fixing errors
 opt('o', 'smartcase', true)                                                     -- Case insensitive search when characters in pattern are lowercase
 opt('o', 'splitbelow', true)                                                    -- Open new horizontal splits below the current one
 opt('o', 'splitright', true)                                                    -- Open new vertical splits to the right of the current one
-opt('o', 'swapfile', false)                                                     -- Don't create temporary swap files
 opt('o', 'termguicolors', true)                                                 -- True color support
 opt('o', 'updatetime', 100)                                                     -- Bring down delay for diagnostic messages
 opt('o', 'wildignore', vim.o.wildignore..'.git/**,tmp/**,coverage/**,log/**,db/migrate/**,node_modules/**,bin/**,**/*.min.js')
 opt('o', 'wildmenu', true)                                                      -- TAB completion in COMMAND mode
 opt('o', 'writebackup', false)                                                  -- Don't create backups
+
+opt('w', 'foldenable', false)                                                   -- Turn off code folding
+opt('w', 'number', true)                                                        -- line numbers
+opt('w', 'signcolumn', 'yes')                                                   -- Keeps sign column from jumping around when fixing errors
 
 g.ayucolor = 'mirage'                                                           -- Sub-theme for Ayu theme
 cmd 'colorscheme ayu'                                                           -- Set theme
@@ -117,32 +118,40 @@ opt('w', 'colorcolumn', table.concat(a, ','))
 
 --
 --syntax on                                                                       -- Turn on syntax highlighting
---[[
 -- hi! link CursorLine Visual|                                                     -- Make CursorLine highlight more visible (also used by coc lists)
 -- hi Search guibg=#1271a1|                                                         -- More subtle color for search highlighting and fuzzy search in coc
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Plugin settings
 
--- let g:python3_host_prog = 'C:\Python39\python.exe'                              -- Python providers
--- let g:python_host_prog = 'C:\Python27\python.exe'                               -- Python providers
-let NERDTreeQuitOnOpen=1                                                        -- close NERDTree after opening file
-let g:scratch_persistence_file = '.scratch.vim'                                 -- Store scratch text in project .scratch.vim file
-let g:scratch_horizontal = 1                                                    -- Open scratch split horizontally
-let g:scratch_height = 15                                                       -- with height of 20 rows
-let g:lightline = { 'colorscheme': 'ayu' }                                      -- Set same theme as colorscheme for lightline.vim
-let g:lightline.component_function = { 'filename': 'FilenameForLightline' }     -- Calls FilenameForLightline function to show full path name in statusline
-let powershell = 'term://pwsh -C'                                          -- Used by terminal split mappings to use PowerShell as the terminal shell
-let g:diagnostic_insert_delay = 1
-let g:completion_enable_auto_popup = 0                                          -- completion-nvim: Disable auto popup of completion
-let g:completion_enable_snippet = 'UltiSnips'                                   -- completion-nvim: Enable UltiSnips integration
-let g:vim_markdown_conceal = 0
-let g:vim_markdown_folding_disabled = 1
-augroup pandoc_syntax
-  au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc|hi! link pandocStrong Operator|hi! link pandocEmphasis Delimiter
-augroup END
+if package.config:sub(1,1) == '\\' then
+  g.python3_host_prog = 'C:\\Python39\\python.exe'                              -- Python providers
+  g.python_host_prog = 'C:\\Python27\\python.exe'                               -- Python providers
+end
 
-lua << EOF
+g.NERDTreeQuitOnOpen = 1                                                        -- close NERDTree after opening file
+g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
+g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
+g.scratch_height = 15                                                           -- with height of 20 rows
+g.lightline = { colorscheme = 'ayu' }                                           -- Set same theme as colorscheme for lightline.vim
+g.lightline.component_function = { filename = 'FilenameForLightline' }          -- Calls FilenameForLightline function to show full path name in statusline
+
+local powershell = 'term://pwsh -C'                                             -- Used by terminal split mappings to use PowerShell as the terminal shell
+g.diagnostic_insert_delay = 1
+g.completion_enable_auto_popup = 0                                              -- LSP completion: Disable auto popup of completion
+g.completion_enable_snippet = 'UltiSnips'                                       -- LSP completion: Enable UltiSnips integration
+--g.vim_markdown_conceal = 0              -- Using pandoc so not sure if these lines are needed
+--g.vim_markdown_folding_disabled = 1
+
+-- No support for autocommands yet
+-- Waiting on https://github.com/neovim/neovim/pull/12378
+cmd [[augroup pandoc_syntax
+        au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc|hi! link pandocStrong Operator|hi! link pandocEmphasis Delimiter
+      augroup END]]
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- LSP Client
 
 local lspconfig = require 'lspconfig'
 local configs = require 'lspconfig/configs'
@@ -165,27 +174,18 @@ local on_attach = function(client)
 end
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-vim.lsp.diagnostic.on_publish_diagnostics, {
--- disable virtual text
-virtual_text = false,
-
--- show signs
-signs = true,
-
--- delay update diagnostics
-update_in_insert = false,
--- display_diagnostic_autocmds = { 'InsertLeave'  },
-
-
-}
-
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+  virtual_text = false,                                                         -- disable virtual text
+  signs = true,                                                                 -- show signs
+  update_in_insert = false                                                      -- delay update diagnostics
+  }
 )
 
 lspconfig.fsharp.setup{on_attach = on_attach}
 lspconfig.tsserver.setup{on_attach = on_attach}
 lspconfig.solargraph.setup{on_attach = on_attach}
-EOF
 
+--[[
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- Key Mappings
