@@ -126,3 +126,6 @@ alias nvim=$VISUAL
 
 export CODE_DIR=~/code
 cd $CODE_DIR
+
+export DOTNET_CLI_TELEMETRY_OPTOUT=true
+
