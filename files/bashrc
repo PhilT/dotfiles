@@ -124,6 +124,7 @@ VISUAL=$HOME/nvim.appimage
 EDITOR="$VISUAL"
 alias nvim=$VISUAL
 
+export TODO_DIR=/mnt/d/todo
 export CODE_DIR=~/code
 cd $CODE_DIR
 

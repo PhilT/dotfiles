@@ -14,9 +14,11 @@ setx DOTNET_CLI_TELEMETRY_OPTOUT true
 rem FZF
 setx FZF_DEFAULT_COMMAND "rg --files --no-ignore-vcs --hidden"
 
-rem .../code folder dependent on OS
+rem code/ folder dependent on OS
 setx CODE_DIR D:\code
 
+rem todo/ folder
+setx TODO_DIR D:\todo
 
 
 call RefreshEnv

@@ -107,8 +107,9 @@ local a = {}; for i=0,500 do a[i]=i+80 end                                      
 opt('w', 'colorcolumn', table.concat(a, ','))
 
 -- Plugin settings --------------------------------------------------------------------------------------------------------------------------------------------
+local windows = package.config:sub(1,1) == '\\'
 
-if package.config:sub(1,1) == '\\' then
+if windows then
   g.python3_host_prog = 'C:\\Python39\\python.exe'                              -- Python providers
   g.python_host_prog = 'C:\\Python27\\python.exe'                               -- Python providers
 end
@@ -117,10 +118,12 @@ g.NERDTreeQuitOnOpen = 1                                                        
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
-g.lightline = { colorscheme = 'powerline' }                                     -- Set theme for lightline.vim
-g.lightline.component_function = { filename = 'FilenameForLightline' }          -- Calls FilenameForLightline function to show full path name in statusline
+g.lightline = { 
+  colorscheme = 'powerline',                                                    -- Set theme for lightline.vim
+  component_function = { filename = 'FilenameForLightline' }                    -- Calls filename_for_lightline function to show full path name in statusline 
+}
 
-local powershell = 'term://pwsh -C'                                             -- Used by terminal split mappings to use PowerShell as the terminal shell
+shellcmd = windows and 'term://pwsh -C' or 'term://'                               -- Used by terminal split mappings to use shellcmd as the terminal shell
 g.diagnostic_insert_delay = 1
 g.completion_enable_auto_popup = 0                                              -- LSP completion: Disable auto popup of completion
 g.completion_enable_snippet = 'UltiSnips'                                       -- LSP completion: Enable UltiSnips integration
@@ -174,185 +177,13 @@ local function map(mode, lhs, rhs, opts)
 end
 
 --[[
-inoremap <silent><expr>  <Tab> RunCompletionOrNextItemOrSnippet()|              -- Potentially open completion list by pressing TAB
-inoremap <silent><expr> <S-Tab> PreviousCompletionItem()|                       -- Go to previous item in completion list if open
+function is_space_behind()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
+end
 
-nnoremap <silent> <Space> :nohlsearch<CR>|                                      -- SPACE to turn off search highlight
-nnoremap <C-p> :Files<CR>|                                                      -- CTRL+p to open Fuzzy File Finder
-nnoremap <C-f> :NERDTreeToggle<CR>|                                             -- CTRL+f to open NERDTree file browser
-nnoremap <C-u> :UndotreeToggle<CR>|                                             -- Show undo tree
-nnoremap <C-b> :Buffers<CR>|                                                    -- CTRL+b to open buffer list - currently open files
-nnoremap <C-d> :OpenDiagnostic<CR>|                                             -- CTRL+d to open diagnostics - aka errors, warnings and hints to correct
-nnoremap <C-s> <cmd>lua vim.lsp.buf.workspace_symbol()<CR>|                     -- CTRL+s to open symbol list (for entire workspace)- Fuzzy find types, functions, etc
---nnoremap <C-z> :CocCommand snippets.editSnippets<CR>|                           -- CTRL+z to edit snippets for current file type
-
-nnoremap j gj|                                                                  -- Move down single lines when wrapped
-nnoremap k gk|                                                                  -- Move down single lines when wrapped
-nmap go :Scratch<CR>
-nmap gp :ScratchPreview<CR>
-
-noremap zz <c-w>_ \| <c-w>\||                                                   -- Zoom in and maximize current window
-noremap zo <c-w>=|                                                              -- Zoom out and equalize windows
-
-nnoremap ta :tabe<CR>|                                                          -- Add tab pane
-nnoremap tc :tabc<CR>|                                                          -- Clear (remove) tab pane
-nnoremap tn :tabn<CR>|                                                          -- Next tab pane
-nnoremap tp :tabp<CR>|                                                          -- Previous tab pane
-nnoremap tt :tabe<CR>:exec 'edit '.powershell<CR>|                              -- Open terminal in new tab
-
-nnoremap <CR> :cn<CR>|                                                          -- Next quickfix entry
-nnoremap <Leader><CR> :cp<CR>|                                                  -- Previous quickfix entry
-
-nnoremap <F6> :setlocal spell!<CR>|                                             -- Toggle spellcheck
-nnoremap <silent> <F7> :call DeleteTermBuffer()<CR>|                            -- Close build/test terminal split
-nnoremap <silent> <F8> :call Run('build')<CR>|                                  -- Runs ./build in a terminal split
-nnoremap <silent> <F9> :call Run('test')<CR>|                                   -- Run tests in a terminal
-nnoremap <silent> <S-F9> :call Run('test', 'GRAPH')<CR>|                        -- Run tests in a terminal with GRAPH directive
-nnoremap <silent> <F10> :call Run('run')<CR>|                                   -- Run the project
-nnoremap <silent> <S-F10> :call Run('run_release')<CR>|                         -- Run the project
-nnoremap <silent> <Leader><F10> :call Run('bench')<CR>|                         -- Run BenchmarkDotNet
-nnoremap <silent> <F11> :call Run('clean')<CR>|                                 -- Clean the project
-
-nnoremap <silent> [g :PrevDiagnosticCycle|                                      -- diagnostic-nvim: Navigate diagnostics
-nnoremap <silent> ]g :NextDiagnosticCycle|                                      -- diagnostic-nvim: Navigate diagnostics
-nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>|                     -- LSP: Goto definition
-nnoremap <silent> gr <cmd>lua vim.lsp.buf.references()<CR>|                     -- LSP: List references - ENTER to go to next
-nnoremap <silent>K <cmd>lua vim.lsp.buf.hover()<CR>|                            -- LSP: Show documentation
-nnoremap <silent>X <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>|     -- LSP: Show errors in floating window (in case of long lines)
-inoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>|              -- LSP: Show signature (only works when opening parens)
-
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>|              -- LSP: Not supported by F# LS
-
-tnoremap <A-e> <C-\><C-n>|                                                      -- ALT+e switches to NORMAL mode from TERMINAL mode
-tnoremap <A-h> <C-\><C-n><C-w>h|                                                --
-tnoremap <A-j> <C-\><C-n><C-w>j|                                                -- ALT+(hjkl) to navigate splits from any mode
-tnoremap <A-k> <C-\><C-n><C-w>k|                                                -- including TERMINAL mode.
-tnoremap <A-l> <C-\><C-n><C-w>l|                                                --
-inoremap <A-h> <C-\><C-n><C-w>h|                                                -- CTRL+(hjkl) to navigate splits from NORMAL mode
-inoremap <A-j> <C-\><C-n><C-w>j|                                                --
-inoremap <A-k> <C-\><C-n><C-w>k|                                                --
-inoremap <A-l> <C-\><C-n><C-w>l|                                                --
-nnoremap <A-h> <C-w>h|                                                          --
-nnoremap <A-j> <C-w>j|                                                          --
-nnoremap <A-k> <C-w>k|                                                          --
-nnoremap <A-l> <C-w>l|                                                          --
-nnoremap <C-h> <C-w>h|                                                          --
-nnoremap <C-j> <C-w>j|                                                          --
-nnoremap <C-k> <C-w>k|                                                          --
-nnoremap <C-l> <C-w>l|                                                          --
-
-nnoremap <Leader>a :source $HOME/.config/nvim/init.vim<CR>|                     -- Reload Vim config
-nnoremap <silent> <Leader>d :bd<CR>|                                            -- delete buffer
-nnoremap <silent> <Leader>dd :bufdo bd<CR>|                                     -- delete all buffers
-nnoremap <silent> <Leader>td :call ReloadThemeAndLightline('mirage')<CR>|       -- Set dark colorscheme
-nnoremap <silent> <Leader>tl :call ReloadThemeAndLightline('light')<CR>|        -- Set light colorscheme
-nnoremap <silent> <Leader>h :exec 'topleft vsplit ' . powershell<CR>|           -- Terminal far left split
-nnoremap <silent> <Leader>i :setlocal number!<CR>|                              -- Toggle line numbers
-nnoremap <silent> <Leader>j :exec 'botright split ' . powershell<CR>|           -- Terminal bottom split
-nnoremap <silent> <Leader>k :exec 'topleft split ' . powershell<CR>|            -- Terminal top split
-nnoremap <silent> <Leader>l :exec 'botright vsplit ' . powershell<CR>|          -- Terminal far right split
-nnoremap <silent> <Leader>n :bn<CR>|                                            -- next buffer
-nnoremap <silent> <Leader>o :set paste!<CR>|                                    -- Toggle paste formatting
-nnoremap <silent> <Leader>p :bp<CR>|                                            -- previous buffer
-nnoremap <silent> <Leader>v :tabe<CR>:e $CODE_DIR/dotfiles/files/config/nvim/init.vim<CR>|-- edit vimrc
-nnoremap <Leader>do :topleft split $CODE_DIR/../todo/todo.txt<CR>:resize 20<CR>|-- Open TODO list
-
--- map <C-z> <Nop>                                                               -- Turn off stupid CTRL keys - Overriden by edit snippets
--- map <C-s> <Nop>                                                               -- Turn off stupid CTRL keys - Overriden by symbols, above
-map <C-q> <Nop>|                                                                -- Turn off stupid CTRL keys
-
-
--- Auto Commands ----------------------------------------------------------------------------------------------------------------------------------------------
-
-augroup mygroup
-  autocmd!|                                                                     -- Clear out all autocmds for this augroup
-
-  autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>|                     -- Ensure Enter is not remapped in Quickfix so found files can be selected for example
-  autocmd InsertEnter * setlocal cursorline                                     -- Highlight current line while in insert mode
-  autocmd InsertLeave * setlocal nocursorline
-  autocmd FileType fsharp let b:AutoPairs = AutoPairsDefine({'(*' : '*)//n'})|  -- Define auto-pair for F# multiline comments
-
-  autocmd bufread *.fsx,*.fs syn region fsharpMultiLineComment
-        \ start='(\*' end='\*)' contains=fsharpTodo,@Spell                      -- Enable spell checking in multi-line F# comments
-  autocmd bufenter * call QuitNERDTree()|                                       -- quit vim if NERDTree is last window
-  autocmd BufLeave todo.txt resize 2 | normal gg                                -- Resize todo window on leaving
-  autocmd BufEnter todo.txt resize 20 | set wfh                                 -- Resize todo window on entering
-
-  autocmd Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc
-  autocmd Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc
-augroup END
-
-
--- Functions --------------------------------------------------------------------------------------------------------------------------------------------------
-
-function SetTermInsert()                                                        -- Turn on insert mode
-  augroup TermInsert
-    autocmd!
-    autocmd TermOpen * startinsert
-  augroup END
-endfunction
-call SetTermInsert()                                                            -- Make insert mode for starting terminals the default
-
-function SwitchOutOfTerm()                                                      -- Switch back to previous window after running build command
-  let g:termbuffer = bufnr('%')                                                 -- Store terminal buffer used to run build
-  execute 'normal G'|                                                           -- Move to bottom of output
-  wincmd p                                                                      -- Switch to previous window
-  call SetTermInsert()                                                          -- Reset back to insert mode when starting terminal window
-endfunction
-
-function Run(command)                                                           -- Run a build command e.g. 'run', 'test', 'build'
-  call DeleteTermBuffer()
-
-  augroup TermInsert                                                            -- Disable insert mode on entering terminal and switch to previous window
-    autocmd!
-    autocmd TermOpen * call SwitchOutOfTerm()
-  augroup END
-
-  execute ':botright split '.g:powershell.' ./'.a:command
-endfunction
-
-function DeleteTermBuffer()                                                     -- Removes the terminal buffer used to run commands
-  if exists('g:termbuffer')
-    execute g:termbuffer.'bd!'
-    unlet g:termbuffer
-  endif
-endfunction
-
-function QuitNERDTree()                                                         -- Exit vim if NERDTree is the last window open
-  if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree())
-    q
-  endif
-endfunction
-
-function ThemeLoad(theme)                                                       -- Set the passed in theme variation and reinit colorscheme
-  let g:ayucolor=a:theme
-  colorscheme ayu
-
-  highlight CocUnderline cterm=underline gui=underline|                         -- Redisplay error underlines that disappear when switching themes
-endfunction
-
-function LightlineLoad(theme)                                                   -- Set the passed in theme variation and reinit lightline.vim
-  let g:lightline.colorscheme = a:theme
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
-endfunction
-
-function FilenameForLightline()                                                 -- Show full paths in lightline.vim statusline
-    return expand('%')
-endfunction
-
-function ReloadThemeAndLightline(theme)                                         -- Reload both colorscheme and lightline when changing theme variation
-  call ThemeLoad(a:theme)
-  call LightlineLoad('ayu_'.a:theme)
-endfunction
-
-function IsSpaceBehind() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-function RunCompletionOrNextItemOrSnippet()
+function run_completion_or_next_or_snippet()
+  local col = vim.api.nvim_win_get_cursor(0)[2] 
   if pumvisible()
     return '\<C-n>'
   elseif IsSpaceBehind()                                                        -- Insert a Tab if there is a space behind the cursor
@@ -360,10 +191,160 @@ function RunCompletionOrNextItemOrSnippet()
   else
     return '\<C-x>\<C-o>'
   endif                                                                         -- behind the current position
-endfunction
+end
 
-function PreviousCompletionItem()                                               -- If completion list is open go to the previous item in the list
+function previous_completion_item()                                               -- If completion list is open go to the previous item in the list
   return pumvisible() ? '\<C-p>' : '\<S-Tab>'                                   -- otherwise send SHIFT+TAB
-endfunction
-
+end
 --]]
+
+g.UltiSnipsExpandTrigger = '<C-Tab>'
+map('i', '<Tab>', '<Plug>(completion_smart_tab)', { noremap = false })          -- Potentially open completion list by pressing TAB
+map('i', '<S-Tab>', '<Plug>(completion_smart_s_tab)', { noremap = false })      -- Go to previous item in completion list if open
+map('n', '<Space>', '<cmd>nohlsearch<CR>')                                      -- SPACE to turn off search highlight
+map('n', '<C-p>', '<cmd>Files<CR>')                                             -- CTRL+p to open Fuzzy File Finder
+map('n', '<C-f>', '<cmd>NERDTreeToggle<CR>')                                    -- CTRL+f to open NERDTree file browser
+map('n', '<C-u>', '<cmd>UndotreeToggle<CR>')                                    -- Show undo tree
+map('n', '<C-b>', '<cmd>Buffers<CR>')                                           -- CTRL+b to open buffer list - currently open files
+map('n', '<C-d>', '<cmd>OpenDiagnostic<CR>')                                    -- CTRL+d to open diagnostics - aka errors, warnings and hints to correct
+map('n', '<C-s>', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')                -- CTRL+s to open symbol list (for entire workspace)- Fuzzy find types, functions, etc
+
+map('n', 'j', 'gj')                                                             -- Move down single lines when wrapped
+map('n', 'k', 'gk')                                                             -- Move down single lines when wrapped
+map('n', 'go', '<cmd>Scratch<CR>')                                              -- go to switch to Scratch window (closes when switching to another window)
+map('n', 'gp', '<cmd>ScratchPreview<CR>')                                       -- gp to open Scratch window
+
+--nnoremap <C-z> :CocCommand snippets.editSnippets<CR>|                           -- CTRL+z to edit snippets for current file type
+
+
+map('n', 'zz', '<c-w>_ \\| <c-w>\\|')                                                   -- Zoom in and maximize current window
+map('n', 'zo', '<c-w>=')                                                              -- Zoom out and equalize windows
+
+map('n', 'ta', '<cmd>tabe<CR>')                                                          -- Add tab pane
+map('n', 'tc', '<cmd>tabc<CR>')                                                          -- Clear (remove) tab pane
+map('n', 'tn', '<cmd>tabn<CR>')                                                          -- Next tab pane
+map('n', 'tp', '<cmd>tabp<CR>')                                                          -- Previous tab pane
+map('n', 'tt', '<cmd>tabe<CR><cmd>edit '..shellcmd..'<CR>')                              -- Open terminal in new tab
+
+map('n', '<CR>', '<cmd>cn<CR>')                                                          -- Next quickfix entry
+map('n', '<Leader><CR>', '<cmd>cp<CR>')                                                  -- Previous quickfix entry
+
+map('n', '<F6>', '<cmd>setlocal spell!<CR>')                                             -- Toggle spellcheck
+map('n', '<F7>', '<cmd>call v:lua.delete_term_buffer()<CR>')                            -- Close build/test terminal split
+map('n', '<F8>', "<cmd>call v:lua.term_run('build')<CR>")                                  -- Runs ./build in a terminal split
+map('n', '<F9>', "<cmd>call v:lua.term_run('test')<CR>")                                   -- Run tests in a terminal
+map('n', '<S-F9>', "<cmd>call v:lua.term_run('test', 'GRAPH')<CR>")                        -- Run tests in a terminal with GRAPH directive
+map('n', '<F10>', "<cmd>call v:lua.term_run('run')<CR>")                                   -- Run the project
+map('n', '<S-F10>', "<cmd>call v:lua.term_run('run_release')<CR>")                         -- Run the project
+map('n', '<Leader><F10>', "<cmd>call v:lua.term_run('bench')<CR>")                         -- Run BenchmarkDotNet
+map('n', '<F11>', "<cmd>call v:lua.term_run('clean')<CR>")                                 -- Clean the project
+
+map('n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')               -- diagnostic-nvim: Navigate diagnostics
+map('n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')               -- diagnostic-nvim: Navigate diagnostics
+map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')                     -- LSP: Goto definition
+map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')                     -- LSP: List references - ENTER to go to next
+map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')                            -- LSP: Show documentation
+map('n', 'X', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>')     -- LSP: Show errors in floating window (in case of long lines)
+map('i', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')              -- LSP: Show signature (only works when opening parens)
+
+map('n', 'gD', '<cmd>lua vim.lsp.buf.implementation()<CR>')              -- LSP: Not supported by F# LS
+
+map('t', '<A-e>', '<C-\\><C-n>')                                                     -- ALT+e switches to NORMAL mode from TERMINAL mode
+map('t', '<A-h>', '<C-\\><C-n><C-w>h')                                               --
+map('t', '<A-j>', '<C-\\><C-n><C-w>j')                                               -- ALT+(hjkl) to navigate splits from any mode
+map('t', '<A-k>', '<C-\\><C-n><C-w>k')                                               -- including TERMINAL mode.
+map('t', '<A-l>', '<C-\\><C-n><C-w>l')                                               --
+map('i', '<A-h>', '<C-\\><C-n><C-w>h')                                               -- CTRL+(hjkl) to navigate splits from NORMAL mode
+map('i', '<A-j>', '<C-\\><C-n><C-w>j')                                               --
+map('i', '<A-k>', '<C-\\><C-n><C-w>k')                                               --
+map('i', '<A-l>', '<C-\\><C-n><C-w>l')                                               --
+map('n', '<A-h>', '<C-w>h')                                                         --
+map('n', '<A-j>', '<C-w>j')                                                         --
+map('n', '<A-k>', '<C-w>k')                                                         --
+map('n', '<A-l>', '<C-w>l')                                                         --
+map('n', '<C-h>', '<C-w>h')                                                         --
+map('n', '<C-j>', '<C-w>j')                                                         --
+map('n', '<C-k>', '<C-w>k')                                                         --
+map('n', '<C-l>', '<C-w>l')                                                         --
+
+map('n', '<Leader>a', '<cmd>source $HOME/.config/nvim/init.vim<CR>')                     -- Reload Vim config
+map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
+map('n', '<Leader>dd', '<cmd>bufdo bd<CR>')                                     -- delete all buffers
+map('n', '<Leader>h', '<cmd>topleft vsplit '..shellcmd..'<CR>')           -- Terminal far left split
+map('n', '<Leader>i', '<cmd>setlocal number!<CR>')                              -- Toggle line numbers
+map('n', '<Leader>j', '<cmd>botright split '..shellcmd..'<CR>')           -- Terminal bottom split
+map('n', '<Leader>k', '<cmd>topleft split '..shellcmd..'<CR>')            -- Terminal top split
+map('n', '<Leader>l', '<cmd>botright vsplit '..shellcmd..'<CR>')          -- Terminal far right split
+map('n', '<Leader>n', '<cmd>bn<CR>')                                            -- next buffer
+map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    -- Toggle paste formatting
+map('n', '<Leader>p', '<cmd>bp<CR>')                                            -- previous buffer
+
+local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/config/nvim/init.vim'
+local todo_path = os.getenv('TODO_DIR')..'/todo.txt'
+map('n', '<Leader>v', '<cmd>tabe<CR><cmd>e '..init_lua_path..'<CR>')            -- \v edit vimrc
+map('n', '<Leader>do', '<cmd>topleft split '..todo_path..'<CR><cmd>resize 20<CR>')-- \do Open TODO list
+
+-- map <C-z> <Nop>                                                                -- Turn off stupid CTRL keys - Overriden by edit snippets
+-- map <C-s> <Nop>                                                                -- Turn off stupid CTRL keys - Overriden by symbols, above
+map('n', '<C-q>', '<Nop>')                                                      -- Turn off stupid CTRL keys
+
+
+-- Auto Commands ----------------------------------------------------------------------------------------------------------------------------------------------
+
+local function au(group, commands)
+  cmd('augroup '..group)
+  cmd('autocmd!')
+  for i, command in ipairs(commands) do
+    cmd('autocmd '..command)
+  end
+  cmd('augroup END')
+end
+
+local commands = {
+  'BufReadPost quickfix nnoremap <buffer> <CR> <CR>',               -- Unmap ENTER in Quickfix so found files can be selected for example
+  [[FileType fsharp let b:AutoPairs = AutoPairsDefine({'(*' : '*)//n'})]], -- Define auto-pair for F# multiline comments
+  'BufLeave todo.txt resize 2 | normal gg',                         -- Resize todo window on leaving
+  'BufEnter todo.txt resize 20 | set wfh',                          -- Resize todo window on entering
+  'Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc',
+  'Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc',
+  [[bufread *.fsx,*.fs syn region fsharpMultiLineComment start='(\*' end='\*)' contains=fsharpTodo,@Spell]] -- Spell checking in multi-line F# comments
+}
+au('mygroup', commands)
+
+
+-- Functions --------------------------------------------------------------------------------------------------------------------------------------------------
+
+function set_term_insert()                                                      -- Turn on insert mode
+  au('TermInsert', {'TermOpen * startinsert'})
+end
+set_term_insert()                                                               -- Make insert mode for starting terminals the default
+
+function _G.switch_out_of_term()                                                      -- Switch back to previous window after running build command
+  g.termbuffer = vim.fn.bufnr('%')                                                 -- Store terminal buffer used to run build
+  cmd('normal G')                                                           -- Move to bottom of output
+  cmd('wincmd p')                                                                      -- Switch to previous window
+  set_term_insert()                                                          -- Reset back to insert mode when starting terminal window
+end
+
+function _G.term_run(command)                                                           -- Run a build command e.g. 'run', 'test', 'build'
+  delete_term_buffer()
+
+  au('TermInsert', {'TermOpen * call v:lua.switch_out_of_term()'})
+  cmd('botright split '..shellcmd..' ./'..command)
+end
+
+function _G.delete_term_buffer()                                                     -- Removes the terminal buffer used to run commands
+  if termbuffer then
+    cmd(termbuffer..'bd!')
+    termbuffer = nil
+  end
+end
+
+vim.api.nvim_exec(                                                              -- Show full paths in lightline.vim statusline
+[[
+function! FilenameForLightline()
+  return expand('%')
+endfunction
+]], false
+)
+
