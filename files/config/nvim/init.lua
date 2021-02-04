@@ -37,9 +37,12 @@ paq {'tpope/vim-surround'}                                                      
 paq {'tpope/vim-scriptease'}                                                    -- Some helpers for developing Vim plugins
 paq {'dbeniamine/todo.txt-vim'}                                                 -- \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
 paq {'mbbill/undotree'}                                                         -- :UndotreeToggle/F5 - Visualise the undo tree
-paq {'vim-pandoc/vim-pandoc-syntax'}
-paq {'OmniSharp/omnisharp-vim'}
-paq {'nvim-treesitter/nvim-treesitter'}
+paq {'godlygeek/tabular'}                                                       -- For aligning text (like this comment!)
+paq {'plasticboy/vim-markdown'}                                                 -- Markdown syntax highlighting and commands like adding a TOC
+paq {'OmniSharp/omnisharp-vim'}                                                 -- C# plugin
+paq {'nvim-treesitter/nvim-treesitter'}                                         -- More accurate syntax highlighting for some languages (e.g. Ruby)
+paq {'slim-template/vim-slim'}                                                  -- Slim templates syntax highlighting
+paq {'tpope/vim-abolish'}                                                       -- Change word styles (e.g. Camelcase to underscore)
 
 --[[
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -93,6 +96,7 @@ opt('o', 'wildignore', vim.o.wildignore..'.git/**,tmp/**,coverage/**,log/**,db/m
 opt('o', 'wildmenu', true)                                                      -- TAB completion in COMMAND mode
 opt('o', 'writebackup', false)                                                  -- Don't create backups
 
+opt('w', 'conceallevel', 2)                                                     -- Make Markdown look pretty (hides some characters unless at the cursor)
 opt('w', 'cursorline', true)                                                    -- Turn on highlight on cursor line (Uses color of CursorLine)
 opt('w', 'foldenable', false)                                                   -- Turn off code folding
 opt('w', 'number', true)                                                        -- line numbers
@@ -114,12 +118,13 @@ if windows then
   g.python_host_prog = 'C:\\Python27\\python.exe'                               -- Python providers
 end
 
+g.vim_markdown_folding_disabled = 1                                             -- Folding? Yuk!
 g.NERDTreeQuitOnOpen = 1                                                        -- close NERDTree after opening file
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
 g.lightline = { 
-  colorscheme = 'powerline',                                                    -- Set theme for lightline.vim
+  colorscheme = 'tender',                                                       -- Set theme for lightline.vim
   component_function = { filename = 'FilenameForLightline' }                    -- Calls filename_for_lightline function to show full path name in statusline 
 }
 
@@ -127,14 +132,6 @@ shellcmd = windows and 'term://pwsh -C' or 'term://'                            
 g.diagnostic_insert_delay = 1
 g.completion_enable_auto_popup = 0                                              -- LSP completion: Disable auto popup of completion
 g.completion_enable_snippet = 'UltiSnips'                                       -- LSP completion: Enable UltiSnips integration
---g.vim_markdown_conceal = 0              -- Using pandoc so not sure if these lines are needed
---g.vim_markdown_folding_disabled = 1
-
--- Markdown formatting/styling
--- No support for autocommands until https://github.com/neovim/neovim/pull/12378
-cmd [[augroup pandoc_syntax
-        au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc|hi! link pandocStrong Operator|hi! link pandocEmphasis Delimiter
-      augroup END]]
 
 
 -- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -152,6 +149,7 @@ if not configs.fsharp then
   }
 end
 
+-- No support for autocommands until https://github.com/neovim/neovim/pull/12378
 cmd('autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()')      -- Show diagnostics in a popup window instead of after source code
 cmd("autocmd BufEnter * lua require'completion'.on_attach()")                   -- Load completion provider
 
@@ -267,7 +265,11 @@ map('n', '<C-j>', '<C-w>j')                                                     
 map('n', '<C-k>', '<C-w>k')                                                     --
 map('n', '<C-l>', '<C-w>l')                                                     --
 
-map('n', '<Leader>a', '<cmd>source $HOME/.config/nvim/init.vim<CR>')                     -- Reload Vim config
+local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/config/nvim/init.lua'
+local todo_path = os.getenv('TODO_DIR')..'/todo.txt'
+local alacritty_yml_path = os.getenv('CODE_DIR')..'/dotfiles/files/alacritty.yml'
+
+map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
 map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
 map('n', '<Leader>dd', '<cmd>bufdo bd<CR>')                                     -- delete all buffers
 map('n', '<Leader>h', '<cmd>topleft vsplit '..shellcmd..'<CR>')                 -- Terminal far left split
@@ -279,13 +281,12 @@ map('n', '<Leader>n', '<cmd>bn<CR>')                                            
 map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    -- Toggle paste formatting
 map('n', '<Leader>p', '<cmd>bp<CR>')                                            -- previous buffer
 
-local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/config/nvim/init.vim'
-local todo_path = os.getenv('TODO_DIR')..'/todo.txt'
-map('n', '<Leader>v', '<cmd>tabe<CR><cmd>e '..init_lua_path..'<CR>')            -- \v edit vimrc
-map('n', '<Leader>do', '<cmd>topleft split '..todo_path..'<CR><cmd>resize 20<CR>')-- \do Open TODO list
+map('n', '<Leader>v', '<cmd>tabe '..init_lua_path..'<CR>')                      -- Edit vimrc
+map('n', '<Leader>t', '<cmd>topleft split '..todo_path..'<CR><cmd>resize 20<CR>')-- Edit TODO list
+map('n', '<Leader>y', '<cmd>tabe '..alacritty_yml_path..'<CR>')                 -- Edit alacritty.yml
 
--- map <C-z> <Nop>                                                                -- Turn off stupid CTRL keys - Overriden by edit snippets
--- map <C-s> <Nop>                                                                -- Turn off stupid CTRL keys - Overriden by symbols, above
+-- map('n', '<C-z>', '<Nop>'                                                    -- Turn off stupid CTRL keys - Overriden by edit snippets
+-- map('n', '<C-s>', '<Nop>'                                                    -- Turn off stupid CTRL keys - Overriden by symbols, above
 map('n', '<C-q>', '<Nop>')                                                      -- Turn off stupid CTRL keys
 
 
