@@ -31,15 +31,12 @@ call install_apps.cmd
 rem --- Benchmarks ---
 choco install superposition-benchmark heaven-benchmark valley-benchmark
 
-rem --- Install Latest Powershell --
-dotnet tool install -g powershell
-
+rem -- Install Apps ---
 call manual_install_apps.cmd
 
+rem --- Install Neovim and integrations ---
 call install_neovim.cmd
-
 call RefreshEnv
-
 call create_links.cmd
 
 rem Update man help

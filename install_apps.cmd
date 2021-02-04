@@ -4,9 +4,9 @@ pause
 
 choco install^
  7zip^
+ alacritty^
  audacity-lame^
  audacity^
- autoit^
  blender^
  brave^
  calibre^
@@ -23,7 +23,6 @@ choco install^
  inkscape^
  keepass^
  libreoffice-fresh^
- microsoft-windows-terminal^
  nodejs^
  nvidia-display-driver^
  python2^
