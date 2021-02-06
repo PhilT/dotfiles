@@ -126,7 +126,6 @@ alias nvim=$VISUAL
 
 export TODO_DIR=/mnt/d/todo
 export CODE_DIR=~/code
-cd $CODE_DIR
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=true
-
+export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden"

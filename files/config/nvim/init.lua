@@ -120,6 +120,8 @@ end
 
 g.vim_markdown_folding_disabled = 1                                             -- Folding? Yuk!
 g.NERDTreeQuitOnOpen = 1                                                        -- close NERDTree after opening file
+g.NERDTreeShowHidden = 1                                                        -- Show hidden files
+g.NERDTreeWinSize = 50                                                          -- Width of NERDTree window
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
