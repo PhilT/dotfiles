@@ -1,8 +1,9 @@
 local cmd = vim.cmd                                                             -- Shortcuts
 local fn = vim.fn
 local g = vim.g
+local is_windows = package.config:sub(1,1) == '\\'
 
-local scopes = {o = vim.o, b = vim.bo, w = vim.wo}                              -- Workaround to enable simple option interface until 
+local scopes = {o = vim.o, b = vim.bo, w = vim.wo}                              -- Workaround to enable simple option interface until
 local function opt(scope, key, value)                                           -- https://github.com/neovim/neovim/pull/13479 is complete
   scopes[scope][key] = value
   if scope ~= 'o' then scopes['o'][key] = value end
@@ -25,7 +26,8 @@ paq {'jiangmiao/auto-pairs'}                                                    
 paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
 paq {'junegunn/fzf'}                                                            -- Fuzzy finder
 paq {'junegunn/fzf.vim'}
-paq {'jacoborus/tender.vim'}                                                    -- Colorscheme
+paq {'hoob3rt/ayu-vim'}                                                         -- Colorscheme
+
 paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
 paq {'tpope/vim-fugitive'}                                                      -- Git plugin - :G for enhanced status. See plugin section below for more
 paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
@@ -44,21 +46,6 @@ paq {'nvim-treesitter/nvim-treesitter'}                                         
 paq {'slim-template/vim-slim'}                                                  -- Slim templates syntax highlighting
 paq {'tpope/vim-abolish'}                                                       -- Change word styles (e.g. Camelcase to underscore)
 
---[[
----------------------------------------------------------------------------------------------------------------------------------------------------------------
--- Temporary settings for testing - move once confirmed working
-
--- Configure RipGrep to also search hidden files (.likethis)
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --hidden --ignore-file ~/.ignore --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
-let g:vim_markdown_conceal = 0
-let g:vim_markdown_folding_disabled = 1
-augroup pandoc_syntax
-    au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc|hi! link pandocStrong Operator|hi! link pandocEmphasis Delimiter
-augroup END
---]]
 
 -- General settings -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -103,7 +90,8 @@ opt('w', 'number', true)                                                        
 opt('w', 'signcolumn', 'yes')                                                   -- Keeps sign column visable to stop edit window shifting left and right
 
 cmd('syntax enable')                                                            -- Ensures error pop ups correctly show red text
-cmd('colorscheme tender')                                                       -- Set theme
+g.ayucolor = 'mirage'
+cmd('colorscheme ayu')                                                       -- Set theme
 cmd('hi! Search guifg=#333333 guibg=#c9d05c ctermbg=NONE gui=NONE cterm=NONE')  -- Remove underline from search highlight and use some inverted color instead
 cmd('hi! CursorLine guibg=#333333')
 
@@ -111,9 +99,8 @@ local a = {}; for i=0,500 do a[i]=i+80 end                                      
 opt('w', 'colorcolumn', table.concat(a, ','))
 
 -- Plugin settings --------------------------------------------------------------------------------------------------------------------------------------------
-local windows = package.config:sub(1,1) == '\\'
 
-if windows then
+if is_windows then
   g.python3_host_prog = 'C:\\Python39\\python.exe'                              -- Python providers
   g.python_host_prog = 'C:\\Python27\\python.exe'                               -- Python providers
 end
@@ -125,15 +112,20 @@ g.NERDTreeWinSize = 50                                                          
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
-g.lightline = { 
-  colorscheme = 'tender',                                                       -- Set theme for lightline.vim
-  component_function = { filename = 'FilenameForLightline' }                    -- Calls filename_for_lightline function to show full path name in statusline 
+g.lightline = {
+  colorscheme = 'ayu',                                                          -- Set theme for lightline.vim
+  component_function = { filename = 'FilenameForLightline' }                    -- Calls filename_for_lightline function to show full path name in statusline
 }
 
-shellcmd = windows and 'term://pwsh -C' or 'term://'                            -- Used by terminal split mappings to use shellcmd as the terminal shell
+shellcmd = is_windows and 'term://powershell -C' or 'term://'                   -- Used by terminal split mappings to use shellcmd as the terminal shell
 g.diagnostic_insert_delay = 1
 g.completion_enable_auto_popup = 0                                              -- LSP completion: Disable auto popup of completion
 g.completion_enable_snippet = 'UltiSnips'                                       -- LSP completion: Enable UltiSnips integration
+
+cmd([[command! -bang -nargs=* Rg call fzf#vim#grep('rg --hidden ]]..            -- FZF Riggrep commandline options
+  [[--ignore-file ~/.ignore --column --line-number --no-heading ]]..
+  [[--color=always --smart-case -- '.shellescape(<q-args>), 1, ]]..
+  [[fzf#vim#with_preview(), <bang>0)]])
 
 
 -- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -169,34 +161,11 @@ lspconfig.solargraph.setup{}
 
 -- Key Mappings -----------------------------------------------------------------------------------------------------------------------------------------------
 
-
 local function map(mode, lhs, rhs, opts)
   local options = {noremap = true}
   if opts then options = vim.tbl_extend('force', options, opts) end
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
-
---[[
-function is_space_behind()
-  local col = vim.api.nvim_win_get_cursor(0)[2]
-  return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
-end
-
-function run_completion_or_next_or_snippet()
-  local col = vim.api.nvim_win_get_cursor(0)[2] 
-  if pumvisible()
-    return '\<C-n>'
-  elseif IsSpaceBehind()                                                        -- Insert a Tab if there is a space behind the cursor
-    return '\<Tab>'
-  else
-    return '\<C-x>\<C-o>'
-  endif                                                                         -- behind the current position
-end
-
-function previous_completion_item()                                             -- If completion list is open go to the previous item in the list
-  return pumvisible() ? '\<C-p>' : '\<S-Tab>'                                   -- otherwise send SHIFT+TAB
-end
---]]
 
 g.UltiSnipsExpandTrigger = '<C-Tab>'
 map('i', '<Tab>', '<Plug>(completion_smart_tab)', { noremap = false })          -- Potentially open completion list by pressing TAB
@@ -337,9 +306,9 @@ function _G.term_run(command)                                                   
 end
 
 function _G.delete_term_buffer()                                                -- Removes the terminal buffer used to run commands
-  if termbuffer then
-    cmd(termbuffer..'bd!')
-    termbuffer = nil
+  if g.termbuffer then
+    cmd(g.termbuffer..'bd!')
+    g.termbuffer = nil
   end
 end
 

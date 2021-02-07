@@ -12,7 +12,7 @@ rem Don't send data to Microsoft
 setx DOTNET_CLI_TELEMETRY_OPTOUT true
 
 rem FZF
-setx FZF_DEFAULT_COMMAND "rg --files --no-ignore-vcs --hidden"
+setx FZF_DEFAULT_COMMAND "rg --files --no-ignore-vcs --hidden --ignore-file %USERPROFILE%.ignore"
 
 rem code/ folder dependent on OS
 setx CODE_DIR D:\code
