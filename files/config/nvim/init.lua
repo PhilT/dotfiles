@@ -16,35 +16,55 @@ g.polyglot_disabled = {'fsharp'}
 
 cmd 'packadd paq-nvim'
 local paq = require('paq-nvim').paq
-
 paq {'savq/paq-nvim', opt = true}                                               -- manages itself
-paq {'SirVer/ultisnips'}                                                        -- Handle snippets
-paq {'PhilT/vim-fs'}                                                            -- F# Syntax and Indent
-paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
-paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
+
+-- UI
+paq {'hoob3rt/ayu-vim'}                                                         -- Colorscheme
+paq {'christoomey/vim-tmux-navigator'}                                          -- Move between vim and tmux panes seamlessly
+paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
+
+-- General
+paq {'scrooloose/nerdtree'}                                                     -- CTRL+B - open file tree
+paq {'mtth/scratch.vim'}                                                        -- go/gp - Scratchpad
 paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
-paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
 paq {'junegunn/fzf'}                                                            -- Fuzzy finder
 paq {'junegunn/fzf.vim'}
-paq {'hoob3rt/ayu-vim'}                                                         -- Colorscheme
-
-paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
-paq {'tpope/vim-fugitive'}                                                      -- Git plugin - :G for enhanced status. See plugin section below for more
-paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
-paq {'scrooloose/nerdtree'}                                                     -- CTRL+B - open file tree
-paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
-paq {'mtth/scratch.vim'}                                                        -- go/gp - Scratchpad
-paq {'mhinz/vim-signify'}                                                       -- Git icons in the gutter
+paq {'jremmen/vim-ripgrep'}                                                     -- Allow you to search word under cursor
 paq {'tpope/vim-surround'}                                                      -- cs'<q> - change from single quotes to xml tags
-paq {'tpope/vim-scriptease'}                                                    -- Some helpers for developing Vim plugins
+paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
+paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
 paq {'dbeniamine/todo.txt-vim'}                                                 -- \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
-paq {'mbbill/undotree'}                                                         -- :UndotreeToggle/F5 - Visualise the undo tree
-paq {'godlygeek/tabular'}                                                       -- For aligning text (like this comment!)
+
+-- Version Control
+paq {'tpope/vim-fugitive'}                                                      -- Git plugin - :G for enhanced status. See plugin section below for more
+paq {'mhinz/vim-signify'}                                                       -- Git icons in the gutter
+
+-- Writing
 paq {'plasticboy/vim-markdown'}                                                 -- Markdown syntax highlighting and commands like adding a TOC
-paq {'OmniSharp/omnisharp-vim'}                                                 -- C# plugin
-paq {'nvim-treesitter/nvim-treesitter'}                                         -- More accurate syntax highlighting for some languages (e.g. Ruby)
-paq {'slim-template/vim-slim'}                                                  -- Slim templates syntax highlighting
+
+-- General programming
+paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
 paq {'tpope/vim-abolish'}                                                       -- Change word styles (e.g. Camelcase to underscore)
+paq {'SirVer/ultisnips'}                                                        -- Handle snippets
+paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
+paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
+
+-- F#
+paq {'PhilT/vim-fs'}                                                            -- F# Syntax and Indent
+paq {'OmniSharp/omnisharp-vim'}                                                 -- C# plugin
+
+-- Vimscript
+paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
+paq {'tpope/vim-scriptease'}                                                    -- Some helpers for developing Vim plugins
+
+-- Ruby
+paq {'nvim-treesitter/nvim-treesitter'}                                         -- More accurate syntax highlighting for some languages (e.g. Ruby) [TODO: Not sure it's configured]
+paq {'slim-template/vim-slim'}                                                  -- Slim templates syntax highlighting
+
+-- Unused pending removal
+--paq {'mbbill/undotree'}                                                         -- :UndotreeToggle/F5 - Visualise the undo tree
+--paq {'godlygeek/tabular'}                                                       -- For aligning text (like this comment!)
+
 
 
 -- General settings -------------------------------------------------------------------------------------------------------------------------------------------
@@ -122,10 +142,10 @@ g.diagnostic_insert_delay = 1
 g.completion_enable_auto_popup = 0                                              -- LSP completion: Disable auto popup of completion
 g.completion_enable_snippet = 'UltiSnips'                                       -- LSP completion: Enable UltiSnips integration
 
-cmd([[command! -bang -nargs=* Rg call fzf#vim#grep('rg --hidden ]]..            -- FZF Riggrep commandline options
-  [[--ignore-file ~/.ignore --column --line-number --no-heading ]]..
-  [[--color=always --smart-case -- '.shellescape(<q-args>), 1, ]]..
-  [[fzf#vim#with_preview(), <bang>0)]])
+--cmd([[command! -bang -nargs=* Rg call fzf#vim#grep('rg --hidden ]]..            -- FZF Riggrep commandline options
+--  [[--ignore-file ~/.ignore --column --line-number --no-heading ]]..
+--  [[--color=always --smart-case -- '.shellescape(<q-args>), 1, ]]..
+--  [[fzf#vim#with_preview(), <bang>0)]])
 
 
 -- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
@@ -158,6 +178,7 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
 lspconfig.fsharp.setup{}
 lspconfig.tsserver.setup{}
 lspconfig.solargraph.setup{}
+
 
 -- Key Mappings -----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -211,7 +232,7 @@ map('n', '<F11>', "<cmd>call v:lua.term_run('clean')<CR>")                      
 map('n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')                   -- diagnostic-nvim: Navigate diagnostics
 map('n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')                   -- diagnostic-nvim: Navigate diagnostics
 map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')                         -- LSP: Goto definition
-map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')                         -- LSP: List references - ENTER to go to next
+map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')                         -- LSP: Get references - ENTER to go to next
 map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')                               -- LSP: Show documentation
 map('n', 'X', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>')        -- LSP: Show errors in floating window (in case of long lines)
 map('i', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')                  -- LSP: Show signature (only works when opening parens)
