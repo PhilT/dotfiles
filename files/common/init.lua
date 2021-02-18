@@ -11,12 +11,19 @@ end
 
 -- Plugins ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-g.polyglot_disabled = {'fsharp'}
-
 cmd 'packadd paq-nvim'
 local paq = require('paq-nvim').paq
 paq {'savq/paq-nvim', opt = true}                                               -- manages itself
+
+paq {'SirVer/ultisnips'}                                                        -- Handle snippets
+paq {'PhilT/vim-fs'}                                                            -- F# Syntax and Indent
+paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
+paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
+paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
+paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
+paq {'junegunn/fzf'}                                                            -- Fuzzy finder
+paq {'junegunn/fzf.vim'}
+paq {'hoob3rt/ayu-vim'}                                                         -- Ayu Colorscheme modified to support diff colours (fixes colour issue in signcolumn)
 
 -- UI
 paq {'hoob3rt/ayu-vim'}                                                         -- Colorscheme
@@ -34,6 +41,7 @@ paq {'tpope/vim-surround'}                                                      
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
 paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
 paq {'dbeniamine/todo.txt-vim'}                                                 -- \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
+paq {'simeji/winresizer'}                                                       -- CTRL+E - Resize windows with hjkl
 
 -- Version Control
 paq {'tpope/vim-fugitive'}                                                      -- Git plugin - :G for enhanced status. See plugin section below for more
@@ -64,7 +72,6 @@ paq {'slim-template/vim-slim'}                                                  
 -- Unused pending removal
 --paq {'mbbill/undotree'}                                                         -- :UndotreeToggle/F5 - Visualise the undo tree
 --paq {'godlygeek/tabular'}                                                       -- For aligning text (like this comment!)
-
 
 
 -- General settings -------------------------------------------------------------------------------------------------------------------------------------------
@@ -110,13 +117,21 @@ opt('w', 'number', true)                                                        
 opt('w', 'signcolumn', 'yes')                                                   -- Keeps sign column visable to stop edit window shifting left and right
 
 cmd('syntax enable')                                                            -- Ensures error pop ups correctly show red text
-g.ayucolor = 'mirage'
-cmd('colorscheme ayu')                                                       -- Set theme
+g.ayucolor = 'mirage'                                                           -- Set theme
+cmd('colorscheme ayu')
 cmd('hi! Search guifg=#333333 guibg=#c9d05c ctermbg=NONE gui=NONE cterm=NONE')  -- Remove underline from search highlight and use some inverted color instead
 cmd('hi! CursorLine guibg=#333333')
 
 local a = {}; for i=0,500 do a[i]=i+80 end                                      -- Grey out everything past 80 columns
 opt('w', 'colorcolumn', table.concat(a, ','))
+
+if is_windows then                                                              -- Set Powershell as terminal on Windows (default is cmd)
+  cmd([[let &shell = 'powershell']])
+  cmd([[set shellquote= shellpipe=\| shellxquote=]])
+  cmd([[set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command]])
+  cmd([[set shellredir=\|\ Out-File\ -Encoding\ UTF8]])
+end
+
 
 -- Plugin settings --------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -129,6 +144,7 @@ g.vim_markdown_folding_disabled = 1                                             
 g.NERDTreeQuitOnOpen = 1                                                        -- close NERDTree after opening file
 g.NERDTreeShowHidden = 1                                                        -- Show hidden files
 g.NERDTreeWinSize = 50                                                          -- Width of NERDTree window
+g.NERDTreeIgnore = {[[\.git]], [[\.paket]], [[packages]], [[paket-files]]}      -- Hide some directories in NERDTree
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
@@ -156,7 +172,7 @@ local configs = require 'lspconfig/configs'
 if not configs.fsharp then
   configs.fsharp = {
     default_config = {
-      cmd = {'$CODE_DIR/fsharp-language-server/src/FSharpLanguageServer/bin/Release/netcoreapp3.1/FSharpLanguageServer'};
+      cmd = {'D:/code/fsharp-language-server/src/FSharpLanguageServer/bin/Release/netcoreapp3.1/FSharpLanguageServer'};
       filetypes = {'fsharp'};
       root_dir = lspconfig.util.root_pattern('*.fsproj');
     };
@@ -175,9 +191,9 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   }
 )
 
-lspconfig.fsharp.setup{}
-lspconfig.tsserver.setup{}
-lspconfig.solargraph.setup{}
+lspconfig.fsharp.setup{}                                                        -- F# Language server
+lspconfig.tsserver.setup{}                                                      -- TypeScript/JavaScript language server
+lspconfig.solargraph.setup{}                                                    -- Ruby language server
 
 
 -- Key Mappings -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -212,8 +228,6 @@ map('n', 'zo', '<c-w>=')                                                        
 
 map('n', 'ta', '<cmd>tabe<CR>')                                                 -- Add tab pane
 map('n', 'tc', '<cmd>tabc<CR>')                                                 -- Clear (remove) tab pane
-map('n', 'tn', '<cmd>tabn<CR>')                                                 -- Next tab pane
-map('n', 'tp', '<cmd>tabp<CR>')                                                 -- Previous tab pane
 map('n', 'tt', '<cmd>tabe<CR><cmd>edit '..shellcmd..'<CR>')                     -- Open terminal in new tab
 
 map('n', '<CR>', '<cmd>cn<CR>')                                                 -- Next quickfix entry
