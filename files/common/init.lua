@@ -1,7 +1,7 @@
 local cmd = vim.cmd                                                             -- Shortcuts
 local fn = vim.fn
 local g = vim.g
-local is_windows = package.config:sub(1,1) == '\\'
+local is_windows = vim.fn.has('win32') == 1
 
 local scopes = {o = vim.o, b = vim.bo, w = vim.wo}                              -- Workaround to enable simple option interface until
 local function opt(scope, key, value)                                           -- https://github.com/neovim/neovim/pull/13479 is complete
@@ -44,7 +44,7 @@ paq {'plasticboy/vim-markdown'}                                                 
 paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
 paq {'tpope/vim-abolish'}                                                       -- Change word styles (e.g. Camelcase to underscore)
 paq {'SirVer/ultisnips'}                                                        -- Handle snippets
-paq {'PhilT/nvim-lspconfig'}                                                   -- Language server client settings
+paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
 paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
 
 -- F#
@@ -169,7 +169,14 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
 )
 
 local lspconfig = require'lspconfig'
-lspconfig.fsautocomplete.setup{}                                                -- F# Language server
+local fsautocomplete_path = '/home/phil/lib/fsac/fsautocomplete.dll'
+if is_windows then
+  fsautocomplete_path = 'C:/tools/fsac/fsautocomplete.dll'
+end
+
+lspconfig.fsautocomplete.setup{                                                 -- F# Language server
+  cmd = {'dotnet', fsautocomplete_path, '--background-service-enabled'}
+}
 lspconfig.tsserver.setup{}                                                      -- TypeScript/JavaScript language server
 lspconfig.solargraph.setup{}                                                    -- Ruby language server
 
