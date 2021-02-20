@@ -15,16 +15,6 @@ cmd 'packadd paq-nvim'
 local paq = require('paq-nvim').paq
 paq {'savq/paq-nvim', opt = true}                                               -- manages itself
 
-paq {'SirVer/ultisnips'}                                                        -- Handle snippets
-paq {'PhilT/vim-fs'}                                                            -- F# Syntax and Indent
-paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
-paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
-paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
-paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
-paq {'junegunn/fzf'}                                                            -- Fuzzy finder
-paq {'junegunn/fzf.vim'}
-paq {'hoob3rt/ayu-vim'}                                                         -- Ayu Colorscheme modified to support diff colours (fixes colour issue in signcolumn)
-
 -- UI
 paq {'hoob3rt/ayu-vim'}                                                         -- Colorscheme
 paq {'christoomey/vim-tmux-navigator'}                                          -- Move between vim and tmux panes seamlessly
@@ -54,12 +44,12 @@ paq {'plasticboy/vim-markdown'}                                                 
 paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
 paq {'tpope/vim-abolish'}                                                       -- Change word styles (e.g. Camelcase to underscore)
 paq {'SirVer/ultisnips'}                                                        -- Handle snippets
-paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
+paq {'PhilT/nvim-lspconfig'}                                                   -- Language server client settings
 paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
 
 -- F#
-paq {'PhilT/vim-fs'}                                                            -- F# Syntax and Indent
-paq {'OmniSharp/omnisharp-vim'}                                                 -- C# plugin
+paq {'PhilT/vim-fsharp'}                                                        -- F# Syntax and Indent
+--paq {'OmniSharp/omnisharp-vim'}                                                 -- C# plugin
 
 -- Vimscript
 paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
@@ -166,19 +156,6 @@ g.completion_enable_snippet = 'UltiSnips'                                       
 
 -- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
 
-local lspconfig = require 'lspconfig'
-local configs = require 'lspconfig/configs'
-
-if not configs.fsharp then
-  configs.fsharp = {
-    default_config = {
-      cmd = {'D:/code/fsharp-language-server/src/FSharpLanguageServer/bin/Release/netcoreapp3.1/FSharpLanguageServer'};
-      filetypes = {'fsharp'};
-      root_dir = lspconfig.util.root_pattern('*.fsproj');
-    };
-  }
-end
-
 -- No support for autocommands until https://github.com/neovim/neovim/pull/12378
 cmd('autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()')      -- Show diagnostics in a popup window instead of after source code
 cmd("autocmd BufEnter * lua require'completion'.on_attach()")                   -- Load completion provider
@@ -191,9 +168,12 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   }
 )
 
-lspconfig.fsharp.setup{}                                                        -- F# Language server
+local lspconfig = require'lspconfig'
+lspconfig.fsautocomplete.setup{}                                                -- F# Language server
 lspconfig.tsserver.setup{}                                                      -- TypeScript/JavaScript language server
 lspconfig.solargraph.setup{}                                                    -- Ruby language server
+
+--vim.lsp.set_log_level("debug")
 
 
 -- Key Mappings -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -271,9 +251,8 @@ map('n', '<C-j>', '<C-w>j')                                                     
 map('n', '<C-k>', '<C-w>k')                                                     --
 map('n', '<C-l>', '<C-w>l')                                                     --
 
-local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/config/nvim/init.lua'
+local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/common/init.lua'
 local todo_path = os.getenv('TODO_DIR')..'/todo.txt'
-local alacritty_yml_path = os.getenv('CODE_DIR')..'/dotfiles/files/alacritty.yml'
 
 map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
 map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
@@ -289,7 +268,6 @@ map('n', '<Leader>p', '<cmd>bp<CR>')                                            
 
 map('n', '<Leader>v', '<cmd>tabe '..init_lua_path..'<CR>')                      -- Edit vimrc
 map('n', '<Leader>t', '<cmd>topleft split '..todo_path..'<CR><cmd>resize 20<CR>')-- Edit TODO list
-map('n', '<Leader>y', '<cmd>tabe '..alacritty_yml_path..'<CR>')                 -- Edit alacritty.yml
 
 -- map('n', '<C-z>', '<Nop>'                                                    -- Turn off stupid CTRL keys - Overriden by edit snippets
 -- map('n', '<C-s>', '<Nop>'                                                    -- Turn off stupid CTRL keys - Overriden by symbols, above
