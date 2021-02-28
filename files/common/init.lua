@@ -26,7 +26,6 @@ paq {'mtth/scratch.vim'}                                                        
 paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
 paq {'junegunn/fzf'}                                                            -- Fuzzy finder
 paq {'junegunn/fzf.vim'}
-paq {'jremmen/vim-ripgrep'}                                                     -- Allow you to search word under cursor
 paq {'tpope/vim-surround'}                                                      -- cs'<q> - change from single quotes to xml tags
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
 paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
@@ -121,6 +120,9 @@ if is_windows then                                                              
   cmd([[set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command]])
   cmd([[set shellredir=\|\ Out-File\ -Encoding\ UTF8]])
 end
+
+cmd([[command! -nargs=* Rg :cexpr system('rg --vimgrep '.]]..                   -- `Rg <terms>` or `Rg` Search for terms or word under cursor
+    [[('<args>' == '' ? expand('<cword>') : '<args>'))|:copen]])
 
 
 -- Plugin settings --------------------------------------------------------------------------------------------------------------------------------------------
