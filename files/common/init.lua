@@ -55,7 +55,6 @@ paq {'junegunn/vader.vim'}                                                      
 paq {'tpope/vim-scriptease'}                                                    -- Some helpers for developing Vim plugins
 
 -- Ruby
-paq {'nvim-treesitter/nvim-treesitter'}                                         -- More accurate syntax highlighting for some languages (e.g. Ruby) [TODO: Not sure it's configured]
 paq {'slim-template/vim-slim'}                                                  -- Slim templates syntax highlighting
 
 -- Unused pending removal
@@ -136,7 +135,9 @@ g.vim_markdown_folding_disabled = 1                                             
 g.NERDTreeQuitOnOpen = 1                                                        -- close NERDTree after opening file
 g.NERDTreeShowHidden = 1                                                        -- Show hidden files
 g.NERDTreeWinSize = 50                                                          -- Width of NERDTree window
-g.NERDTreeIgnore = {[[\.git]], [[\.paket]], [[packages]], [[paket-files]]}      -- Hide some directories in NERDTree
+g.NERDTreeIgnore = {                                                            -- Hide some directories in NERDTree
+  [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]]
+}
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
@@ -245,7 +246,7 @@ map('n', 'gD', '<cmd>lua vim.lsp.buf.implementation()<CR>')                     
 map('t', '<A-e>', '<C-\\><C-n>')                                                -- ALT+e switches to NORMAL mode from TERMINAL mode
 map('t', '<A-h>', '<C-\\><C-n><C-w>h')                                          --
 map('t', '<A-j>', '<C-\\><C-n><C-w>j')                                          -- ALT+(hjkl) to navigate splits from terminal mode...
-map('t', '<A-k>', '<C-\\><C-n><C-w>k')                                          -- 
+map('t', '<A-k>', '<C-\\><C-n><C-w>k')                                          --
 map('t', '<A-l>', '<C-\\><C-n><C-w>l')                                          --
 map('i', '<A-h>', '<C-\\><C-n><C-w>h')                                          -- ...insert mode
 map('i', '<A-j>', '<C-\\><C-n><C-w>j')                                          --
@@ -303,6 +304,10 @@ local commands = {
   'BufEnter todo.txt resize 20 | set wfh',                                      -- Resize todo window on entering
   'Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc',
   'Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc',
+  'Filetype todo setlocal omnifunc=todo#Complete',
+  'Filetype todo imap <buffer> + +<C-x><C-o>',
+  'Filetype todo imap <buffer> @ @<C-x><C-o>',
+  'Filetype todo imap <Tab> <C-x><C-o>',
   [[bufread *.fsx,*.fs syn region fsharpMultiLineComment start='(\*' end='\*)' contains=fsharpTodo,@Spell]] -- Spell checking in multi-line F# comments
 }
 au('mygroup', commands)
