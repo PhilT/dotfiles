@@ -29,7 +29,7 @@ paq {'junegunn/fzf.vim'}
 paq {'tpope/vim-surround'}                                                      -- `cs'<q>` - change from single quotes to xml tags
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
 paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
-paq {'dbeniamine/todo.txt-vim'}                                                 -- `\do` - Opens C:\Users\phil\Dropbox\todo\todo.txt
+paq {'dbeniamine/todo.txt-vim'}                                                 -- `\t` - Opens my todo list
 paq {'simeji/winresizer'}                                                       -- `CTRL+E` - Resize windows with `hjkl`
 
 -- Version Control
