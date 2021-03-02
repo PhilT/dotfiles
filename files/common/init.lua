@@ -26,11 +26,11 @@ paq {'mtth/scratch.vim'}                                                        
 paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
 paq {'junegunn/fzf'}                                                            -- Fuzzy finder
 paq {'junegunn/fzf.vim'}
-paq {'tpope/vim-surround'}                                                      -- cs'<q> - change from single quotes to xml tags
+paq {'tpope/vim-surround'}                                                      -- `cs'<q>` - change from single quotes to xml tags
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
 paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
-paq {'dbeniamine/todo.txt-vim'}                                                 -- \do - Opens C:\Users\phil\Dropbox\todo\todo.txt
-paq {'simeji/winresizer'}                                                       -- CTRL+E - Resize windows with hjkl
+paq {'dbeniamine/todo.txt-vim'}                                                 -- `\do` - Opens C:\Users\phil\Dropbox\todo\todo.txt
+paq {'simeji/winresizer'}                                                       -- `CTRL+E` - Resize windows with `hjkl`
 
 -- Version Control
 paq {'tpope/vim-fugitive'}                                                      -- Git plugin - :G for enhanced status. See plugin section below for more
@@ -183,7 +183,7 @@ lspconfig.tsserver.setup{}                                                      
 lspconfig.solargraph.setup{}                                                    -- Ruby language server
 
 --vim.lsp.set_log_level("debug")
-
+-- lua print(vim.lsp.get_log_path())
 
 -- Key Mappings -----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -244,21 +244,22 @@ map('n', 'gD', '<cmd>lua vim.lsp.buf.implementation()<CR>')                     
 
 map('t', '<A-e>', '<C-\\><C-n>')                                                -- ALT+e switches to NORMAL mode from TERMINAL mode
 map('t', '<A-h>', '<C-\\><C-n><C-w>h')                                          --
-map('t', '<A-j>', '<C-\\><C-n><C-w>j')                                          -- ALT+(hjkl) to navigate splits from any mode
-map('t', '<A-k>', '<C-\\><C-n><C-w>k')                                          -- including TERMINAL mode.
+map('t', '<A-j>', '<C-\\><C-n><C-w>j')                                          -- ALT+(hjkl) to navigate splits from terminal mode...
+map('t', '<A-k>', '<C-\\><C-n><C-w>k')                                          -- 
 map('t', '<A-l>', '<C-\\><C-n><C-w>l')                                          --
-map('i', '<A-h>', '<C-\\><C-n><C-w>h')                                          -- CTRL+(hjkl) to navigate splits from NORMAL mode
+map('i', '<A-h>', '<C-\\><C-n><C-w>h')                                          -- ...insert mode
 map('i', '<A-j>', '<C-\\><C-n><C-w>j')                                          --
 map('i', '<A-k>', '<C-\\><C-n><C-w>k')                                          --
 map('i', '<A-l>', '<C-\\><C-n><C-w>l')                                          --
-map('n', '<A-h>', '<C-w>h')                                                     --
+map('n', '<A-h>', '<C-w>h')                                                     -- ...normal mode
 map('n', '<A-j>', '<C-w>j')                                                     --
 map('n', '<A-k>', '<C-w>k')                                                     --
 map('n', '<A-l>', '<C-w>l')                                                     --
-map('n', '<C-h>', '<C-w>h')                                                     --
+map('n', '<C-h>', '<C-w>h')                                                     -- CTRL+(hjkl) to navigate splits from NORMAL mode
 map('n', '<C-j>', '<C-w>j')                                                     --
 map('n', '<C-k>', '<C-w>k')                                                     --
 map('n', '<C-l>', '<C-w>l')                                                     --
+map('n', '<C-c>', '<C-w>c')                                                     -- 'CTRL+c' to close window
 
 local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/common/init.lua'
 local todo_path = os.getenv('TODO_DIR')..'/todo.txt'
@@ -266,6 +267,7 @@ local todo_path = os.getenv('TODO_DIR')..'/todo.txt'
 map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
 map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
 map('n', '<Leader>dd', '<cmd>bufdo bd<CR>')                                     -- delete all buffers
+map('n', '<Leader>f', '<cmd>NERDTreeFind<CR>')                                  -- Find and reveal the current file in NERDTree
 map('n', '<Leader>h', '<cmd>topleft vsplit '..shellcmd..'<CR>')                 -- Terminal far left split
 map('n', '<Leader>i', '<cmd>setlocal number!<CR>')                              -- Toggle line numbers
 map('n', '<Leader>j', '<cmd>botright split '..shellcmd..'<CR>')                 -- Terminal bottom split

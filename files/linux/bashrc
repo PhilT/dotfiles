@@ -117,9 +117,8 @@ if ! shopt -oq posix; then
 fi
 export PATH=~/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-VISUAL=$HOME/nvim.appimage
+VISUAL=nvim
 EDITOR="$VISUAL"
-alias nvim=$VISUAL
 
 
 export TODO_DIR=/mnt/d/todo
@@ -131,6 +130,9 @@ alias fs=$CODE_DIR/dotfiles/files/linux/bin/tmux_fs.sh
 export DOTNET_CLI_TELEMETRY_OPTOUT=true
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --ignore-file ~/.ignore" # duplicated in env.cmd
 export NO_COVERAGE=true
+#export RUBYGEMS_GEMDEPS=- # Getting errors saying rake isn't installed
+export DATABASE_USERNAME=phil
+export DATABASE_HOST=
 
 # Load chruby scripts
 source /usr/local/share/chruby/chruby.sh
