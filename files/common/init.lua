@@ -28,6 +28,7 @@ paq {'junegunn/fzf'}                                                            
 paq {'junegunn/fzf.vim'}
 paq {'tpope/vim-surround'}                                                      -- `cs'<q>` - change from single quotes to xml tags
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
+paq {'tpope/vim-dispatch'}                                                      -- Run commands asynchronously using Neovim's jobstart()
 paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
 paq {'dbeniamine/todo.txt-vim'}                                                 -- `\t` - Opens my todo list
 paq {'simeji/winresizer'}                                                       -- `CTRL+E` - Resize windows with `hjkl`
@@ -78,6 +79,7 @@ opt('b', 'tabstop', indent)                                                     
 opt('b', 'fileformat', 'unix')                                                  -- Ensure lf line-endings are used on Windows
 opt('b', 'swapfile', false)                                                     -- Don't create temporary swap files
 
+opt('o', 'autowrite', true)                                                     -- Autosave files before running make
 opt('o', 'backup', false)                                                       -- Don't create backups
 opt('o', 'equalalways', false)                                                  -- Stop windows being resized (to stop todo.txt from being resized)
 opt('o', 'fileformats', 'unix,dos')                                             -- Recognise unix or dos line-endings, save new files as unix
@@ -151,11 +153,6 @@ g.diagnostic_insert_delay = 1
 g.completion_enable_auto_popup = 0                                              -- LSP completion: Disable auto popup of completion
 g.completion_enable_snippet = 'UltiSnips'                                       -- LSP completion: Enable UltiSnips integration
 
---cmd([[command! -bang -nargs=* Rg call fzf#vim#grep('rg --hidden ]]..            -- FZF Riggrep commandline options
---  [[--ignore-file ~/.ignore --column --line-number --no-heading ]]..
---  [[--color=always --smart-case -- '.shellescape(<q-args>), 1, ]]..
---  [[fzf#vim#with_preview(), <bang>0)]])
-
 
 -- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -165,9 +162,7 @@ cmd("autocmd BufEnter * lua require'completion'.on_attach()")                   
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-  virtual_text = false,                                                         -- disable virtual text
-  signs = true,                                                                 -- show signs
-  update_in_insert = false                                                      -- delay update diagnostics
+    virtual_text = false,                                                       -- Adds messages to ends of lines
   }
 )
 
@@ -178,12 +173,13 @@ if is_windows then
 end
 
 lspconfig.fsautocomplete.setup{                                                 -- F# Language server
-  cmd = {'dotnet', fsautocomplete_path, '--background-service-enabled'}
+  cmd = {'dotnet', fsautocomplete_path, '--background-service-enabled'};
+  root_dir = lspconfig.util.root_pattern('*.sln');
 }
 lspconfig.tsserver.setup{}                                                      -- TypeScript/JavaScript language server
 lspconfig.solargraph.setup{}                                                    -- Ruby language server
 
---vim.lsp.set_log_level("debug")
+-- vim.lsp.set_log_level("debug")
 -- lua print(vim.lsp.get_log_path())
 
 -- Key Mappings -----------------------------------------------------------------------------------------------------------------------------------------------
@@ -205,8 +201,6 @@ map('n', '<C-b>', '<cmd>Buffers<CR>')                                           
 map('n', '<C-d>', '<cmd>OpenDiagnostic<CR>')                                    -- CTRL+d to open diagnostics - aka errors, warnings and hints to correct
 map('n', '<C-s>', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')                -- CTRL+s to open symbol list (for entire workspace)- Fuzzy find types, functions, etc
 
-map('n', 'j', 'gj')                                                             -- Move down single lines when wrapped
-map('n', 'k', 'gk')                                                             -- Move down single lines when wrapped
 map('n', 'go', '<cmd>Scratch<CR>')                                              -- go to switch to Scratch window (closes when switching to another window)
 map('n', 'gp', '<cmd>ScratchPreview<CR>')                                       -- gp to open Scratch window
 
@@ -264,6 +258,7 @@ map('n', '<C-c>', '<C-w>c')                                                     
 
 local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/common/init.lua'
 local todo_path = os.getenv('TODO_DIR')..'/todo.txt'
+local someday_path = os.getenv('TODO_DIR')..'/someday.txt'
 
 map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
 map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
@@ -279,7 +274,8 @@ map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    
 map('n', '<Leader>p', '<cmd>bp<CR>')                                            -- previous buffer
 
 map('n', '<Leader>v', '<cmd>tabe '..init_lua_path..'<CR>')                      -- Edit vimrc
-map('n', '<Leader>t', '<cmd>topleft split '..todo_path..'<CR><cmd>resize 20<CR>')-- Edit TODO list
+map('n', '<Leader>t', '<cmd>topleft split '..todo_path..'<CR><cmd>resize 20<CR>')-- Edit todo.txt file
+map('n', '<Leader>s', '<cmd>split '..someday_path..'<CR>')                      -- Edit someday.txt file
 
 -- map('n', '<C-z>', '<Nop>'                                                    -- Turn off stupid CTRL keys - Overriden by edit snippets
 -- map('n', '<C-s>', '<Nop>'                                                    -- Turn off stupid CTRL keys - Overriden by symbols, above
@@ -307,7 +303,6 @@ local commands = {
   'Filetype todo setlocal omnifunc=todo#Complete',
   'Filetype todo imap <buffer> + +<C-x><C-o>',
   'Filetype todo imap <buffer> @ @<C-x><C-o>',
-  'Filetype todo imap <Tab> <C-x><C-o>',
   [[bufread *.fsx,*.fs syn region fsharpMultiLineComment start='(\*' end='\*)' contains=fsharpTodo,@Spell]] -- Spell checking in multi-line F# comments
 }
 au('mygroup', commands)
