@@ -8,6 +8,7 @@
 [alias]
   ap = !git add -N . && git add -p
   ss = stash
+  sd = stash -- $\\\\(git diff --staged --name-only\\\\)
   pp = stash pop
   cl = branch -d $(git branch --merged | grep -v '\\(\\*\\|develop\\|master\\)')
   st = status -s
