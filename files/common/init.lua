@@ -21,7 +21,7 @@ paq {'christoomey/vim-tmux-navigator'}                                          
 paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
 
 -- General
-paq {'scrooloose/nerdtree'}                                                     -- CTRL+B - open file tree
+paq {'scrooloose/nerdtree'}                                                     -- CTRL+F - open file tree
 paq {'mtth/scratch.vim'}                                                        -- go/gp - Scratchpad
 paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
 paq {'junegunn/fzf'}                                                            -- Fuzzy finder
@@ -49,7 +49,6 @@ paq {'nvim-lua/completion-nvim'}                                                
 
 -- F#
 paq {'PhilT/vim-fsharp'}                                                        -- F# Syntax and Indent
---paq {'OmniSharp/omnisharp-vim'}                                                 -- C# plugin
 
 -- Vimscript
 paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
@@ -81,7 +80,6 @@ opt('b', 'swapfile', false)                                                     
 
 opt('o', 'autowrite', true)                                                     -- Autosave files before running make
 opt('o', 'backup', false)                                                       -- Don't create backups
-opt('o', 'equalalways', false)                                                  -- Stop windows being resized (to stop todo.txt from being resized)
 opt('o', 'fileformats', 'unix,dos')                                             -- Recognise unix or dos line-endings, save new files as unix
 opt('o', 'hidden', true)                                                        -- hide buffers instead of closing
 opt('o', 'ignorecase', true)                                                    -- See smartcase
@@ -190,10 +188,13 @@ local function map(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+map('n', '<Space>', '<Nop>')                                                    -- Unmap spacebar to allow --v
+g.mapleader = ' '                                                               -- Make spacebar the leader key
+
 g.UltiSnipsExpandTrigger = '<C-Tab>'
 map('i', '<Tab>', '<Plug>(completion_smart_tab)', { noremap = false })          -- Potentially open completion list by pressing TAB
 map('i', '<S-Tab>', '<Plug>(completion_smart_s_tab)', { noremap = false })      -- Go to previous item in completion list if open
-map('n', '<Space>', '<cmd>nohlsearch<CR>')                                      -- SPACE to turn off search highlight
+map('n', '<Leader>-', '<cmd>nohlsearch<CR>')                                    -- SPACE+- to turn off search highlight
 map('n', '<C-p>', '<cmd>Files<CR>')                                             -- CTRL+p to open Fuzzy File Finder
 map('n', '<C-f>', '<cmd>NERDTreeToggle<CR>')                                    -- CTRL+f to open NERDTree file browser
 map('n', '<C-u>', '<cmd>UndotreeToggle<CR>')                                    -- Show undo tree
@@ -212,20 +213,19 @@ map('n', 'zo', '<c-w>=')                                                        
 
 map('n', 'ta', '<cmd>tabe<CR>')                                                 -- Add tab pane
 map('n', 'tc', '<cmd>tabc<CR>')                                                 -- Clear (remove) tab pane
-map('n', 'tt', '<cmd>tabe<CR><cmd>edit '..shellcmd..'<CR>')                     -- Open terminal in new tab
+map('n', 'tt', '<cmd>tabe<CR><cmd>term<CR>')                                    -- Open terminal in new tab
 
 map('n', '<CR>', '<cmd>cn<CR>')                                                 -- Next quickfix entry
 map('n', '<Leader><CR>', '<cmd>cp<CR>')                                         -- Previous quickfix entry
 
 map('n', '<F6>', '<cmd>setlocal spell!<CR>')                                    -- Toggle spellcheck
-map('n', '<F7>', '<cmd>call v:lua.delete_term_buffer()<CR>')                    -- Close build/test terminal split
-map('n', '<F8>', "<cmd>call v:lua.term_run('build')<CR>")                       -- Runs ./build in a terminal split
-map('n', '<F9>', "<cmd>call v:lua.term_run('test')<CR>")                        -- Run tests in a terminal
-map('n', '<S-F9>', "<cmd>call v:lua.term_run('test', 'GRAPH')<CR>")             -- Run tests in a terminal with GRAPH directive
-map('n', '<F10>', "<cmd>call v:lua.term_run('run')<CR>")                        -- Run the project
-map('n', '<S-F10>', "<cmd>call v:lua.term_run('run_release')<CR>")              -- Run the project
-map('n', '<Leader><F10>', "<cmd>call v:lua.term_run('bench')<CR>")              -- Run BenchmarkDotNet
-map('n', '<F11>', "<cmd>call v:lua.term_run('clean')<CR>")                      -- Clean the project
+
+cmd([[set errorformat^=\ %#%f(%l\\\,%c):\ %m,\%.%#\ at\ %.%#\ in\ %f:line\ %l]])-- Set errorformats for dotnet build and test errors
+
+map('n', '<F7>', '<cmd>ccl<CR>')                                                -- Close quickfix window
+map('n', '<Leader><F7>', '<cmd>call v:lua.create_website_env()<CR>')            -- Setup windows for Blog development
+map('n', '<Leader><F8>', '<cmd>call v:lua.create_fsharp_env()<CR>')             -- Setup windows for F# development
+map('n', '<Leader><F9>', '<cmd>call v:lua.create_ruby_env()<CR>')               -- Setup windows for Ruby development
 
 map('n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')                   -- diagnostic-nvim: Navigate diagnostics
 map('n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')                   -- diagnostic-nvim: Navigate diagnostics
@@ -274,7 +274,7 @@ map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    
 map('n', '<Leader>p', '<cmd>bp<CR>')                                            -- previous buffer
 
 map('n', '<Leader>v', '<cmd>tabe '..init_lua_path..'<CR>')                      -- Edit vimrc
-map('n', '<Leader>t', '<cmd>topleft split '..todo_path..'<CR><cmd>resize 20<CR>')-- Edit todo.txt file
+map('n', '<Leader>t', '<cmd>split '..todo_path..'<CR>')                         -- Edit todo.txt file
 map('n', '<Leader>s', '<cmd>split '..someday_path..'<CR>')                      -- Edit someday.txt file
 
 -- map('n', '<C-z>', '<Nop>'                                                    -- Turn off stupid CTRL keys - Overriden by edit snippets
@@ -296,8 +296,6 @@ end
 local commands = {
   'BufReadPost quickfix nnoremap <buffer> <CR> <CR>',                           -- Unmap ENTER in Quickfix so found files can be selected for example
   [[FileType fsharp let b:AutoPairs = AutoPairsDefine({'(*' : '*)//n'})]],      -- Define auto-pair for F# multiline comments
-  'BufLeave todo.txt resize 2 | normal gg',                                     -- Resize todo window on leaving
-  'BufEnter todo.txt resize 20 | set wfh',                                      -- Resize todo window on entering
   'Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc',
   'Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc',
   'Filetype todo setlocal omnifunc=todo#Complete',
@@ -310,6 +308,14 @@ au('mygroup', commands)
 
 -- Functions --------------------------------------------------------------------------------------------------------------------------------------------------
 
+vim.api.nvim_exec(                                                              -- Show full paths in lightline.vim statusline
+[[
+function! FilenameForLightline()
+  return expand('%')
+endfunction
+]], false
+)
+
 function set_term_insert()                                                      -- Turn on insert mode
   au('TermInsert', {'TermOpen * startinsert'})
 end
@@ -318,15 +324,12 @@ set_term_insert()                                                               
 function _G.switch_out_of_term()                                                -- Switch back to previous window after running build command
   g.termbuffer = vim.fn.bufnr('%')                                              -- Store terminal buffer used to run build
   cmd('normal G')                                                               -- Move to bottom of output
-  cmd('wincmd p')                                                               -- Switch to previous window
   set_term_insert()                                                             -- Reset back to insert mode when starting terminal window
 end
 
 function _G.term_run(command)                                                   -- Run a build command e.g. 'run', 'test', 'build'
-  delete_term_buffer()
-
-  au('TermInsert', {'TermOpen * call v:lua.switch_out_of_term()'})
-  cmd('botright split '..shellcmd..' ./'..command)
+  au('TermInsert', {'TermOpen * call v:lua.switch_out_of_term()'})              -- When entering insert mode in a terminal switch back out of it
+  cmd('term '..command)
 end
 
 function _G.delete_term_buffer()                                                -- Removes the terminal buffer used to run commands
@@ -336,11 +339,32 @@ function _G.delete_term_buffer()                                                
   end
 end
 
-vim.api.nvim_exec(                                                              -- Show full paths in lightline.vim statusline
-[[
-function! FilenameForLightline()
-  return expand('%')
-endfunction
-]], false
-)
+function _G.init_build_mappings()                                               -- Setup dotnet build mappings
+  cmd('set makeprg=./build')
+
+  map('n', '<F8>', '<cmd>Make<CR>')                                             -- dotnet build
+  map('n', '<F9>', '<cmd>Dispatch ./test<CR>')                                  -- dotnet test
+  map('n', '<Leader><F9>', '<cmd>Dispatch ./bench')                             -- runs benchmarking project
+  map('n', '<F10>', '<cmd>Dispatch ./run')                                      -- dotnet run
+  map('n', '<F11>', '<cmd>Dispatch ./clear')                                    -- dotnet clear
+end
+
+function _G.create_fsharp_env()                                                 -- Prepare Neovim for developing F# project
+  init_build_mappings()
+
+  cmd('vsplit')                                                                 -- Vertical split
+  cmd('wincmd h')                                                               -- Move to left pane
+  term_run('./watch')                                                           -- Start test watcher in terminal
+  cmd('split '..todo_path)                                                      -- Split below and add todo list
+  cmd('wincmd l')                                                               -- Move back to right pane
+end
+
+function _G.create_website_env()                                                -- Prepare Neovim for working on the blog
+  init_build_mappings()
+
+  cmd('vsplit')                                                                 -- Vertical split
+  cmd('wincmd h')                                                               -- Move to left pane
+  term_run('./start electricvisions')                                           -- Start web server
+  cmd('wincmd l')                                                               -- Move back to right pane
+end
 
