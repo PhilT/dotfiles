@@ -344,9 +344,9 @@ function _G.init_build_mappings()                                               
 
   map('n', '<F8>', '<cmd>Make<CR>')                                             -- dotnet build
   map('n', '<F9>', '<cmd>Dispatch ./test<CR>')                                  -- dotnet test
-  map('n', '<Leader><F9>', '<cmd>Dispatch ./bench')                             -- runs benchmarking project
-  map('n', '<F10>', '<cmd>Dispatch ./run')                                      -- dotnet run
-  map('n', '<F11>', '<cmd>Dispatch ./clear')                                    -- dotnet clear
+  map('n', '<Leader><F9>', '<cmd>Dispatch ./bench<CR>')                         -- runs benchmarking project
+  map('n', '<F10>', '<cmd>Dispatch ./run<CR>')                                  -- dotnet run
+  map('n', '<F11>', '<cmd>Dispatch ./clear<CR>')                                -- dotnet clear
 end
 
 function _G.create_fsharp_env()                                                 -- Prepare Neovim for developing F# project
