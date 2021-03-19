@@ -177,7 +177,7 @@ lspconfig.fsautocomplete.setup{                                                 
 lspconfig.tsserver.setup{}                                                      -- TypeScript/JavaScript language server
 lspconfig.solargraph.setup{}                                                    -- Ruby language server
 
--- vim.lsp.set_log_level("debug")
+-- lua vim.lsp.set_log_level("debug")
 -- lua print(vim.lsp.get_log_path())
 
 -- Key Mappings -----------------------------------------------------------------------------------------------------------------------------------------------
