@@ -190,6 +190,7 @@ end
 
 map('n', '<Space>', '<Nop>')                                                    -- Unmap spacebar to allow --v
 g.mapleader = ' '                                                               -- Make spacebar the leader key
+g.maplocalleader = ' '
 
 g.UltiSnipsExpandTrigger = '<C-Tab>'
 map('i', '<Tab>', '<Plug>(completion_smart_tab)', { noremap = false })          -- Potentially open completion list by pressing TAB
@@ -225,7 +226,8 @@ cmd([[set errorformat^=\ %#%f(%l\\\,%c):\ %m,\%.%#\ at\ %.%#\ in\ %f:line\ %l]])
 map('n', '<F7>', '<cmd>ccl<CR>')                                                -- Close quickfix window
 map('n', '<Leader><F7>', '<cmd>call v:lua.create_website_env()<CR>')            -- Setup windows for Blog development
 map('n', '<Leader><F8>', '<cmd>call v:lua.create_fsharp_env()<CR>')             -- Setup windows for F# development
-map('n', '<Leader><F9>', '<cmd>call v:lua.create_ruby_env()<CR>')               -- Setup windows for Ruby development
+map('n', '<Leader><F9>', '<cmd>call v:lua.create_fsharp_script_env()<CR>')      -- Setup windows for F# script development
+map('n', '<Leader><F10>', '<cmd>call v:lua.create_ruby_env()<CR>')              -- Setup windows for Ruby development
 
 map('n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')                   -- diagnostic-nvim: Navigate diagnostics
 map('n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')                   -- diagnostic-nvim: Navigate diagnostics
@@ -347,6 +349,10 @@ function _G.init_build_mappings()                                               
   map('n', '<Leader><F9>', '<cmd>Dispatch ./bench<CR>')                         -- runs benchmarking project
   map('n', '<F10>', '<cmd>Dispatch ./run<CR>')                                  -- dotnet run
   map('n', '<F11>', '<cmd>Dispatch ./clear<CR>')                                -- dotnet clear
+end
+
+function _G.create_fsharp_script_env()
+  init_build_mappings()
 end
 
 function _G.create_fsharp_env()                                                 -- Prepare Neovim for developing F# project
