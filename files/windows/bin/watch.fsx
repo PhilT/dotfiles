@@ -17,13 +17,11 @@ let log (msg: string) =
 
 let cmd (cmd: string) (args: string) =
   let proc = Process.Start(cmd, args)
-  let success = proc.WaitForExit(EXE_TIMEOUT)
-  printfn ""
+  proc.WaitForExit(EXE_TIMEOUT) |> ignore
 
 
 let changed action (agent: MailboxProcessor<string>) sender (e: FileSystemEventArgs) =
   if not (Regex.IsMatch(e.FullPath, "(.git|bin\\\|obj\\\)")) then
-    log $"Filename: {e.FullPath}"
     agent.Post($"{action} {e.Name}")
 
 
