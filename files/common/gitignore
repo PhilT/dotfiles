@@ -1,11 +1,10 @@
 .fake
-.ionide
-.vscode
-Thumbs.db
-node_modules
 .git
-.tags
-.scratch.txt
 .ionide
+.scratch.txt
+.tags
+.vscode
 AppData/
 Local Settings/
+Thumbs.db
+node_modules

@@ -172,7 +172,7 @@ end
 
 lspconfig.fsautocomplete.setup{                                                 -- F# Language server
   cmd = {'dotnet', fsautocomplete_path, '--background-service-enabled'};
-  root_dir = lspconfig.util.root_pattern('*.sln');
+  root_dir = lspconfig.util.root_pattern('*.sln', '.git');
 }
 lspconfig.tsserver.setup{}                                                      -- TypeScript/JavaScript language server
 lspconfig.solargraph.setup{}                                                    -- Ruby language server
