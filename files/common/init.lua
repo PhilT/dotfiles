@@ -30,7 +30,7 @@ paq {'tpope/vim-surround'}                                                      
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
 paq {'tpope/vim-dispatch'}                                                      -- Run commands asynchronously using Neovim's jobstart()
 paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
-paq {'dbeniamine/todo.txt-vim'}                                                 -- `\t` - Opens my todo list
+paq {'dbeniamine/todo.txt-vim', url='https://gitlab.com/dbeniamine/todo.txt-vim'}-- `\t` - Opens my todo list
 paq {'simeji/winresizer'}                                                       -- `CTRL+E` - Resize windows with `hjkl`
 
 -- Version Control
@@ -135,8 +135,8 @@ g.vim_markdown_folding_disabled = 1                                             
 g.NERDTreeQuitOnOpen = 1                                                        -- close NERDTree after opening file
 g.NERDTreeShowHidden = 1                                                        -- Show hidden files
 g.NERDTreeWinSize = 50                                                          -- Width of NERDTree window
-g.NERDTreeIgnore = {                                                            -- Hide some directories in NERDTree
-  [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]]
+g.NERDTreeIgnore = {                                                            -- Hide some files/directories in NERDTree
+  [[\.stignore]], [[\.stfolder]], [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]]
 }
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
@@ -145,6 +145,9 @@ g.lightline = {
   colorscheme = 'ayu',                                                          -- Set theme for lightline.vim
   component_function = { filename = 'FilenameForLightline' }                    -- Calls filename_for_lightline function to show full path name in statusline
 }
+
+g.TodoTxtForceDoneName='archive/done.txt'                                       -- <LocalLeader>D to archive to archive/done.txt rather than default done.txt
+g.TodoTxtUseAbbrevInsertMode = 1                                                -- Stop glitchy autocompletions
 
 shellcmd = is_windows and 'term://powershell -C' or 'term://'                   -- Used by terminal split mappings to use shellcmd as the terminal shell
 g.diagnostic_insert_delay = 1
@@ -259,8 +262,8 @@ map('n', '<C-l>', '<C-w>l')                                                     
 map('n', '<C-c>', '<C-w>c')                                                     -- 'CTRL+c' to close window
 
 local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/common/init.lua'
-local todo_path = os.getenv('TODO_DIR')..'/todo.txt'
-local someday_path = os.getenv('TODO_DIR')..'/someday.txt'
+local todo_path = os.getenv('TXT_DIR')..'/todo.txt'
+local someday_path = os.getenv('TXT_DIR')..'/someday.txt'
 
 map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
 map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
@@ -298,12 +301,17 @@ end
 local commands = {
   'BufReadPost quickfix nnoremap <buffer> <CR> <CR>',                           -- Unmap ENTER in Quickfix so found files can be selected for example
   [[FileType fsharp let b:AutoPairs = AutoPairsDefine({'(*' : '*)//n'})]],      -- Define auto-pair for F# multiline comments
-  'Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc',
+  'Filetype fsharp setlocal omnifunc=v:lua.vim.lsp.omnifunc',                   -- Do I need this if I have LSP?
   'Filetype typescript setlocal omnifunc=v:lua.vim.lsp.omnifunc',
-  'Filetype todo setlocal omnifunc=todo#Complete',
-  'Filetype todo imap <buffer> + +<C-x><C-o>',
-  'Filetype todo imap <buffer> @ @<C-x><C-o>',
-  [[bufread *.fsx,*.fs syn region fsharpMultiLineComment start='(\*' end='\*)' contains=fsharpTodo,@Spell]] -- Spell checking in multi-line F# comments
+  'Filetype todo setlocal omnifunc=todo#Complete',                              -- Turn on autocomplete for todo lists
+  'Filetype todo imap <buffer> + +<C-x><C-o>',                                  -- Open autocomplete when pressing +
+  'Filetype todo imap <buffer> @ @<C-x><C-o>',                                  -- Open autocomplete when pressing @
+  'Filetype todo setlocal foldenable',                                          -- Enable folding for todo lists
+  'Filetype todo nnoremap <F2> za',                                             -- Toggle folds (todo)
+  'Filetype todo nnoremap <LocalLeader><F2> zM',                                -- Close all folds (todo)
+  'Filetype todo nnoremap <F3> :call todo#Sort("@")<CR>',                       -- Sort by @context (todo)
+  'BufRead someday.txt set filetype=todo',                                      -- Enable syntax highlighting for someday.txt file
+  [[BufRead *.fsx,*.fs syn region fsharpMultiLineComment start='(\*' end='\*)' contains=fsharpTodo,@Spell]] -- Spell checking in multi-line F# comments
 }
 au('mygroup', commands)
 

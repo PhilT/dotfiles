@@ -121,7 +121,7 @@ VISUAL=nvim
 EDITOR="$VISUAL"
 
 
-export TODO_DIR=/mnt/d/todo
+export TXT_DIR=/mnt/d/txt
 export CODE_DIR=~/code
 
 alias work=$CODE_DIR/dotfiles/files/linux/bin/tmux_work.sh
@@ -139,6 +139,6 @@ source /usr/local/share/chruby/chruby.sh
 source /usr/local/share/chruby/auto.sh
 
 # Source local bashrc (not under version control for private stuff)
-if [ -f ~/.bashrc.local ]; then 
+if [ -f ~/.bashrc.local ]; then
   source ~/.bashrc.local
 fi

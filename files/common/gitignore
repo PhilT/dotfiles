@@ -2,6 +2,7 @@
 .git
 .ionide
 .scratch.txt
+.stignore
 .tags
 .vscode
 AppData/
