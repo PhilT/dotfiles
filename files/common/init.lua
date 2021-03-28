@@ -21,11 +21,10 @@ paq {'christoomey/vim-tmux-navigator'}                                          
 paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
 
 -- General
-paq {'scrooloose/nerdtree'}                                                     -- CTRL+F - open file tree
+--paq {'scrooloose/nerdtree'}                                                     -- CTRL+F - open file tree
+paq {'ctrlpvim/ctrlp.vim'}
 paq {'mtth/scratch.vim'}                                                        -- go/gp - Scratchpad
 paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
-paq {'junegunn/fzf'}                                                            -- Fuzzy finder
-paq {'junegunn/fzf.vim'}
 paq {'tpope/vim-surround'}                                                      -- `cs'<q>` - change from single quotes to xml tags
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
 paq {'tpope/vim-dispatch'}                                                      -- Run commands asynchronously using Neovim's jobstart()
@@ -131,13 +130,16 @@ if is_windows then
   g.python_host_prog = 'C:\\Python27\\python.exe'                               -- Python providers
 end
 
+g.netrw_liststyle = 3                                                           -- Tree style directory browser
+
 g.vim_markdown_folding_disabled = 1                                             -- Folding? Yuk!
-g.NERDTreeQuitOnOpen = 1                                                        -- close NERDTree after opening file
-g.NERDTreeShowHidden = 1                                                        -- Show hidden files
-g.NERDTreeWinSize = 50                                                          -- Width of NERDTree window
-g.NERDTreeIgnore = {                                                            -- Hide some files/directories in NERDTree
-  [[\.stignore]], [[\.stfolder]], [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]]
+
+g.ctrlp_custom_ignore = {                                                       -- Hide some files/directories in NERDTree
+  dir = [[\.(stfolder|ionide|git|paket|packages|paket-files)]],
+  file = [[\.stignore]]
 }
+g.ctrlp_user_command = 'rg --files %s'
+g.ctrlp_use_caching = 0
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
@@ -199,10 +201,8 @@ g.UltiSnipsExpandTrigger = '<C-Tab>'
 map('i', '<Tab>', '<Plug>(completion_smart_tab)', { noremap = false })          -- Potentially open completion list by pressing TAB
 map('i', '<S-Tab>', '<Plug>(completion_smart_s_tab)', { noremap = false })      -- Go to previous item in completion list if open
 map('n', '<Leader>-', '<cmd>nohlsearch<CR>')                                    -- SPACE+- to turn off search highlight
-map('n', '<C-p>', '<cmd>Files<CR>')                                             -- CTRL+p to open Fuzzy File Finder
-map('n', '<C-f>', '<cmd>NERDTreeToggle<CR>')                                    -- CTRL+f to open NERDTree file browser
-map('n', '<C-u>', '<cmd>UndotreeToggle<CR>')                                    -- Show undo tree
-map('n', '<C-b>', '<cmd>Buffers<CR>')                                           -- CTRL+b to open buffer list - currently open files
+map('n', '<C-f>', '<cmd>Explore<CR>')                                           -- CTRL+f to open netrw
+map('n', '<C-b>', '<cmd>CtrlPBuffer<CR>')                                       -- CTRL+b to open buffer list - currently open files
 map('n', '<C-d>', '<cmd>OpenDiagnostic<CR>')                                    -- CTRL+d to open diagnostics - aka errors, warnings and hints to correct
 map('n', '<C-s>', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')                -- CTRL+s to open symbol list (for entire workspace)- Fuzzy find types, functions, etc
 
