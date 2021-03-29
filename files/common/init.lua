@@ -120,7 +120,7 @@ if is_windows then                                                              
 end
 
 cmd([[command! -nargs=* Rg :cexpr system('rg --vimgrep '.]]..                   -- `Rg <terms>` or `Rg` Search for terms or word under cursor
-    [[('<args>' == '' ? expand('<cword>') : '<args>'))|:copen]])
+    [[('<args>' == '' ? expand('<cword>') : '<args>'))|:bot copen]])
 
 
 -- Plugin settings --------------------------------------------------------------------------------------------------------------------------------------------
