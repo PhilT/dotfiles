@@ -276,6 +276,8 @@ map('n', '<Leader>k', '<cmd>topleft split '..shellcmd..'<CR>')                  
 map('n', '<Leader>l', '<cmd>botright vsplit '..shellcmd..'<CR>')                -- Terminal far right split
 map('n', '<Leader>n', '<cmd>bn<CR>')                                            -- next buffer
 map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    -- Toggle paste formatting
+map('n', '<Leader>r', '<cmd>Dispatch rspec %<CR>')                              -- Run RSpec for given file
+map('n', '<Leader>R', '<cmd>Dispatch rspec<CR>')                                -- Run RSpec for everything
 map('n', '<Leader>p', '<cmd>bp<CR>')                                            -- previous buffer
 
 map('n', '<Leader>v', '<cmd>tabe '..init_lua_path..'<CR>')                      -- Edit vimrc
