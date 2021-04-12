@@ -20,8 +20,8 @@ let cmd (cmd: string) (args: string) =
   proc.WaitForExit(EXE_TIMEOUT) |> ignore
 
 
-let changed action (agent: MailboxProcessor<string>) sender (e: FileSystemEventArgs) =
-  if not (Regex.IsMatch(e.FullPath, "(.git|bin\\\|obj\\\)")) then
+let changed action (agent: MailboxProcessor<string>) includes sender (e: FileSystemEventArgs) =
+  if (Regex.IsMatch(e.FullPath, includes)) then
     agent.Post($"{action} {e.Name}")
 
 
@@ -32,13 +32,12 @@ let rec loop () =
   if str <> "q" then loop ()
 
 
-let start agent =
-  watcher.Changed.AddHandler (FileSystemEventHandler(changed "Changed" agent))
-  watcher.Created.AddHandler (FileSystemEventHandler(changed "Created" agent))
-  watcher.Renamed.AddHandler (RenamedEventHandler(changed "Moved" agent))
-  watcher.Deleted.AddHandler (FileSystemEventHandler(changed "Deleted" agent))
+let start agent includes =
+  watcher.Changed.AddHandler (FileSystemEventHandler(changed "Changed" agent includes))
+  watcher.Created.AddHandler (FileSystemEventHandler(changed "Created" agent includes))
+  watcher.Renamed.AddHandler (RenamedEventHandler(changed "Moved" agent includes))
+  watcher.Deleted.AddHandler (FileSystemEventHandler(changed "Deleted" agent includes))
 
-  watcher.Filter <- "*.*"
   watcher.IncludeSubdirectories <- true
   watcher.EnableRaisingEvents <- true
 
