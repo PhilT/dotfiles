@@ -57,16 +57,12 @@ paq {'tpope/vim-scriptease'}                                                    
 -- Ruby
 paq {'slim-template/vim-slim'}                                                  -- Slim templates syntax highlighting
 
--- Unused pending removal
---paq {'mbbill/undotree'}                                                         -- :UndotreeToggle/F5 - Visualise the undo tree
---paq {'godlygeek/tabular'}                                                       -- For aligning text (like this comment!)
-
 
 -- General settings -------------------------------------------------------------------------------------------------------------------------------------------
 
 local indent = 2
 
-vim.o.switchbuf = 'useopen'                                                     -- `:sbuf filepattern` switch to buffer and use available window if visible
+vim.o.switchbuf = 'useopen,uselast'                                             -- `:sbuf filepattern` switch to buffer and use available window if visible
 vim.o.cmdheight = 2                                                             -- Doesn't halt nvim for 2 line messages
 vim.o.completeopt = 'menuone,noinsert,noselect'                                 -- popup on 1 item, don't auto-insert selection, don't auto-select a match
 
@@ -274,7 +270,7 @@ local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/common/init.lua'
 local todo_path = os.getenv('TXT_DIR')..'/todo.txt'
 local someday_path = os.getenv('TXT_DIR')..'/someday.txt'
 
-map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
+--map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
 map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
 map('n', '<Leader>dd', '<cmd>bufdo bd<CR>')                                     -- delete all buffers
 map('n', '<Leader>f', '<cmd>NERDTreeFind<CR>')                                  -- Find and reveal the current file in NERDTree
@@ -376,20 +372,21 @@ end
 
 function _G.create_fsharp_env()                                                 -- Prepare Neovim for developing F# project
   init_build_mappings()
-
-  cmd('vsplit')                                                                 -- Vertical split
-  cmd('wincmd h')                                                               -- Move to left pane
-  term_run('./watch')                                                           -- Start test watcher in terminal
-  cmd('split '..todo_path)                                                      -- Split below and add todo list
-  cmd('wincmd l')                                                               -- Move back to right pane
+                                                                                -- Create 4 vertical panes with the last one
+  cmd('vsplit')                                                                 -- containing a test watcher
+  cmd('vsplit')                                                                 -- and the todo list
+  cmd('vsplit')
+  term_run('./watch')
+  cmd('split '..todo_path)
+  cmd('wincmd h')
 end
 
 function _G.create_website_env()                                                -- Prepare Neovim for working on the blog
   init_build_mappings()
-
-  cmd('vsplit')                                                                 -- Vertical split
-  cmd('wincmd h')                                                               -- Move to left pane
-  term_run('./start electricvisions')                                           -- Start web server
-  cmd('wincmd l')                                                               -- Move back to right pane
+                                                                                -- 2 vertical panes with webserver on
+  cmd('vsplit')                                                                 -- the left
+  cmd('wincmd h')
+  term_run('./start electricvisions')
+  cmd('wincmd l')
 end
 
