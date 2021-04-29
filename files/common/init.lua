@@ -22,8 +22,8 @@ paq {'itchyny/lightline.vim'}                                                   
 
 -- General
 paq {'preservim/nerdtree'}
-paq {'ctrlpvim/ctrlp.vim'}                                                      -- CTRL+P to open fuzzy file finder
-paq {'FelikZ/ctrlp-py-matcher'}                                                 -- Better matcher for CtrlP
+paq {'junegunn/fzf'}                                                            -- CTRL+P to open fuzzy file finder
+paq {'junegunn/fzf.vim'}
 paq {'mtth/scratch.vim'}                                                        -- go/gp - Scratchpad
 paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
 paq {'tpope/vim-surround'}                                                      -- `cs'<q>` - change from single quotes to xml tags
@@ -109,13 +109,6 @@ cmd('hi! CursorLine guibg=#333333')
 local a = {}; for i=0,500 do a[i]=i+80 end                                      -- Grey out everything past 80 columns
 opt('w', 'colorcolumn', table.concat(a, ','))
 
-if is_windows then                                                              -- Set Powershell as terminal on Windows (default is cmd)
-  cmd([[let &shell = 'powershell']])
-  cmd([[set shellquote= shellpipe=\| shellxquote=]])
-  cmd([[set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command]])
-  cmd([[set shellredir=\|\ Out-File\ -Encoding\ UTF8]])
-end
-
 cmd([[command! -nargs=* Rg :cexpr system('rg --vimgrep '.]]..                   -- `Rg <terms>` or `Rg` Search for terms or word under cursor
     [[('<args>' == '' ? expand('<cword>') : '<args>'))|:bot copen]])
 
@@ -138,13 +131,6 @@ g.NERDTreeIgnore = {                                                            
   [[\.stignore]], [[\.stfolder]], [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]]
 
 }
-g.ctrlp_custom_ignore = {                                                       -- Hide some files/directories in NERDTree
-  dir = [[\.(stfolder|ionide|git|paket|packages|paket-files)]],
-  file = [[\.stignore]]
-}
-g.ctrlp_user_command = 'rg --files %s'
-g.ctrlp_use_caching = 0
-g.ctrlp_match_func = { match = 'pymatcher#PyMatch' }
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
 g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
 g.scratch_height = 15                                                           -- with height of 20 rows
@@ -156,7 +142,7 @@ g.lightline = {
 g.TodoTxtForceDoneName='archive/done.txt'                                       -- <LocalLeader>D to archive to archive/done.txt rather than default done.txt
 g.TodoTxtUseAbbrevInsertMode = 1                                                -- Stop glitchy autocompletions
 
-shellcmd = is_windows and 'term://powershell -C' or 'term://'                   -- Used by terminal split mappings to use shellcmd as the terminal shell
+shellcmd = is_windows and 'term://powershell' or 'term://'                      -- Used by terminal split mappings to use shellcmd as the terminal shell
 g.diagnostic_insert_delay = 1
 g.completion_enable_auto_popup = 0                                              -- LSP completion: Disable auto popup of completion
 g.completion_enable_snippet = 'UltiSnips'                                       -- LSP completion: Enable UltiSnips integration
@@ -206,8 +192,9 @@ g.UltiSnipsExpandTrigger = '<C-Tab>'
 map('i', '<Tab>', '<Plug>(completion_smart_tab)', { noremap = false })          -- Potentially open completion list by pressing TAB
 map('i', '<S-Tab>', '<Plug>(completion_smart_s_tab)', { noremap = false })      -- Go to previous item in completion list if open
 map('n', '<Leader>-', '<cmd>nohlsearch<CR>')                                    -- SPACE+- to turn off search highlight
+map('n', '<C-p>', '<cmd>Files<CR>')                                             -- CTRL+p to open Fuzzy finder
 map('n', '<C-f>', '<cmd>NERDTreeToggle<CR>')                                    -- CTRL+f to open NERDTree
-map('n', '<C-b>', '<cmd>CtrlPBuffer<CR>')                                       -- CTRL+b to open buffer list - currently open files
+map('n', '<C-b>', '<cmd>Buffers<CR>')                                           -- CTRL+b to open buffer list - currently open files
 map('n', '<C-d>', '<cmd>OpenDiagnostic<CR>')                                    -- CTRL+d to open diagnostics - aka errors, warnings and hints to correct
 map('n', '<C-s>', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')                -- CTRL+s to open symbol list (for entire workspace)- Fuzzy find types, functions, etc
 
@@ -357,13 +344,13 @@ function _G.delete_term_buffer()                                                
 end
 
 function _G.init_build_mappings()                                               -- Setup dotnet build mappings
-  cmd('set makeprg=./build')
+  cmd([[set makeprg=.\build]])
 
   map('n', '<F8>', '<cmd>Make<CR>')                                             -- dotnet build
-  map('n', '<F9>', '<cmd>Dispatch ./test<CR>')                                  -- dotnet test
-  map('n', '<Leader><F9>', '<cmd>Dispatch ./bench<CR>')                         -- runs benchmarking project
-  map('n', '<F10>', '<cmd>Dispatch ./run<CR>')                                  -- dotnet run
-  map('n', '<F11>', '<cmd>Dispatch ./clear<CR>')                                -- dotnet clear
+  map('n', '<F9>', [[<cmd>Dispatch ./test<CR>]])                                  -- dotnet test
+  map('n', '<Leader><F9>', [[<cmd>Dispatch .\bench<CR>]])                         -- runs benchmarking project
+  map('n', '<F10>', [[<cmd>Dispatch .\run<CR>]])                                  -- dotnet run
+  map('n', '<F11>', [[<cmd>Dispatch .\clear<CR>]])                                -- dotnet clear
 end
 
 function _G.create_fsharp_script_env()
@@ -376,7 +363,7 @@ function _G.create_fsharp_env()                                                 
   cmd('vsplit')                                                                 -- containing a test watcher
   cmd('vsplit')                                                                 -- and the todo list
   cmd('vsplit')
-  term_run('./watch')
+  term_run([[.\watch]])
   cmd('split '..todo_path)
   cmd('wincmd h')
 end
@@ -386,7 +373,7 @@ function _G.create_website_env()                                                
                                                                                 -- 2 vertical panes with webserver on
   cmd('vsplit')                                                                 -- the left
   cmd('wincmd h')
-  term_run('./start electricvisions')
+  term_run([[.\start electricvisions]])
   cmd('wincmd l')
 end
 
