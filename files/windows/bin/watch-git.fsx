@@ -30,4 +30,4 @@ let agent =
     loop List.empty
   )
 
-Watcher.start agent @"^(.git|bin\|obj\)"
+Watcher.start agent ".*"

@@ -347,10 +347,10 @@ function _G.init_build_mappings()                                               
   cmd([[set makeprg=.\build]])
 
   map('n', '<F8>', '<cmd>Make<CR>')                                             -- dotnet build
-  map('n', '<F9>', [[<cmd>Dispatch ./test<CR>]])                                  -- dotnet test
-  map('n', '<Leader><F9>', [[<cmd>Dispatch .\bench<CR>]])                         -- runs benchmarking project
-  map('n', '<F10>', [[<cmd>Dispatch .\run<CR>]])                                  -- dotnet run
-  map('n', '<F11>', [[<cmd>Dispatch .\clear<CR>]])                                -- dotnet clear
+  map('n', '<F9>', [[<cmd>Dispatch .\test<CR>]])                                -- dotnet test
+  map('n', '<Leader><F9>', [[<cmd>Dispatch .\bench<CR>]])                       -- runs benchmarking project
+  map('n', '<F10>', [[<cmd>Dispatch .\run<CR>]])                                -- dotnet run
+  map('n', '<F11>', [[<cmd>Dispatch .\clear<CR>]])                              -- dotnet clear
 end
 
 function _G.create_fsharp_script_env()

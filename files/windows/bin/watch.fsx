@@ -21,7 +21,8 @@ let cmd (cmd: string) (args: string) =
 
 
 let changed action (agent: MailboxProcessor<string>) includes sender (e: FileSystemEventArgs) =
-  if (Regex.IsMatch(e.FullPath, includes)) then
+  let isGitPath = Regex.IsMatch(e.FullPath, @"\.git")
+  if ((Regex.IsMatch(e.FullPath, includes)) && not isGitPath) then
     agent.Post($"{action} {e.Name}")
 
 
