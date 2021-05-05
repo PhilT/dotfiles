@@ -109,7 +109,7 @@ cmd('hi! CursorLine guibg=#333333')
 local a = {}; for i=0,500 do a[i]=i+80 end                                      -- Grey out everything past 80 columns
 opt('w', 'colorcolumn', table.concat(a, ','))
 
-cmd([[command! -nargs=* Rg :cexpr system('rg --vimgrep '.]]..                   -- `Rg <terms>` or `Rg` Search for terms or word under cursor
+cmd([[command! -nargs=* Rg :cexpr system('rg --smart-case --vimgrep '.]]..      -- `Rg <terms>` or `Rg` Search for terms or word under cursor
     [[('<args>' == '' ? expand('<cword>') : '<args>'))|:bot copen]])
 
 
