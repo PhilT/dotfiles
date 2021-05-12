@@ -1,1 +1,1 @@
-@dotnet fsi %0\..\watch-git.fsx
+@dotnet fsi %~dp0\watch-git.fsx

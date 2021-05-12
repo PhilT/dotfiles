@@ -17,8 +17,8 @@ setx FZF_DEFAULT_COMMAND "rg --files --no-ignore-vcs --hidden --ignore-file %USE
 rem code/ folder dependent on OS
 setx CODE_DIR D:\code
 
-rem todo/ folder
-setx TODO_DIR D:\todo
+rem txt/ folder
+setx TODO_DIR D:\txt
 
 rem Path
 rem System Path is searched before User Path so in order to control precedence

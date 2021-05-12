@@ -1,6 +1,6 @@
 #load "watch.fsx"
 
-let COMMIT_TIMEOUT = 10000 // Commit any changes after 10 seconds of no activity
+let COMMIT_TIMEOUT = 120000 // Commit any changes after 2 minutes of no activity
 
 let git (args: string) =
   Watcher.log $"git {args}"

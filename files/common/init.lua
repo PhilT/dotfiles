@@ -128,7 +128,7 @@ g.NERDTreeQuitOnOpen = 1                                                        
 g.NERDTreeShowHidden = 1                                                        -- Show hidden files
 g.NERDTreeWinSize = 50                                                          -- Width of NERDTree window
 g.NERDTreeIgnore = {                                                            -- Hide some files/directories in NERDTree
-  [[\.stignore]], [[\.stfolder]], [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]]
+  [[\.stignore]], [[\.stfolder]], [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]], [[obj]], [[bin]]
 
 }
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file

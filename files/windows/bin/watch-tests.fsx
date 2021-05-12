@@ -6,7 +6,7 @@ let TIMEOUT = 60000
 
 let runTests () =
   Watcher.log "Running tests..."
-  Watcher.cmd "dotnet" "fsi main.fsx"
+  Watcher.cmd "dotnet" "run"
 
 
 let agent =
