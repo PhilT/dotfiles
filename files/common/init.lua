@@ -16,7 +16,7 @@ local paq = require('paq-nvim').paq
 paq {'savq/paq-nvim', opt = true}                                               -- manages itself
 
 -- UI
-paq {'hoob3rt/ayu-vim'}                                                         -- Colorscheme
+paq {'ayu-theme/ayu-vim'}                                                       -- Colorscheme
 paq {'christoomey/vim-tmux-navigator'}                                          -- Move between vim and tmux panes seamlessly
 paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
 
@@ -30,7 +30,7 @@ paq {'tpope/vim-surround'}                                                      
 paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
 paq {'tpope/vim-dispatch'}                                                      -- Run commands asynchronously using Neovim's jobstart()
 paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
-paq {'dbeniamine/todo.txt-vim', url='https://gitlab.com/dbeniamine/todo.txt-vim'}-- `\t` - Opens my todo list
+paq {'dbeniamine/todo.txt-vim', url='https://gitlab.com/dbeniamine/todo.txt-vim'}-- `<Leader>t` - Opens my todo list
 paq {'simeji/winresizer'}                                                       -- `CTRL+E` - Resize windows with `hjkl`
 
 -- Version Control
@@ -97,7 +97,7 @@ opt('o', 'writebackup', false)                                                  
 opt('w', 'conceallevel', 2)                                                     -- Make Markdown look pretty (hides some characters unless at the cursor)
 opt('w', 'cursorline', true)                                                    -- Turn on highlight on cursor line (Uses color of CursorLine)
 opt('w', 'foldenable', false)                                                   -- Turn off code folding
-opt('w', 'number', true)                                                        -- line numbers
+opt('w', 'number', false)                                                       -- line numbers
 opt('w', 'signcolumn', 'yes')                                                   -- Keeps sign column visable to stop edit window shifting left and right
 
 cmd('syntax enable')                                                            -- Ensures error pop ups correctly show red text
@@ -253,8 +253,14 @@ map('n', '<C-k>', '<C-w>k')                                                     
 map('n', '<C-l>', '<C-w>l')                                                     --
 map('n', '<C-c>', '<C-w>c')                                                     -- 'CTRL+c' to close window
 
+function file_exist(filename)
+  local file = io.open(filename, "r")
+  if file == nil then return false else io.close(file) return true end
+end
+
 local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/common/init.lua'
-local todo_path = os.getenv('TXT_DIR')..'/todo.txt'
+local todo_path = file_exist('TODO.md') and 'TODO.md' or os.getenv('TXT_DIR')..'/todo.txt' -- Set TODO file to local project if it exists otherwise main todo.txt in D:\txt
+local done_path = os.getenv('TXT_DIR')..'/archive/done.txt'
 local someday_path = os.getenv('TXT_DIR')..'/someday.txt'
 
 --map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
@@ -274,6 +280,7 @@ map('n', '<Leader>p', '<cmd>bp<CR>')                                            
 
 map('n', '<Leader>v', '<cmd>tabe '..init_lua_path..'<CR>')                      -- Edit vimrc
 map('n', '<Leader>t', '<cmd>split '..todo_path..'<CR>')                         -- Edit todo.txt file
+map('n', '<Leader>u', '<cmd>split '..done_path..'<CR>')                         -- Edit done.txt file
 map('n', '<Leader>s', '<cmd>split '..someday_path..'<CR>')                      -- Edit someday.txt file
 
 -- map('n', '<C-z>', '<Nop>'                                                    -- Turn off stupid CTRL keys - Overriden by edit snippets
@@ -350,7 +357,7 @@ function _G.init_build_mappings()                                               
   map('n', '<F9>', [[<cmd>Dispatch .\test<CR>]])                                -- dotnet test
   map('n', '<Leader><F9>', [[<cmd>Dispatch .\bench<CR>]])                       -- runs benchmarking project
   map('n', '<F10>', [[<cmd>Dispatch .\run<CR>]])                                -- dotnet run
-  map('n', '<F11>', [[<cmd>Dispatch .\clear<CR>]])                              -- dotnet clear
+  map('n', '<F11>', [[<cmd>Dispatch .\clean<CR>]])                              -- dotnet clean
 end
 
 function _G.create_fsharp_script_env()

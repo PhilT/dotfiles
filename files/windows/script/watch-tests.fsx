@@ -4,25 +4,32 @@ open System.Diagnostics
 
 let TIMEOUT = 60000
 
-let runTests () =
-  Watcher.log "Running tests..."
-  Watcher.cmd "dotnet" "run"
+let runTests (changes: string list) =
+  changes
+  |> List.distinct
+  |> List.iter(fun change ->
+    let c = change.Split("|")
+    Watcher.log $"Running interactive...{c.[0]}:{c.[1]}"
+    Watcher.cmd "dotnet" $"fsi {c.[1]}"
+  )
 
 
 let agent =
   MailboxProcessor.Start(fun inbox ->
-    let rec loop timeout =
+    let rec loop changes =
       async {
-        let! msg = inbox.TryReceive(timeout)
+        let! msg =
+          let timeout = if (List.isEmpty changes) then TIMEOUT else 200
+          inbox.TryReceive(timeout)
         match msg with
-        | Some m -> return! loop 200
+        | Some m -> return! loop (m :: changes)
         | None ->
-          if timeout = 200 then runTests ()
-          return! loop TIMEOUT
-        return! loop timeout
+          if not (List.isEmpty changes) then runTests changes
+          return! loop List.empty
+        return! loop List.empty
       }
 
-    loop TIMEOUT
+    loop List.empty
   )
 
-Watcher.start agent @"\.(fs|fsx|fsproj|sln)$"
+Watcher.start agent @"\.(fs|fsx)$"

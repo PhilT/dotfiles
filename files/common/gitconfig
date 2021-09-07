@@ -39,7 +39,6 @@
 
 [core]
   whitespace = -trailing-space
-  pager = less -R
   excludesfile = ~/.gitignore
 	autocrlf = false
   eol = lf
