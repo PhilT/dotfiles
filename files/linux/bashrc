@@ -15,9 +15,9 @@ HISTCONTROL=ignoreboth
 # append to the history file, don't overwrite it
 shopt -s histappend
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+# Set Unlimited history
+HISTSIZE=
+HISTFILESIZE=
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -115,7 +115,7 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-export PATH=~/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PATH=~/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:~/code/adr-tools/src
 
 VISUAL=nvim
 EDITOR="$VISUAL"
@@ -125,6 +125,7 @@ export TXT_DIR=/mnt/d/txt
 export CODE_DIR=~/code
 
 alias work=$CODE_DIR/dotfiles/files/linux/bin/tmux_work.sh
+alias fox=$CODE_DIR/dotfiles/files/linux/bin/tmux_foxsoft.sh
 alias fs=$CODE_DIR/dotfiles/files/linux/bin/tmux_fs.sh
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=true
