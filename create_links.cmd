@@ -7,8 +7,8 @@ del /q %USERPROFILE%\.gitignore
 del /q %USERPROFILE%\.ignore
 rmdir /q %USERPROFILE%\script
 
-mklink %USERPROFILE%\.config\nvim\init.lua d:\code\dotfiles\files\common\init.lua
-mklink %USERPROFILE%\.gitconfig d:\code\dotfiles\files\common\gitconfig
-mklink %USERPROFILE%\.gitignore d:\code\dotfiles\files\common\gitignore
-mklink %USERPROFILE%\.ignore d:\code\dotfiles\files\common\ignore
-mklink /d %USERPROFILE%\script d:\code\dotfiles\files\windows\script
+mklink %USERPROFILE%\.config\nvim\init.lua %CODE_DIR%\dotfiles\files\common\init.lua
+mklink %USERPROFILE%\.gitconfig %CODE_DIR%\dotfiles\files\common\gitconfig
+mklink %USERPROFILE%\.gitignore %CODE_DIR%\dotfiles\files\common\gitignore
+mklink %USERPROFILE%\.ignore %CODE_DIR%\dotfiles\files\common\ignore
+mklink /d %USERPROFILE%\script %CODE_DIR%\dotfiles\files\windows\script

@@ -43,7 +43,7 @@ paq {'plasticboy/vim-markdown'}                                                 
 -- General programming
 paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
 paq {'tpope/vim-abolish'}                                                       -- Change word styles (e.g. Camelcase to underscore)
-paq {'SirVer/ultisnips'}                                                        -- Handle snippets
+--paq {'SirVer/ultisnips'}                                                        -- Handle snippets
 paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
 paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
 
@@ -97,7 +97,7 @@ opt('o', 'writebackup', false)                                                  
 opt('w', 'conceallevel', 2)                                                     -- Make Markdown look pretty (hides some characters unless at the cursor)
 opt('w', 'cursorline', true)                                                    -- Turn on highlight on cursor line (Uses color of CursorLine)
 opt('w', 'foldenable', false)                                                   -- Turn off code folding
-opt('w', 'number', false)                                                       -- line numbers
+opt('w', 'number', false)                                                       -- Hide line numbers
 opt('w', 'signcolumn', 'yes')                                                   -- Keeps sign column visable to stop edit window shifting left and right
 
 cmd('syntax enable')                                                            -- Ensures error pop ups correctly show red text
@@ -151,7 +151,7 @@ g.completion_enable_snippet = 'UltiSnips'                                       
 -- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- No support for autocommands until https://github.com/neovim/neovim/pull/12378
-cmd('autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()')      -- Show diagnostics in a popup window instead of after source code
+cmd('autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics({ focusable = false })') -- Show diagnostics in a popup window instead of after source code
 cmd("autocmd BufEnter * lua require'completion'.on_attach()")                   -- Load completion provider
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
@@ -229,7 +229,7 @@ map('n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')                   
 map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')                         -- LSP: Goto definition
 map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')                         -- LSP: Get references - ENTER to go to next
 map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')                               -- LSP: Show documentation
-map('n', 'X', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>')        -- LSP: Show errors in floating window (in case of long lines)
+map('n', 'X', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics({ focusable = false })<CR>') -- LSP: Show errors in floating window (in case of long lines)
 map('i', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>')                  -- LSP: Show signature (only works when opening parens)
 
 map('n', 'gD', '<cmd>lua vim.lsp.buf.implementation()<CR>')                     -- LSP: Not supported by F# LS
@@ -369,7 +369,6 @@ function _G.create_fsharp_env()                                                 
                                                                                 -- Create 4 vertical panes with the last one
   cmd('vsplit')                                                                 -- containing a test watcher
   cmd('vsplit')                                                                 -- and the todo list
-  cmd('vsplit')
   term_run([[.\watch]])
   cmd('split '..todo_path)
   cmd('wincmd h')
