@@ -11,52 +11,49 @@ end
 
 -- Plugins ----------------------------------------------------------------------------------------------------------------------------------------------------
 
-cmd 'packadd paq-nvim'
-local paq = require('paq-nvim').paq
-paq {'savq/paq-nvim', opt = true}                                               -- manages itself
-
--- UI
-paq {'ayu-theme/ayu-vim'}                                                       -- Colorscheme
-paq {'christoomey/vim-tmux-navigator'}                                          -- Move between vim and tmux panes seamlessly
-paq {'itchyny/lightline.vim'}                                                   -- Simple statusline
-
--- General
-paq {'preservim/nerdtree'}
-paq {'junegunn/fzf'}                                                            -- CTRL+P to open fuzzy file finder
-paq {'junegunn/fzf.vim'}
-paq {'mtth/scratch.vim'}                                                        -- go/gp - Scratchpad
-paq {'jiangmiao/auto-pairs'}                                                    -- ALT-n - Next bracket pair - Auto-pair brackets.
-paq {'tpope/vim-surround'}                                                      -- `cs'<q>` - change from single quotes to xml tags
-paq {'tpope/vim-repeat'}                                                        -- Repeat plugin commands such as surround with `.`
-paq {'tpope/vim-dispatch'}                                                      -- Run commands asynchronously using Neovim's jobstart()
-paq {'stefandtw/quickfix-reflector.vim'}                                        -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
-paq {'dbeniamine/todo.txt-vim', url='https://gitlab.com/dbeniamine/todo.txt-vim'}-- `<Leader>t` - Opens my todo list
-paq {'simeji/winresizer'}                                                       -- `CTRL+E` - Resize windows with `hjkl`
-
--- Version Control
-paq {'tpope/vim-fugitive'}                                                      -- Git plugin - :G for enhanced status. See plugin section below for more
-paq {'mhinz/vim-signify'}                                                       -- Git icons in the gutter
-
--- Writing
-paq {'plasticboy/vim-markdown'}                                                 -- Markdown syntax highlighting and commands like adding a TOC
-
--- General programming
-paq {'editorconfig/editorconfig-vim'}                                           -- Use a project's .editorconfig file for formatting
-paq {'tpope/vim-abolish'}                                                       -- Change word styles (e.g. Camelcase to underscore)
---paq {'SirVer/ultisnips'}                                                        -- Handle snippets
-paq {'neovim/nvim-lspconfig'}                                                   -- Language server client settings
-paq {'nvim-lua/completion-nvim'}                                                -- Useful defaults to make completion work
-
--- F#
-paq {'PhilT/vim-fsharp'}                                                        -- F# Syntax and Indent
-
--- Vimscript
-paq {'junegunn/vader.vim'}                                                      -- Vimscript test framework
-paq {'tpope/vim-scriptease'}                                                    -- Some helpers for developing Vim plugins
-
--- Ruby
-paq {'slim-template/vim-slim'}                                                  -- Slim templates syntax highlighting
-
+require 'paq' {
+  -- UI
+  'ayu-theme/ayu-vim';                                                          -- Colorscheme
+  'christoomey/vim-tmux-navigator';                                             -- Move between vim and tmux panes seamlessly
+  'itchyny/lightline.vim';                                                      -- Simple statusline
+  
+  -- General
+  'preservim/nerdtree';
+  'junegunn/fzf';                                                               -- CTRL+P to open fuzzy file finder
+  'junegunn/fzf.vim';
+  'mtth/scratch.vim';                                                           -- go/gp - Scratchpad
+  'jiangmiao/auto-pairs';                                                       -- ALT-n - Next bracket pair - Auto-pair brackets.
+  'tpope/vim-surround';                                                         -- `cs'<q>` - change from single quotes to xml tags
+  'tpope/vim-repeat';                                                           -- Repeat plugin commands such as surround with `.`
+  'tpope/vim-dispatch';                                                         -- Run commands asynchronously using Neovim's jobstart()
+  'stefandtw/quickfix-reflector.vim';                                           -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
+  {'dbeniamine/todo.txt-vim', url='https://gitlab.com/dbeniamine/todo.txt-vim'};-- `<Leader>t` - Opens my todo list
+  'simeji/winresizer';                                                          -- `CTRL+E` - Resize windows with `hjkl`
+  
+  -- Version Control
+  'tpope/vim-fugitive';                                                         -- Git plugin - :G for enhanced status. See plugin section below for more
+  --'mhinz/vim-signify';                                                          -- Git icons in the gutter
+  
+  -- Writing
+  'plasticboy/vim-markdown';                                                    -- Markdown syntax highlighting and commands like adding a TOC
+  
+  -- General programming
+  'editorconfig/editorconfig-vim';                                              -- Use a project's .editorconfig file for formatting
+  'tpope/vim-abolish';                                                          -- Change word styles (e.g. Camelcase to underscore)
+  --'SirVer/ultisnips';                                                           -- Handle snippets
+  'neovim/nvim-lspconfig';                                                      -- Language server client settings
+  'nvim-lua/completion-nvim';                                                   -- Useful defaults to make completion work
+  
+  -- F#
+  'PhilT/vim-fsharp';                                                           -- F# Syntax and Indent
+  
+  -- Vimscript
+  'junegunn/vader.vim';                                                         -- Vimscript test framework
+  'tpope/vim-scriptease';                                                       -- Some helpers for developing Vim plugins
+  
+  -- Ruby
+  'slim-template/vim-slim';                                                     -- Slim templates syntax highlighting
+}
 
 -- General settings -------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -128,7 +125,7 @@ g.NERDTreeQuitOnOpen = 1                                                        
 g.NERDTreeShowHidden = 1                                                        -- Show hidden files
 g.NERDTreeWinSize = 50                                                          -- Width of NERDTree window
 g.NERDTreeIgnore = {                                                            -- Hide some files/directories in NERDTree
-  [[\.stignore]], [[\.stfolder]], [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]], [[obj]], [[bin]]
+  [[\.stignore]], [[\.stfolder]], [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]], [[obj]]
 
 }
 g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
@@ -150,21 +147,13 @@ g.completion_enable_snippet = 'UltiSnips'                                       
 
 -- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
 
--- No support for autocommands until https://github.com/neovim/neovim/pull/12378
-cmd('autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics({ focusable = false })') -- Show diagnostics in a popup window instead of after source code
-cmd("autocmd BufEnter * lua require'completion'.on_attach()")                   -- Load completion provider
-
-vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false,                                                       -- Adds messages to ends of lines
-  }
-)
-
 local lspconfig = require'lspconfig'
 local fsautocomplete_path = '/home/phil/lib/fsac/fsautocomplete.dll'
 if is_windows then
   fsautocomplete_path = 'C:/tools/fsac/fsautocomplete.dll'
 end
+
+-- vim.diagnostic.config({virtual_text = false})                                   -- Turn off inline error messages
 
 lspconfig.fsautocomplete.setup{                                                 -- F# Language server
   cmd = {'dotnet', fsautocomplete_path, '--background-service-enabled'};
@@ -311,6 +300,7 @@ local commands = {
   'Filetype todo nnoremap <F2> za',                                             -- Toggle folds (todo)
   'Filetype todo nnoremap <LocalLeader><F2> zM',                                -- Close all folds (todo)
   'Filetype todo nnoremap <F3> :call todo#Sort("@")<CR>',                       -- Sort by @context (todo)
+  'Filetype qf wincmd J',                                                       -- Force quickfix window to open fullwidth at bottom
   'BufRead someday.txt set filetype=todo',                                      -- Enable syntax highlighting for someday.txt file
   [[BufRead *.fsx,*.fs syn region fsharpMultiLineComment start='(\*' end='\*)' contains=fsharpTodo,@Spell]] -- Spell checking in multi-line F# comments
 }

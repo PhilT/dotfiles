@@ -127,6 +127,7 @@ export CODE_DIR=~/code
 alias work=$CODE_DIR/dotfiles/files/linux/bin/tmux_work.sh
 alias fox=$CODE_DIR/dotfiles/files/linux/bin/tmux_foxsoft.sh
 alias fs=$CODE_DIR/dotfiles/files/linux/bin/tmux_fs.sh
+alias ts=$CODE_DIR/dotfiles/files/linux/bin/tmux_ts.sh
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=true
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --ignore-file ~/.ignore" # duplicated in env.cmd

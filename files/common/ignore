@@ -5,7 +5,6 @@
 .paket
 .runtimes
 .thumbnails
-bin
 node_modules
 obj
 output
@@ -14,3 +13,5 @@ paket-files
 paket.lock
 tmp
 vendor
+public/assets
+
