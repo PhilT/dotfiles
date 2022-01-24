@@ -1,0 +1,8 @@
+#!/bin/env sh
+
+# Remove old backup appimage if it exists
+# Backup nvim.appimage so it can be restored if new version isn't working
+# Download new appimage and make it executable
+
+rm -f ~/bin/nvim.old && mv ~/bin/nvim ~/bin/nvim.old && wget -O ~/bin/nvim https://github.com/neovim/neovim/releases/download/stable/nvim.appimage && chmod u+x ~/bin/nvim
+
