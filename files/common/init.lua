@@ -186,6 +186,7 @@ map('n', '<C-f>', '<cmd>NERDTreeToggle<CR>')                                    
 map('n', '<C-b>', '<cmd>Buffers<CR>')                                           -- CTRL+b to open buffer list - currently open files
 map('n', '<C-d>', '<cmd>OpenDiagnostic<CR>')                                    -- CTRL+d to open diagnostics - aka errors, warnings and hints to correct
 map('n', '<C-s>', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')                -- CTRL+s to open symbol list (for entire workspace)- Fuzzy find types, functions, etc
+map('n', '<C-x>', '<cmd>mksession!<CR><cmd>wqa<CR>')                            -- CTRL+x to save session, save all buffers and exit vim
 
 map('n', 'go', '<cmd>Scratch<CR>')                                              -- go to switch to Scratch window (closes when switching to another window)
 map('n', 'gp', '<cmd>ScratchPreview<CR>')                                       -- gp to open Scratch window

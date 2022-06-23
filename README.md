@@ -17,7 +17,12 @@ Attach an existing session call my-app
 
 List all tmux sessions
 
-    <prefix> + s
+    <prefix> + l # (Can't select the session at the moment)
+
+
+Cycle through sessions
+
+    <prefix> + ( or )
 
 
 Detach from the current session

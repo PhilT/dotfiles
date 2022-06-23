@@ -7,6 +7,7 @@
   ui = true
 [alias]
   ap = !git add -N . && git add -p
+  cf = clean -fd --exclude=.scratch.txt
   ss = stash
   sd = stash -- $\\\\(git diff --staged --name-only\\\\)
   pp = stash pop

@@ -3,7 +3,7 @@ cd $CODE_DIR/$1
 [[ -f startup ]] && ./startup
 
 tmux \
-  new-session -s ${1//*\//} 'bash --init-file <(echo ". \"$HOME/.bashrc\"; nvim; pwd")' \; \
+  new-session -s ${1//*\//} 'bash --init-file <(echo ". \"$HOME/.bashrc\"; nvim -S Session.vim; pwd")' \; \
   split-window -v -l 20 \; \
   split-window -h \; \
   select-pane -t 0 \; \
