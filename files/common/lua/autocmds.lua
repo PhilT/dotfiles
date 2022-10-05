@@ -2,7 +2,7 @@ local group = vim.api.nvim_create_augroup('mygroup', { clear = true })
 local autocmd = vim.api.nvim_create_autocmd
 
 autocmd('BufReadPost', {                                                        -- Unmap ENTER in Quickfix so found files can be loaded 
-  pattern = 'qf', 
+  pattern = 'quickfix', 
   command = 'nnoremap <buffer> <CR> <CR>',
   group = group 
 })

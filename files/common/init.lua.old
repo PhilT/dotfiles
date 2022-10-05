@@ -127,9 +127,9 @@ g.vim_markdown_folding_disabled = 1                                             
 --g.NERDTreeIgnore = {                                                            -- Hide some files/directories in NERDTree
 --  [[\.stignore]], [[\.stfolder]], [[\.ionide]], [[\.git]], [[\.paket]], [[packages]], [[paket-files]], [[obj]]
 --}
-g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
-g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
-g.scratch_height = 15                                                           -- with height of 20 rows
+--g.scratch_persistence_file = '.scratch.txt'                                     -- Store scratch text in project .scratch.txt file
+--g.scratch_horizontal = 1                                                        -- Open scratch split horizontally
+--g.scratch_height = 15                                                           -- with height of 20 rows
 --g.lightline = {
 --  colorscheme = 'ayu',                                                          -- Set theme for lightline.vim
 --  component_function = { filename = 'FilenameForLightline' }                    -- Calls filename_for_lightline function to show full path name in statusline

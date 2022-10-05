@@ -1,6 +1,7 @@
 require('plugins')
-require('plugins/ripgrep')
 require('plugins/nerdtree')
+require('plugins/ripgrep')
+require('plugins/scratch')
 require('vars')
 require('opts')
 require('theme')

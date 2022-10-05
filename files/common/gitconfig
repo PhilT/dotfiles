@@ -19,7 +19,7 @@
   df = diff HEAD
   ds = diff --staged
   lg = log -p
-  lo = log --oneline
+  lo = log --oneline --no-merges
   lf = log --name-only --oneline
   lfd = log --name-only --oneline --diff-filter=ACMRTUXB
   pf = push --force-with-lease
