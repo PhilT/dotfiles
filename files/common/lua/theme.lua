@@ -1,7 +1,6 @@
 local cmd = vim.cmd
 
-vim.g.ayucolor = 'mirage'                                                       -- Set theme
-cmd('colorscheme ayu')
+cmd('colorscheme nightfox')
 cmd('hi! Search guifg=#333333 guibg=#c9d05c ctermbg=NONE gui=NONE cterm=NONE')  -- Remove underline from search highlight and use some inverted color instead
 cmd('hi! CursorLine guibg=#333333')
 
@@ -18,7 +17,7 @@ endfunction
 )
 
 vim.g.lightline = {
-  colorscheme = 'ayu',                                                          -- Set theme for lightline.vim
+  colorscheme = 'nightfox',                                                     -- Set theme for lightline.vim
   component_function = { filename = 'FilenameForLightline' }                    -- Calls function to show full path name in statusline
 }
 

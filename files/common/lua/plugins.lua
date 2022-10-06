@@ -5,7 +5,7 @@ require 'paq' {
   'williamboman/mason-lspconfig.nvim';
 
   -- UI
-  'ayu-theme/ayu-vim';                                                          -- Colorscheme
+  'EdenEast/nightfox.nvim';                                                     -- Colorscheme
   'christoomey/vim-tmux-navigator';                                             -- Move between vim and tmux panes seamlessly
   'itchyny/lightline.vim';                                                      -- Simple statusline
   
