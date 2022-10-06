@@ -1,9 +1,3 @@
-local function map(mode, lhs, rhs, opts)                                        -- Maps keys with noremap as a default
-  local options = {noremap = true}
-  if opts then options = vim.tbl_extend('force', options, opts) end
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
-end
-
 -- Setup
 map('n', '<C-z>', '<Nop>')                                                      -- Turn off stupid CTRL keys
 map('n', '<C-s>', '<Nop>')                                                      -- Turn off stupid CTRL keys
@@ -50,6 +44,10 @@ map('n', '<C-x>', '<cmd>wa<CR><cmd>mksession!<CR><cmd>qa<CR>')                  
 -- Scratch
 map('n', 'go', '<cmd>Scratch<CR>')                                              -- go to switch to Scratch window for making notes
 map('n', 'gp', '<cmd>ScratchPreview<CR>')                                       -- gp to open Scratch window without switching to it
+
+-- Windows
+map('n', 'zz', '<c-w>_ \\| <c-w>\\|')                                           -- Zoom in and maximize current window
+map('n', 'zo', '<c-w>=')                                                        -- Zoom out and equalize windows
 
 -- Tabs
 map('n', 'ta', '<cmd>tabe<CR>')                                                 -- Add tab pane

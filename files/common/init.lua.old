@@ -117,9 +117,9 @@ if is_windows then
   g.python_host_prog = 'C:\\Python27\\python.exe'                               -- Python providers
 end
 
-g.netrw_liststyle = 3                                                           -- Tree style directory browser
+--g.netrw_liststyle = 3                                                           -- Tree style directory browser
 
-g.vim_markdown_folding_disabled = 1                                             -- Folding? Yuk!
+--g.vim_markdown_folding_disabled = 1                                             -- Folding? Yuk!
 
 --g.NERDTreeQuitOnOpen = 1                                                        -- close NERDTree after opening file
 --g.NERDTreeShowHidden = 1                                                        -- Show hidden files
@@ -193,8 +193,8 @@ map('n', '<C-s>', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')                
 --nnoremap <C-z> :CocCommand snippets.editSnippets<CR>|                         -- CTRL+z to edit snippets for current file type
 
 
-map('n', 'zz', '<c-w>_ \\| <c-w>\\|')                                           -- Zoom in and maximize current window
-map('n', 'zo', '<c-w>=')                                                        -- Zoom out and equalize windows
+--map('n', 'zz', '<c-w>_ \\| <c-w>\\|')                                           -- Zoom in and maximize current window
+--map('n', 'zo', '<c-w>=')                                                        -- Zoom out and equalize windows
 
 --map('n', 'ta', '<cmd>tabe<CR>')                                                 -- Add tab pane
 --map('n', 'tc', '<cmd>tabc<CR>')                                                 -- Clear (remove) tab pane
@@ -253,18 +253,18 @@ local done_path = os.getenv('TXT_DIR')..'/archive/done.txt'
 local someday_path = os.getenv('TXT_DIR')..'/someday.txt'
 
 --map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload Vim config
-map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
-map('n', '<Leader>dd', '<cmd>bufdo bd<CR>')                                     -- delete all buffers
+--map('n', '<Leader>d', '<cmd>bd<CR>')                                            -- delete buffer
+--map('n', '<Leader>dd', '<cmd>bufdo bd<CR>')                                     -- delete all buffers
 --map('n', '<Leader>f', '<cmd>NERDTreeFind<CR>')                                  -- Find and reveal the current file in NERDTree
-map('n', '<Leader>h', '<cmd>topleft vsplit '..shellcmd..'<CR>')                 -- Terminal far left split
 --map('n', '<Leader>i', '<cmd>setlocal number!<CR>')                              -- Toggle line numbers
+map('n', '<Leader>h', '<cmd>topleft vsplit '..shellcmd..'<CR>')                 -- Terminal far left split
 map('n', '<Leader>j', '<cmd>botright split '..shellcmd..'<CR>')                 -- Terminal bottom split
 map('n', '<Leader>k', '<cmd>topleft split '..shellcmd..'<CR>')                  -- Terminal top split
 map('n', '<Leader>l', '<cmd>botright vsplit '..shellcmd..'<CR>')                -- Terminal far right split
 map('n', '<Leader>n', '<cmd>bn<CR>')                                            -- next buffer
 --map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    -- Toggle paste formatting
-map('n', '<Leader>r', '<cmd>Dispatch rspec %<CR>')                              -- Run RSpec for given file
-map('n', '<Leader>R', '<cmd>Dispatch rspec<CR>')                                -- Run RSpec for everything
+--map('n', '<Leader>r', '<cmd>Dispatch rspec %<CR>')                              -- Run RSpec for given file
+--map('n', '<Leader>R', '<cmd>Dispatch rspec<CR>')                                -- Run RSpec for everything
 map('n', '<Leader>p', '<cmd>bp<CR>')                                            -- previous buffer
 
 --map('n', '<Leader>v', '<cmd>tabe '..init_lua_path..'<CR>')                      -- Edit vimrc
@@ -279,14 +279,14 @@ map('n', '<Leader>p', '<cmd>bp<CR>')                                            
 
 -- Auto Commands ----------------------------------------------------------------------------------------------------------------------------------------------
 
-local function au(group, commands)
-  cmd('augroup '..group)
-  cmd('autocmd!')
-  for i, command in ipairs(commands) do
-    cmd('autocmd '..command)
-  end
-  cmd('augroup END')
-end
+--local function au(group, commands)
+--  cmd('augroup '..group)
+--  cmd('autocmd!')
+--  for i, command in ipairs(commands) do
+--    cmd('autocmd '..command)
+--  end
+--  cmd('augroup END')
+--end
 
 local commands = {
   --'BufReadPost quickfix nnoremap <buffer> <CR> <CR>',                           -- Unmap ENTER in Quickfix so found files can be selected for example
