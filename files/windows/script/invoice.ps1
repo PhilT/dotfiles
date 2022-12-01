@@ -1,1 +1,1 @@
-docker run -t -v ${pwd}:/data sheetzi /app/worksheet $args
+docker run --rm -t -v ${pwd}:/data --name sheetzi sheetzi /app/worksheet $args
