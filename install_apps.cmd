@@ -4,46 +4,50 @@ pause
 
 choco install^
  7zip^
- alacritty^
  audacity-lame^
  audacity^
- blender^
- brave^
- calibre^
+ awssamcli^
  cmake^
+ crystaldiskmark^
  discord^
  docker-desktop^
- dotnetcore-sdk^
+ dotnet-6.0-sdk^
+ firefox^
  foobar2000^
- fraps^
+ fsviewer^
  garmin-express^
+ geekbench^
  gimp^
  git^
+ gpu-z^
+ hwinfo^
  idrive^
  inkscape^
  keepass^
  libreoffice-fresh^
+ microsoft-teams^
  nodejs^
- nvidia-display-driver^
  python2^
  python^
  ripgrep^
  ruby^
  slack^
- spotify^
  steam^
  sumatrapdf^
  synctrayzor^
- telegram^
+ thunderbird^
  treesizefree^
  vlc^
+ whatsapp^
  wsl-ubuntu-2004^
- xnview^
  zeal^
  zoom^
 
 
-rem nordvpn
+rem These require user interaction
+choco install^
+ fraps^
+
 
 RefreshEnv
 

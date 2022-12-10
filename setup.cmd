@@ -16,13 +16,11 @@ rem SETX <key> <value>
 rem SETX <key> <value>
 call .\env.cmd
 
-mkdir %ChocolateyToolsLocation%
-mkdir C:\tools
-
 rem install chocolatey
 powershell -NoProfile -ExecutionPolicy Bypass -Command "iex (new-object net.webclient).downloadstring('https://chocolatey.org/install.ps1')"
 
 %ALLUSERSPROFILE%\chocolatey\bin\choco feature enable --name=allowGlobalConfirmation
+rem I think we'll need to close the shell here for this to take effect unless 
 call RefreshEnv
 
 call remove_default_apps.cmd

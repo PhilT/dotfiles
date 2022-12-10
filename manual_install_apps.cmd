@@ -6,8 +6,7 @@ echo CrewChief
 echo Ledger Live
 echo MediaHuman YouTube MP3 Converter
 echo Netflix
-echo Razer Synapse
 echo SysGauge
 echo Unigine SDK
-
-
+echo QMK MSYS
+echo reMarkable
