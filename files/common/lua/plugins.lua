@@ -13,13 +13,13 @@ require 'paq' {
   'preservim/nerdtree';
   'junegunn/fzf';                                                               -- CTRL+P to open fuzzy file finder
   'junegunn/fzf.vim';
-  'mtth/scratch.vim';                                                           -- go/gp - Scratchpad
+  'mtth/scratch.vim';                                                           -- go/gp - Edit/Preview Project scratchpad
   'jiangmiao/auto-pairs';                                                       -- ALT-n - Next bracket pair - Auto-pair brackets.
   'tpope/vim-surround';                                                         -- `cs'<q>` - change from single quotes to xml tags
   'tpope/vim-repeat';                                                           -- Repeat plugin commands such as surround with `.`
   'tpope/vim-dispatch';                                                         -- Run commands asynchronously using Neovim's jobstart()
   'stefandtw/quickfix-reflector.vim';                                           -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
-  {'dbeniamine/todo.txt-vim', url='https://gitlab.com/dbeniamine/todo.txt-vim'};-- `<Leader>t` - Opens my todo list
+  {'dbeniamine/todo.txt-vim', url='https://gitlab.com/dbeniamine/todo.txt-vim'};-- `<Leader>t` - Opens the project TODO.md file
   'simeji/winresizer';                                                          -- `CTRL+E` - Resize windows with `hjkl`
 
   -- Version Control
