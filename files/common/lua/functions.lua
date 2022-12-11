@@ -4,4 +4,8 @@ function map(mode, lhs, rhs, opts)                                        -- Map
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+function file_exist(filename)
+  local file = io.open(filename, "r")
+  if file == nil then return false else io.close(file) return true end
+end
 

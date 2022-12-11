@@ -8,7 +8,7 @@ require 'paq' {
   'EdenEast/nightfox.nvim';                                                     -- Colorscheme
   'christoomey/vim-tmux-navigator';                                             -- Move between vim and tmux panes seamlessly
   'itchyny/lightline.vim';                                                      -- Simple statusline
-  
+
   -- General
   'preservim/nerdtree';
   'junegunn/fzf';                                                               -- CTRL+P to open fuzzy file finder
@@ -21,26 +21,27 @@ require 'paq' {
   'stefandtw/quickfix-reflector.vim';                                           -- Global search and replace: Rg to search and add reaults to quickfix then edit quickfix and save to make changes to all files
   {'dbeniamine/todo.txt-vim', url='https://gitlab.com/dbeniamine/todo.txt-vim'};-- `<Leader>t` - Opens my todo list
   'simeji/winresizer';                                                          -- `CTRL+E` - Resize windows with `hjkl`
-  
+
   -- Version Control
   'tpope/vim-fugitive';                                                         -- Git plugin - :G for enhanced status. See plugin section below for more
-  
+
   -- Writing
   'plasticboy/vim-markdown';                                                    -- Markdown syntax highlighting and commands like adding a TOC
-  
+
   -- General programming
   'editorconfig/editorconfig-vim';                                              -- Use a project's .editorconfig file for formatting
   'tpope/vim-abolish';                                                          -- Change word styles (e.g. Camelcase to underscore)
   --'SirVer/ultisnips';                                                           -- Handle snippets
   'nvim-lua/completion-nvim';                                                   -- Useful defaults to make completion work
-  
+
   -- F#
-  'PhilT/vim-fsharp';                                                           -- F# Syntax and Indent
-  
+  'adelarsq/neofsharp.vim';                                                     -- F# Syntax and Indent
+  --'PhilT/vim-fsharp';                                                           -- F# Syntax and Indent
+
   -- Vimscript
   'junegunn/vader.vim';                                                         -- Vimscript test framework
   'tpope/vim-scriptease';                                                       -- Some helpers for developing Vim plugins
-  
+
   -- Ruby
   'slim-template/vim-slim';                                                     -- Slim templates syntax highlighting
 }

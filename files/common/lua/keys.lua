@@ -57,7 +57,11 @@ map('n', 'tt', '<cmd>tabe<CR><cmd>term<CR>')                                    
 -- Quickfix
 map('n', '<CR>', '<cmd>cn<CR>')                                                 -- Next quickfix entry
 map('n', '<Leader><CR>', '<cmd>cp<CR>')                                         -- Previous quickfix entry
-map('n', '<Leader>c', '<cmd>ccl<CR>')                                           -- Close quickfix window
+map('n', '<Leader>q', '<cmd>ccl<CR>')                                           -- Close quickfix window
 
 -- NERDTree
 map('n', '<Leader>f', '<cmd>NERDTreeFind<CR>')                                  -- Find and reveal the current file in NERDTree
+
+-- F#
+map('n', '<Leader>#', '<cmd>call v:lua.create_fsharp_env()<CR>')                -- Setup windows for F# development
+

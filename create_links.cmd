@@ -24,6 +24,7 @@ echo.
 echo Create links
 mkdir %USERPROFILE%\.config\nvim
 mklink %USERPROFILE%\.config\nvim\init.lua %CODE_DIR%\dotfiles\files\common\init.lua
+mklink /d %USERPROFILE%\.config\nvim\lua %CODE_DIR%\dotfiles\files\common\lua
 mklink %USERPROFILE%\.gitconfig %CODE_DIR%\dotfiles\files\common\gitconfig
 mklink %USERPROFILE%\.gitignore %CODE_DIR%\dotfiles\files\common\gitignore
 mklink %USERPROFILE%\.ignore %CODE_DIR%\dotfiles\files\common\ignore
