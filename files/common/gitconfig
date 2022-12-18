@@ -54,3 +54,5 @@
 [mergetool]
   path = nvim
 
+[init]
+  defaultBranch = main
