@@ -5,6 +5,8 @@
 .paket
 .runtimes
 .thumbnails
+Debug
+Release
 node_modules
 obj
 output
