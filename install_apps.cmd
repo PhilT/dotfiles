@@ -8,7 +8,6 @@ choco install^
  audacity^
  awssamcli^
  cmake^
- crystaldiskmark^
  discord^
  docker-desktop^
  dotnet-6.0-sdk^
