@@ -43,14 +43,17 @@ function _G.setup_lsp_client()
 end
 
 function _G.init_build_mappings()                                               -- Setup dotnet build mappings
-  vim.cmd([[set makeprg=.\build.cmd]])
+  local separator = '/'
+  if is_windows then separator = '\\' end
+
+  vim.cmd([[set makeprg=.]]..separator..[[build.cmd]])
 
   map('n', '<Leader>m', '<cmd>Make<CR>')                                        -- dotnet build
-  map('n', '<Leader>b', [[<cmd>Dispatch bench.cmd<CR>]])                        -- runs benchmarking project
-  map('n', '<Leader>c', [[<cmd>Dispatch clean.cmd<CR>]])                        -- dotnet clean
-  map('n', '<Leader>r', [[<cmd>Dispatch run.cmd<CR>]])                          -- dotnet run
-  map('n', '<Leader>t', [[<cmd>Dispatch test.cmd<CR>]])                         -- dotnet test unit
-  map('n', '<Leader>v', [[<cmd>Dispatch visual.cmd<CR>]])                       -- dotnet test visual
+  map('n', '<Leader>b', [[<cmd>Dispatch .]]..separator..[[bench.cmd<CR>]])      -- runs benchmarking project
+  map('n', '<Leader>c', [[<cmd>Dispatch .]]..separator..[[clean.cmd<CR>]])      -- dotnet clean
+  map('n', '<Leader>r', [[<cmd>Dispatch .]]..separator..[[run.cmd<CR>]])        -- dotnet run
+  map('n', '<Leader>t', [[<cmd>Dispatch .]]..separator..[[test.cmd<CR>]])       -- dotnet test unit
+  map('n', '<Leader>v', [[<cmd>Dispatch .]]..separator..[[visual.cmd<CR>]])     -- dotnet test visual
 end
 
 
