@@ -146,18 +146,18 @@ g.completion_enable_snippet = 'UltiSnips'                                       
 
 -- LSP Client -------------------------------------------------------------------------------------------------------------------------------------------------
 
-local lspconfig = require'lspconfig'
-local fsautocomplete_path = '/home/phil/lib/fsac/fsautocomplete.dll'
-if is_windows then
-  fsautocomplete_path = 'C:/tools/fsac/fsautocomplete.dll'
-end
+--local lspconfig = require'lspconfig'
+--local fsautocomplete_path = '/home/phil/lib/fsac/fsautocomplete.dll'
+--if is_windows then
+--  fsautocomplete_path = 'C:/tools/fsac/fsautocomplete.dll'
+--end
 
 -- vim.diagnostic.config({virtual_text = false})                                   -- Turn off inline error messages
 
-lspconfig.fsautocomplete.setup{                                                 -- F# Language server
-  cmd = {'dotnet', fsautocomplete_path, '--background-service-enabled'};
-  root_dir = lspconfig.util.root_pattern('*.sln', '.git');
-}
+--lspconfig.fsautocomplete.setup{                                                 -- F# Language server
+--  cmd = {'dotnet', fsautocomplete_path, '--background-service-enabled'};
+--  root_dir = lspconfig.util.root_pattern('*.sln', '.git');
+--}
 lspconfig.tsserver.setup{}                                                      -- TypeScript/JavaScript language server
 lspconfig.solargraph.setup{}                                                    -- Ruby language server
 
@@ -208,10 +208,10 @@ map('n', '<F6>', '<cmd>setlocal spell!<CR>')                                    
 cmd([[set errorformat^=\ %#%f(%l\\\,%c):\ %m,\%.%#\ at\ %.%#\ in\ %f:line\ %l]])-- Set errorformats for dotnet build and test errors
 
 --map('n', '<F7>', '<cmd>ccl<CR>')                                                -- Close quickfix window
-map('n', '<Leader><F7>', '<cmd>call v:lua.create_website_env()<CR>')            -- Setup windows for Blog development
-map('n', '<Leader><F8>', '<cmd>call v:lua.create_fsharp_env()<CR>')             -- Setup windows for F# development
-map('n', '<Leader><F9>', '<cmd>call v:lua.create_fsharp_script_env()<CR>')      -- Setup windows for F# script development
-map('n', '<Leader><F10>', '<cmd>call v:lua.create_ruby_env()<CR>')              -- Setup windows for Ruby development
+--map('n', '<Leader><F7>', '<cmd>call v:lua.create_website_env()<CR>')            -- Setup windows for Blog development
+--map('n', '<Leader><F8>', '<cmd>call v:lua.create_fsharp_env()<CR>')             -- Setup windows for F# development
+--map('n', '<Leader><F9>', '<cmd>call v:lua.create_fsharp_script_env()<CR>')      -- Setup windows for F# script development
+--map('n', '<Leader><F10>', '<cmd>call v:lua.create_ruby_env()<CR>')              -- Setup windows for Ruby development
 
 map('n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>')                   -- diagnostic-nvim: Navigate diagnostics
 map('n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>')                   -- diagnostic-nvim: Navigate diagnostics

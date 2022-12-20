@@ -35,8 +35,7 @@ require 'paq' {
   'nvim-lua/completion-nvim';                                                   -- Useful defaults to make completion work
 
   -- F#
-  'adelarsq/neofsharp.vim';                                                     -- F# Syntax and Indent
-  --'PhilT/vim-fsharp';                                                           -- F# Syntax and Indent
+  'PhilT/vim-fsharp';                                                           -- F# Syntax and Indent
 
   -- Vimscript
   'junegunn/vader.vim';                                                         -- Vimscript test framework
