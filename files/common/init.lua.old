@@ -177,8 +177,8 @@ lspconfig.solargraph.setup{}                                                    
 --g.maplocalleader = ' '
 
 g.UltiSnipsExpandTrigger = '<C-Tab>'
-map('i', '<Tab>', '<Plug>(completion_smart_tab)', { noremap = false })          -- Potentially open completion list by pressing TAB
-map('i', '<S-Tab>', '<Plug>(completion_smart_s_tab)', { noremap = false })      -- Go to previous item in completion list if open
+--map('i', '<Tab>', '<Plug>(completion_smart_tab)', { noremap = false })          -- Potentially open completion list by pressing TAB
+--map('i', '<S-Tab>', '<Plug>(completion_smart_s_tab)', { noremap = false })      -- Go to previous item in completion list if open
 --map('n', '<Leader>-', '<cmd>nohlsearch<CR>')                                    -- SPACE+- to turn off search highlight
 --map('n', '<C-p>', '<cmd>Files<CR>')                                             -- CTRL+p to open Fuzzy finder
 --map('n', '<C-f>', '<cmd>NERDTreeToggle<CR>')                                    -- CTRL+f to open NERDTree

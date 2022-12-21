@@ -1,3 +1,7 @@
+local opts = { noremap=true, silent=true }
+local bufopts = { noremap=true, silent=true, buffer=bufnr }
+local expropts = { noremap=true, silent=true, expr=true }
+
 -- Setup
 map('n', '<C-z>', '<Nop>')                                                      -- Turn off stupid CTRL keys
 map('n', '<C-s>', '<Nop>')                                                      -- Turn off stupid CTRL keys
@@ -55,7 +59,16 @@ map('n', 'tc', '<cmd>tabc<CR>')                                                 
 map('n', 'tt', '<cmd>tabe<CR><cmd>term<CR>')                                    -- Open terminal in new tab
 
 -- Quickfix
-map('n', '<CR>', '<cmd>cn<CR>')                                                 -- Next quickfix entry
+local next_quickfix_entry = function()
+  if vim.bo.buftype == 'quickfix' then 
+    print "In quickfix"
+    return '\r' 
+  else 
+    print 'Not in quickfix'
+    return '<cmd>cn<CR>' 
+  end
+end
+vim.keymap.set('n', '<CR>', next_quickfix_entry, expropts)                      -- Next quickfix entry (except when in quickfix window)
 map('n', '<Leader><CR>', '<cmd>cp<CR>')                                         -- Previous quickfix entry
 map('n', '<Leader>q', '<cmd>ccl<CR>')                                           -- Close quickfix window
 
@@ -63,7 +76,6 @@ map('n', '<Leader>q', '<cmd>ccl<CR>')                                           
 map('n', '<Leader>f', '<cmd>NERDTreeFind<CR>')                                  -- Find and reveal the current file in NERDTree
 
 -- LSP Client
-local opts = { noremap=true, silent=true }
 vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
@@ -92,9 +104,6 @@ end
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 function on_attach(client, bufnr)
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  local expropts = { noremap=true, silent=true, expr=true }
-
   -- Enable completion triggered by <c-x><c-o> and map it to TAB
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   vim.keymap.set('i', '<tab>', tab_completion, expropts)
