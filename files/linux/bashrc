@@ -118,6 +118,7 @@ EDITOR="$VISUAL"
 
 export TXT_DIR=/mnt/d/txt
 export CODE_DIR=~/code
+export CDPATH=$CODE_DIR
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=true
 export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden --ignore-file ~/.ignore" # duplicated in env.cmd
