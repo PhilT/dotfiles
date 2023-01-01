@@ -1,7 +1,7 @@
 local is_windows = vim.fn.has('win32') == 1
 local group = vim.api.nvim_create_augroup('mygroup', { clear = true })
 local autocmd = vim.api.nvim_create_autocmd
-local todo_path = 
+local todo_path =
   file_exist('TODO.md') and 'TODO.md' or os.getenv('TXT_DIR')..'/todo.txt'      -- Set TODO file to local project if it exists otherwise main todo.txt in D:\txt
 
 function _G.term_run(command)                                                   -- Run a build command e.g. 'run', 'test', 'build'
@@ -20,7 +20,7 @@ function _G.create_fsharp_env()                                                 
                                                                                 -- Create 4 vertical panes with the last one
   vim.cmd('vsplit')                                                             -- containing a test watcher
   vim.cmd('vsplit')                                                             -- and the todo list
-  vim.cmd('term ./watch.cmd')
+  vim.cmd('term watch.cmd')
   vim.cmd('split '..todo_path)
   vim.cmd('wincmd h')
 end
@@ -28,7 +28,7 @@ end
 function _G.setup_lsp_client()
   local fsautocomplete_path = '/home/phil/src/FsAutoComplete/src/FsAutoComplete/bin/Release/net6.0/fsautocomplete.dll'
   if is_windows then
-    fsautocomplete_path = 'C:/tools/fsautocomplete/fsautocomplete.dll'
+    fsautocomplete_path = 'D:\\tools\\fsautocomplete\\tools\\net6.0\\any\\fsautocomplete.dll'
   end
 
   local lspconfig = require'lspconfig'
@@ -37,7 +37,7 @@ function _G.setup_lsp_client()
     root_dir = require('lspconfig').util.root_pattern('*.sln', '.git'),
     on_attach = on_attach,
   }
-  
+
   -- lua vim.lsp.set_log_level("debug")
   -- lua print(vim.lsp.get_log_path())
 end
