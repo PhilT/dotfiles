@@ -87,10 +87,11 @@ local tab_completion = function()
   print(string.sub(line, col, col))
 
   if vim.fn.pumvisible() == 0 then
-    if string.sub(line, col, col) == '.' then
-      return '<c-x><c-o>'
-    else
+    local char = string.sub(line, col, col)
+    if col == 0 or char == ' ' then
       return '<tab>'
+    else
+      return '<c-x><c-o>'
     end
   else
     return '<c-n>'
