@@ -60,12 +60,12 @@ map('n', 'tt', '<cmd>tabe<CR><cmd>term<CR>')                                    
 
 -- Quickfix
 local next_quickfix_entry = function()
-  if vim.bo.buftype == 'quickfix' then 
+  if vim.bo.buftype == 'quickfix' then
     print "In quickfix"
-    return '\r' 
-  else 
+    return '\r'
+  else
     print 'Not in quickfix'
-    return '<cmd>cn<CR>' 
+    return '<cmd>cn<CR>'
   end
 end
 vim.keymap.set('n', '<CR>', next_quickfix_entry, expropts)                      -- Next quickfix entry (except when in quickfix window)
@@ -116,7 +116,7 @@ function on_attach(client, bufnr)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<Leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
   vim.keymap.set('n', '<Leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
   vim.keymap.set('n', '<Leader>wl', function()

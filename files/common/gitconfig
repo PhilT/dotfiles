@@ -56,3 +56,5 @@
 
 [init]
   defaultBranch = main
+[diff]
+  wsErrorHighlight = all
