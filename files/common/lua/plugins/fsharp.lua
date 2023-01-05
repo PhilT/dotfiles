@@ -20,7 +20,11 @@ function _G.create_fsharp_env()                                                 
                                                                                 -- Create 4 vertical panes with the last one
   vim.cmd('vsplit')                                                             -- containing a test watcher
   vim.cmd('vsplit')                                                             -- and the todo list
-  vim.cmd('term watch.cmd')
+  if is_windows then
+    vim.cmd('term watch.cmd')
+  else
+    vim.cmd('term ./watch.cmd')
+  end
   vim.cmd('split '..todo_path)
   vim.cmd('wincmd h')
 end
