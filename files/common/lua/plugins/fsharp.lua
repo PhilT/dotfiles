@@ -46,18 +46,23 @@ function _G.setup_lsp_client()
   -- lua print(vim.lsp.get_log_path())
 end
 
-function _G.init_build_mappings()                                               -- Setup dotnet build mappings
+local run_command = function(command)
   local separator = '/'
   if is_windows then separator = '\\' end
+  local cmd = command..[[.cmd]]
+  if not is_windows and file_exist(command..[[.sh]]) then
+    cmd = command..[[.sh]]
+  end
+  vim.cmd([[Dispatch .]]..separator..cmd)
+end
 
-  vim.cmd([[set makeprg=.]]..separator..[[build.cmd]])
-
-  map('n', '<Leader>m', '<cmd>Make<CR>')                                        -- dotnet build
-  map('n', '<Leader>b', [[<cmd>Dispatch .]]..separator..[[bench.cmd<CR>]])      -- runs benchmarking project
-  map('n', '<Leader>c', [[<cmd>Dispatch .]]..separator..[[clean.cmd<CR>]])      -- dotnet clean
-  map('n', '<Leader>r', [[<cmd>Dispatch .]]..separator..[[run.cmd<CR>]])        -- dotnet run
-  map('n', '<Leader>t', [[<cmd>Dispatch .]]..separator..[[test.cmd<CR>]])       -- dotnet test unit
-  map('n', '<Leader>v', [[<cmd>Dispatch .]]..separator..[[visual.cmd<CR>]])     -- dotnet test visual
+function _G.init_build_mappings()                                               -- Setup dotnet build mappings
+  vim.keymap.set('n', '<Leader>m', function() run_command('build') end)         -- dotnet build
+  vim.keymap.set('n', '<Leader>b', function() run_command('bench') end)         -- runs benchmarking project
+  vim.keymap.set('n', '<Leader>c', function() run_command('clean') end)         -- dotnet clean
+  vim.keymap.set('n', '<Leader>r', function() run_command('run') end)           -- dotnet run
+  vim.keymap.set('n', '<Leader>t', function() run_command('test') end)          -- dotnet test unit
+  vim.keymap.set('n', '<Leader>v', function() run_command('visual') end)        -- dotnet test visual
 end
 
 
