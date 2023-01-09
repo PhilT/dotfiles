@@ -17,16 +17,22 @@ function _G.create_fsharp_env()                                                 
   init_build_mappings()
 
   vim.cmd([[set errorformat^=\ %#%f(%l\\\,%c):\ %m,\%.%#\ at\ %.%#\ in\ %f:line\ %l]])-- Set errorformats for dotnet build and test errors
-                                                                                -- Create 4 vertical panes with the last one
-  vim.cmd('vsplit')                                                             -- containing a test watcher
-  vim.cmd('vsplit')                                                             -- and the todo list
-  if is_windows then
-    vim.cmd('term watch.cmd')
-  else
-    vim.cmd('term ./watch.cmd')
+
+  if #vim.api.nvim_tabpage_list_wins(0) == 1 then                               -- Only create splits if there aren't any (E.g. Hasn't had a session reloaded)
+    vim.cmd('vsplit')                                                           -- Create 3 vertical panes with the last one
+    vim.cmd('vsplit')                                                           -- containing a test watcher and the todo list
+    if is_windows then
+      vim.cmd('term watch.cmd')
+    else
+      vim.cmd('term ./watch.cmd')
+    end
+    vim.cmd('split '..todo_path)
+    vim.cmd('wincmd h')
+  else                                                                          -- Reload any buffers to ensure LSP is working
+    vim.cmd('windo e')
+    vim.cmd('wincmd 1w')                                                        -- Return to the first split
   end
-  vim.cmd('split '..todo_path)
-  vim.cmd('wincmd h')
+  print('F# environment loaded')
 end
 
 function _G.setup_lsp_client()

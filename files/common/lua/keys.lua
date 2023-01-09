@@ -79,7 +79,7 @@ map('n', '<Leader>f', '<cmd>NERDTreeFind<CR>')                                  
 vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<Leader>q', vim.diagnostic.setloclist, opts)
+vim.keymap.set('n', '<Leader>g', vim.diagnostic.setloclist, opts)
 
 local tab_completion = function()
   local _, col = unpack(vim.api.nvim_win_get_cursor(0))

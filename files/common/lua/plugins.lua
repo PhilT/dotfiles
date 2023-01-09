@@ -1,8 +1,6 @@
 require 'paq' {
   -- Core
   'neovim/nvim-lspconfig';                                                      -- Language server client settings
-  'williamboman/mason.nvim';
-  'williamboman/mason-lspconfig.nvim';
 
   -- UI
   'EdenEast/nightfox.nvim';                                                     -- Colorscheme
@@ -45,4 +43,3 @@ require 'paq' {
   'slim-template/vim-slim';                                                     -- Slim templates syntax highlighting
 }
 
-require('mason').setup()
