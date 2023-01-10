@@ -10,3 +10,4 @@ require('plugins/nerdtree')
 require('plugins/ripgrep')
 require('plugins/ruby')
 require('plugins/scratch')
+
