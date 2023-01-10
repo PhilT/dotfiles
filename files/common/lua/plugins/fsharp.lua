@@ -55,11 +55,15 @@ end
 local run_command = function(command)
   local separator = '/'
   if is_windows then separator = '\\' end
-  local cmd = command..[[.cmd]]
+  local basePath = "."..separator..command
+
+  local path = vim.api.nvim_buf_get_name(0)
+  local cmd = 'dotnet fsi '..path
+  if not path:match('.fsx$') then cmd = basePath..[[.cmd]] end
   if not is_windows and file_exist(command..[[.sh]]) then
-    cmd = command..[[.sh]]
+    cmd = basePath..[[.sh]]
   end
-  vim.cmd([[Dispatch .]]..separator..cmd)
+  vim.cmd([[Dispatch ]]..cmd)
 end
 
 function _G.init_build_mappings()                                               -- Setup dotnet build mappings
