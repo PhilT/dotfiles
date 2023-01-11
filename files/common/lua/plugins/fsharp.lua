@@ -36,17 +36,7 @@ function _G.create_fsharp_env()                                                 
 end
 
 function _G.setup_lsp_client()
-  local fsautocomplete_path = '/home/phil/src/FsAutoComplete/src/FsAutoComplete/bin/Release/net6.0/fsautocomplete.dll'
-  if is_windows then
-    fsautocomplete_path = 'D:\\tools\\fsautocomplete\\tools\\net6.0\\any\\fsautocomplete.dll'
-  end
-
-  local lspconfig = require'lspconfig'
-  lspconfig['fsautocomplete'].setup{
-    cmd = {'dotnet', fsautocomplete_path, '--adaptive-lsp-server-enabled'},
-    root_dir = require('lspconfig').util.root_pattern('*.sln', '.git'),
-    on_attach = on_attach,
-  }
+  require'lspconfig'.fsautocomplete.setup{on_attach = on_attach}                -- Load F# LSP using FsAutoComplete and use on_attach key binds from keys.lua
 
   -- lua vim.lsp.set_log_level("debug")
   -- lua print(vim.lsp.get_log_path())
@@ -66,6 +56,7 @@ local run_command = function(command)
   vim.cmd([[Dispatch ]]..cmd)
 end
 
+--These might need to move into keys.lua
 function _G.init_build_mappings()                                               -- Setup dotnet build mappings
   vim.keymap.set('n', '<Leader>m', function() run_command('build') end)         -- dotnet build
   vim.keymap.set('n', '<Leader>b', function() run_command('bench') end)         -- runs benchmarking project
