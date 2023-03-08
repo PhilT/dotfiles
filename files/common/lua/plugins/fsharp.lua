@@ -48,7 +48,7 @@ local run_command = function(command)
   local basePath = "."..separator..command
 
   local path = vim.api.nvim_buf_get_name(0)
-  local cmd = 'dotnet fsi '..path
+  local cmd = 'bench '..path
   if not path:match('.fsx$') then cmd = basePath..[[.cmd]] end
   if not is_windows and file_exist(command..[[.sh]]) then
     cmd = basePath..[[.sh]]
@@ -59,7 +59,6 @@ end
 --These might need to move into keys.lua
 function _G.init_build_mappings()                                               -- Setup dotnet build mappings
   vim.keymap.set('n', '<Leader>m', function() run_command('build') end)         -- dotnet build
-  vim.keymap.set('n', '<Leader>b', function() run_command('bench') end)         -- runs benchmarking project
   vim.keymap.set('n', '<Leader>c', function() run_command('clean') end)         -- dotnet clean
   vim.keymap.set('n', '<Leader>r', function() run_command('run') end)           -- dotnet run
   vim.keymap.set('n', '<Leader>t', function() run_command('test') end)          -- dotnet test unit
