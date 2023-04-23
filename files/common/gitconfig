@@ -59,3 +59,5 @@
   defaultBranch = main
 [diff]
   wsErrorHighlight = all
+[pull]
+  rebase = true
