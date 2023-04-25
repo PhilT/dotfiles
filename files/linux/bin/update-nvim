@@ -7,4 +7,3 @@
 rm -f ~/bin/nvim.old
 test -f ~/bin/nvim && mv ~/bin/nvim ~/bin/nvim.old 
 wget -O ~/bin/nvim https://github.com/neovim/neovim/releases/download/stable/nvim.appimage && chmod u+x ~/bin/nvim
-

@@ -1,4 +1,4 @@
-#rm -f $HOME/.config/nvim/init.vim && ln -s $CODE_DIR/dotfiles/files/common/init.lua $HOME/.config/nvim/init.lua
+rm -f $HOME/.config/nvim/lua
 rm -f $HOME/.config/nvim/init.lua
 rm -f $HOME/.gitconfig
 rm -f $HOME/.gitignore
