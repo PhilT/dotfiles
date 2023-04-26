@@ -12,4 +12,8 @@ sudo apt install npm
 sudo npm install -g --save typescript-language-server
 
 ./dotnet.sh
+dotnet tool install --global fsautocomplete
+
+# Swap CAPS and CTRL keys
+setxkbmap -layout gb -option ctrl:swapcaps
 
