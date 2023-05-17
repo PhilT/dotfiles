@@ -8,7 +8,7 @@ case $- in
       *) return;;
 esac
 
-setxkbmap -layout gb -option ctrl:swapcaps # Swap CTRL and CAPSLOCK
+setxkbmap -layout gb -option ctrl:swapcaps
 
 HISTCONTROL=ignoreboth:erasedups # Ignore and remove duplicate lines
 shopt -s histappend # append to the history file, don't overwrite it
