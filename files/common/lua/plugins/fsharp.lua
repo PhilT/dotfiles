@@ -58,8 +58,8 @@ end
 
 --These might need to move into keys.lua
 function _G.init_build_mappings()                                               -- Setup dotnet build mappings
-  vim.keymap.set('n', '<Leader>m', function() run_command('build') end)         -- dotnet build
-  vim.keymap.set('n', '<Leader>c', function() run_command('clean') end)         -- dotnet clean
+  vim.keymap.set('n', '<Leader>m', function() run_command('build') end)         -- dotnet build (Make)
+  vim.keymap.set('n', '<Leader>x', function() run_command('clean') end)         -- dotnet clean (eXpunge)
   vim.keymap.set('n', '<Leader>r', function() run_command('run') end)           -- dotnet run
   vim.keymap.set('n', '<Leader>t', function() run_command('test') end)          -- dotnet test unit
   vim.keymap.set('n', '<Leader>v', function() run_command('visual') end)        -- dotnet test visual

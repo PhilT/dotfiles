@@ -1,3 +1,4 @@
+./ruby-install.sh
 ./chruby.sh
 source ./files/linux/bashrc
 ./create_links.sh
