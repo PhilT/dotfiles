@@ -3,7 +3,8 @@ require 'paq' {
   'neovim/nvim-lspconfig';                                                      -- Language server client settings
 
   -- UI
-  'EdenEast/nightfox.nvim';                                                     -- Colorscheme
+  { 'kisom/eink.vim', url='https://bitbucket.org/kisom/eink.vim' };             -- Eink Colorscheme
+  --'EdenEast/nightfox.nvim';                                                     -- Colorscheme
   'christoomey/vim-tmux-navigator';                                             -- Move between vim and tmux panes seamlessly
   'itchyny/lightline.vim';                                                      -- Simple statusline
 

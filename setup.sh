@@ -18,3 +18,8 @@ dotnet tool install --global fsautocomplete
 # Swap CAPS and CTRL keys
 setxkbmap -layout gb -option ctrl:swapcaps
 
+sudo apt install alacritty tmux
+
+# For installing an AppImage such as Neovim (may not be required once Neovim
+# starts to depend on FUSE 3)
+sudo apt install libfuse2
