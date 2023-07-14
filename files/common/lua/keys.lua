@@ -41,6 +41,7 @@ map('n', '<Leader>-', '<cmd>nohlsearch<CR>')                                    
 map('n', '<C-p>', '<cmd>Files<CR>')                                             -- CTRL+p to open Fuzzy finder
 map('n', '<C-f>', '<cmd>NERDTreeToggle<CR>')                                    -- CTRL+f to open NERDTree
 map('n', '<C-b>', '<cmd>Buffers<CR>')                                           -- CTRL+b to open buffer list - currently open files
+map('n', '<F6>', '<cmd>setlocal spell!<CR>')                                    -- Toggle spellcheck
 
 -- Session
 map('n', '<C-x>', '<cmd>wa<CR><cmd>mksession!<CR><cmd>qa<CR>')                  -- CTRL+x to save all buffers, save session and exit vim
