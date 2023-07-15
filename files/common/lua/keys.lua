@@ -44,11 +44,8 @@ map('n', '<C-b>', '<cmd>Buffers<CR>')                                           
 map('n', '<F6>', '<cmd>setlocal spell!<CR>')                                    -- Toggle spellcheck
 
 -- Theme
-local set_theme = function(theme, statusline)
-  return '<cmd>set background='..theme..'<CR><cmd>let g:lightline.colorscheme = "'..statusline..'"<CR><cmd>call lightline#enable()<CR>'
-end
-vim.keymap.set('n', '<Leader>d', function() return set_theme('dark', 'ayu_dark') end, expropts)   -- SPACE+d to set dark background
-vim.keymap.set('n', '<Leader>l', function() return set_theme('light', 'ayu_light') end, expropts) -- SPACE+l to set light background
+vim.keymap.set('n', '<Leader>d', set_theme_dark)                                -- SPACE+d to set dark background
+vim.keymap.set('n', '<Leader>l', set_theme_light)                               -- SPACE+l to set light background
 
 -- Session
 map('n', '<C-x>', '<cmd>wa<CR><cmd>mksession!<CR><cmd>qa<CR>')                  -- CTRL+x to save all buffers, save session and exit vim

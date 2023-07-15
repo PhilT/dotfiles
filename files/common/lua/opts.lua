@@ -18,7 +18,7 @@ opt.backup = false                                                              
 opt.fileformats = 'unix,dos'                                                      -- Recognise unix or dos line-endings, save new files as unix
 opt.hidden = true                                                                 -- hide buffers instead of closing
 opt.ignorecase = true                                                             -- See smartcase
-opt.incsearch = true                                                              -- Show matches as you type
+opt.incsearch = true                                                              -- Show matches as you type a search
 opt.laststatus = 2                                                                -- Always show the statusline
 opt.path = vim.o.path..'**'                                                       -- recursively search files
 opt.scrolloff = 2                                                                 -- Page up/down with 2 extra lines showing above/below cursor position
@@ -34,9 +34,8 @@ opt.wildmenu = true                                                             
 opt.writebackup = false                                                           -- Don't create backups
 
 opt.conceallevel = 2                                                              -- Make Markdown look pretty (hides some characters unless at the cursor)
-opt.cursorline = true                                                             -- Turn on highlight on cursor line (Uses color of CursorLine)
+--opt.cursorline = true                                                             -- Turn on highlight on cursor line (Uses color of CursorLine)
 opt.foldenable = false                                                            -- Turn off code folding
 opt.number = false                                                                -- Hide line numbers
 opt.signcolumn = 'yes'                                                            -- Keeps sign column visable to stop edit window shifting left and right
-
 
