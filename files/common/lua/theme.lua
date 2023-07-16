@@ -18,7 +18,7 @@ endfunction
 function set_theme(theme, statusline, todo_color, todo_weight)
   vim.opt.background = theme
   cmd.highlight({ 'Todo', 'cterm='..todo_weight, 'ctermbg=NONE', 'ctermfg='..todo_color })
-  vim.g.lightline = { 
+  vim.g.lightline = {
     colorscheme = statusline,                                                   -- Set theme for lightline.vim
     component_function = { filename = 'FilenameForLightline' }                  -- Calls function to show full path name in statusline
   }
@@ -33,4 +33,4 @@ function set_theme_light()
   set_theme('light', 'ayu_light', 240, 'bold')
 end
 
-set_theme_light()
+set_theme_dark()
