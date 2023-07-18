@@ -11,6 +11,7 @@ rm -f $HOME/bin
 mkdir -p $HOME/.config/nvim
 
 ln -s $CODE_DIR/dotfiles/files/common/lua $HOME/.config/nvim/lua
+ln -s $CODE_DIR/dotfiles/files/common/colors $HOME/.config/nvim/colors
 ln -s $CODE_DIR/dotfiles/files/common/init.lua $HOME/.config/nvim/init.lua
 ln -s $CODE_DIR/dotfiles/files/common/gitconfig $HOME/.gitconfig
 ln -s $CODE_DIR/dotfiles/files/common/gitignore $HOME/.gitignore

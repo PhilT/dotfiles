@@ -3,10 +3,9 @@ require 'paq' {
   'neovim/nvim-lspconfig';                                                      -- Language server client settings
 
   -- UI
-  { 'kisom/eink.vim', url='https://bitbucket.org/kisom/eink.vim' };             -- Eink Colorscheme
-  --'EdenEast/nightfox.nvim';                                                     -- Colorscheme
   'christoomey/vim-tmux-navigator';                                             -- Move between vim and tmux panes seamlessly
-  'itchyny/lightline.vim';                                                      -- Simple statusline
+  'nvim-lualine/lualine.nvim';                                                  -- Simple statusline
+  'ap/vim-css-color';                                                           -- Color colors
 
   -- General
   'preservim/nerdtree';
@@ -43,4 +42,3 @@ require 'paq' {
   -- Ruby
   'slim-template/vim-slim';                                                     -- Slim templates syntax highlighting
 }
-
