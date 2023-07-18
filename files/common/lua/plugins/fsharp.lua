@@ -64,3 +64,7 @@ function _G.init_build_mappings()                                               
   vim.keymap.set('n', '<Leader>t', function() run_command('test') end)          -- dotnet test unit
   vim.keymap.set('n', '<Leader>v', function() run_command('visual') end)        -- dotnet test visual
 end
+
+if file_contains('build.cmd', '^dotnet') then
+  create_fsharp_env()
+end
