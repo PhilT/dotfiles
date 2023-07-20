@@ -38,10 +38,11 @@ map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    
 map('n', '<Leader>i', '<cmd>setlocal number!<CR>')                              -- Toggle line numbers
 map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    -- Toggle paste formatting
 map('n', '<Leader>-', '<cmd>nohlsearch<CR>')                                    -- SPACE+- to turn off search highlight
-map('n', '<C-p>', '<cmd>Files<CR>')                                             -- CTRL+p to open Fuzzy finder
-map('n', '<C-f>', '<cmd>NERDTreeToggle<CR>')                                    -- CTRL+f to open NERDTree
-map('n', '<C-b>', '<cmd>Buffers<CR>')                                           -- CTRL+b to open buffer list - currently open files
 map('n', '<F6>', '<cmd>setlocal spell!<CR>')                                    -- Toggle spellcheck
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<C-p>', builtin.find_files, {})                            -- CTRL+p to open fuzzy file finder
+vim.keymap.set('n', '<C-b>', builtin.buffers, {})                               -- CTRL+b to open fuzzy buffer finder
+vim.keymap.set('n', '<C-g>', builtin.live_grep, {})                             -- CTRL+g to open folder-wide live grep using Ripgrep
 
 -- Theme
 vim.keymap.set('n', '<Leader>d', set_theme_dark)                                -- SPACE+d to set dark background
@@ -77,8 +78,9 @@ vim.keymap.set('n', '<CR>', next_quickfix_entry, expropts)                      
 map('n', '<Leader><CR>', '<cmd>cp<CR>')                                         -- Previous quickfix entry
 map('n', '<Leader>q', '<cmd>ccl<CR>')                                           -- Close quickfix window
 
--- NERDTree
-map('n', '<Leader>f', '<cmd>NERDTreeFind<CR>')                                  -- Find and reveal the current file in NERDTree
+-- NvimTree
+map('n', '<C-f>', '<cmd>NvimTreeToggle<CR>')                                    -- CTRL+f to open NERDTree
+map('n', '<Leader>f', '<cmd>NvimTreeFindFile<CR>')                              -- Find and reveal the current file in NERDTree
 
 -- LSP Client
 vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, opts)

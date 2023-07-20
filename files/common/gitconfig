@@ -1,5 +1,5 @@
 [apply]
-  whitespace = nowarn
+    whitespace = nowarn
 [user]
   name = Phil Thompson
   email = phil@electricvisions.com

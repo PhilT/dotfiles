@@ -26,6 +26,7 @@ function _G.create_fsharp_env()                                                 
     else
       vim.cmd('term ./watch.cmd')
     end
+    vim.cmd('wincmd G')
     vim.cmd('split '..todo_path)
     vim.cmd('wincmd h')
   else                                                                          -- Reload any buffers to ensure LSP is working
@@ -63,8 +64,11 @@ function _G.init_build_mappings()                                               
   vim.keymap.set('n', '<Leader>r', function() run_command('run') end)           -- dotnet run
   vim.keymap.set('n', '<Leader>t', function() run_command('test') end)          -- dotnet test unit
   vim.keymap.set('n', '<Leader>v', function() run_command('visual') end)        -- dotnet test visual
+
+  vim.api.nvim_create_autocmd('BufWritePost', { pattern = '*.fs,*.fsx',         -- Run tests on save
+    callback = function() run_command('test') end })
 end
 
-if file_contains('build.cmd', '^dotnet') then
-  create_fsharp_env()
+if file_contains('build.cmd', '^dotnet') then                                   -- If a file exists called build.cmd and at least one line starts with dotnet
+  create_fsharp_env()                                                           --   then startup the F# environment
 end
