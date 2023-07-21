@@ -40,13 +40,14 @@ map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    
 map('n', '<Leader>-', '<cmd>nohlsearch<CR>')                                    -- SPACE+- to turn off search highlight
 map('n', '<F6>', '<cmd>setlocal spell!<CR>')                                    -- Toggle spellcheck
 local builtin = require('telescope.builtin')
-vim.keymap.set(                                                                 -- CTRL+p to open fuzzy file finder
-  'n', '<C-p>', function()
+vim.keymap.set('n', '<C-p>', function()                                         -- CTRL+p to open fuzzy file finder
     builtin.find_files({layout_config=calc_telescope_layout()})
-  end
-)
+  end)
 vim.keymap.set('n', '<C-b>', builtin.buffers, {})                               -- CTRL+b to open fuzzy buffer finder
 vim.keymap.set('n', '<C-g>', builtin.live_grep, {})                             -- CTRL+g to open folder-wide live grep using Ripgrep
+vim.keymap.set('n', ':', function()                                     -- SPACE+; to open commandline (: equivilent)
+  require('telescope').extensions.cmdline.cmdline({})
+end)
 
 -- Theme
 vim.keymap.set('n', '<Leader>d', set_theme_dark)                                -- SPACE+d to set dark background

@@ -9,9 +9,13 @@ require 'paq' {
   'ap/vim-css-color';                                                           -- Color colors
 
   -- General
+  'MunifTanjim/nui.nvim';
+  --'folke/noice.nvim';
   'nvim-tree/nvim-tree.lua';                                                    -- CTRL+F to open File explorer
   {'nvim-telescope/telescope.nvim', branch = '0.1.x' };                         -- CTRL+P to open fuzzy file finder
+  'jonarrien/telescope-cmdline.nvim';                                           -- Replacement for :commands so I don't need to turn my head 90deg to see the prompt
   'nvim-telescope/telescope-fzy-native.nvim';
+  --'VonHeikemen/fine-cmdline.nvim';
 
   'mtth/scratch.vim';                                                           -- go/gp - Edit/Preview Project scratchpad
   'jiangmiao/auto-pairs';                                                       -- ALT-n - Next bracket pair - Auto-pair brackets.

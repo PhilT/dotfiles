@@ -1,0 +1,13 @@
+--require('noice').setup({
+--  cmdline = {
+--    view = 'split',
+--  },
+--  views = {
+--    split = {
+--      relative = 'win'
+--    },
+--    cmdline_popup = {
+--      relative = 'win',
+--    },
+--  }
+--})
