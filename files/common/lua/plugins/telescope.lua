@@ -1,4 +1,3 @@
-require("telescope").load_extension('cmdline')
 require('telescope').setup({
   defaults = {
     layout_strategy = 'horizontal',
@@ -16,13 +15,6 @@ require('telescope').setup({
       preview_width = 0.498
     }
   },
-  pickers = {
-    cmdline = {
-      layout_config = {
-        width = 0.9
-      }
-    }
-  }
 })
 
 function calc_telescope_layout()

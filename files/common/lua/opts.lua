@@ -2,7 +2,7 @@ local opt = vim.opt
 local indent = 2
 
 opt.switchbuf = 'useopen,uselast'                                               -- `:sbuf filepattern` switch to buffer and use available window if visible
-opt.cmdheight = 1                                                               -- Doesn't halt nvim for 2 line messages
+opt.cmdheight = 2                                                               -- Doesn't halt nvim for 2 line messages
 opt.completeopt = 'menuone,noinsert,noselect'                                   -- popup on 1 item, don't auto-insert selection, don't auto-select a match
 
 opt.expandtab = true                                                            -- Use spaces instead of tabs
