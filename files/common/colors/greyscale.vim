@@ -56,7 +56,7 @@ hi fugitiveUntrackedHeading gui=bold
 hi fugitiveUnstagedHeading gui=bold
 hi fugitiveStagedHeading gui=bold
 
-hi Directory guifg=#777777 guibg=NONE guisp=NONE gui=bold ctermfg=60 ctermbg=NONE cterm=bold
+hi Directory guifg=#666666 guibg=NONE guisp=NONE gui=bold ctermfg=60 ctermbg=NONE cterm=bold
 hi Error guifg=#ee4444 guibg=NONE guisp=NONE gui=NONE ctermfg=243 ctermbg=88 cterm=NONE
 hi ErrorMsg guifg=#eeaaaa guibg=NONE guisp=NONE gui=NONE ctermfg=243 ctermbg=3 cterm=NONE
 hi Exception guifg=#aaaaaa guibg=NONE guisp=NONE gui=NONE ctermfg=245 ctermbg=NONE cterm=NONE
