@@ -1,4 +1,5 @@
 window:
   startup_mode: Fullscreen
 font:
-  size: 9.0
+  size: 10.0
+  family: Roboto Mono
