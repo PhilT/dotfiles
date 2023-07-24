@@ -70,5 +70,9 @@ function _G.init_build_mappings()                                               
 end
 
 if file_contains('build.cmd', '^dotnet') then                                   -- If a file exists called build.cmd and at least one line starts with dotnet
-  create_fsharp_env()                                                           --   then startup the F# environment
+  setup_lsp_client()                                                            --   then startup the F# environment
+  init_build_mappings()
+
+  --FIXME: This doesn't appear to be working
+  vim.cmd([[set errorformat^=\ %#%f(%l\\\,%c):\ %m,\%.%#\ at\ %.%#\ in\ %f:line\ %l]])-- Set errorformats for dotnet build and test errors
 end

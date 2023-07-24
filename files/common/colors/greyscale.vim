@@ -111,7 +111,7 @@ hi Type guifg=#aaaaaa guibg=NONE guisp=NONE gui=NONE ctermfg=252 ctermbg=NONE ct
 hi Typedef guifg=#aaaaaa guibg=NONE guisp=NONE gui=NONE ctermfg=60 ctermbg=NONE cterm=NONE
 hi Underlined guifg=#c7c7cc guibg=#192224 guisp=#192224 gui=underline ctermfg=252 ctermbg=235 cterm=underline
 hi VertSplit guifg=#555555 guibg=#1c1c1c guisp=#1c1c1c gui=bold ctermfg=NONE ctermbg=66 cterm=bold
-hi Visual guifg=#000000 guibg=#F9F9FF guisp=#F9F9FF gui=NONE ctermfg=NONE ctermbg=189 cterm=NONE
+hi Visual guifg=#000000 guibg=#777777 guisp=#777777 gui=NONE ctermfg=NONE ctermbg=189 cterm=NONE
 hi VisualNOS guifg=#000000 guibg=#F9F9F9 guisp=#F9F9F9 gui=underline ctermfg=NONE ctermbg=189 cterm=underline
 hi WarningMsg guifg=#eeeeee guibg=#b7b7b7 guisp=#b7b7b7 gui=NONE ctermfg=243 ctermbg=88 cterm=NONE
 hi WildMenu guifg=NONE guibg=#A1A1A1 guisp=#A1A1A1 gui=NONE ctermfg=NONE ctermbg=248 cterm=NONE
