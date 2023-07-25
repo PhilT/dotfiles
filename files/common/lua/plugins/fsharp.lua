@@ -75,4 +75,6 @@ if file_contains('build.cmd', '^dotnet') then                                   
 
   --FIXME: This doesn't appear to be working
   vim.cmd([[set errorformat^=\ %#%f(%l\\\,%c):\ %m,\%.%#\ at\ %.%#\ in\ %f:line\ %l]])-- Set errorformats for dotnet build and test errors
+
+  print('F# environment loaded')
 end
