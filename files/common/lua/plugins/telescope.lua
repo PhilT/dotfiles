@@ -4,8 +4,8 @@ require('telescope').setup({
     sorting_strategy = 'ascending',
     mappings = {
       i = {
-        ['<C-j>'] = require('telescope.actions').move_selection_next,
-        ['<C-k>'] = require('telescope.actions').move_selection_previous
+        ['<C-j>'] = require('telescope.actions').move_selection_next,           -- CTRL+j FZF bindings
+        ['<C-k>'] = require('telescope.actions').move_selection_previous        -- CTRL+k FZF bindings
       }
     },
     layout_config = {

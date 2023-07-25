@@ -31,24 +31,27 @@ map('n', '<C-l>', '<C-w>l')                                                     
 map('n', '<C-c>', '<C-w>c')                                                     -- 'CTRL+c' to close window
 
 -- Neovim
-local init_lua_path = os.getenv('CODE_DIR')..'/dotfiles/files/common/init.lua'
-map('n', '<Leader>a', '<cmd>source '..init_lua_path..'<CR>')                    -- Reload config (NOT WORKING YET)
+vim.keymap.set('n', '<Leader>a', ReloadConfig, {desc = 'Reload Neovim config'}) -- Reload config (NOT WORKING YET)
 
 -- Toggles
 map('n', '<Leader>i', '<cmd>setlocal number!<CR>')                              -- Toggle line numbers
 map('n', '<Leader>o', '<cmd>set paste!<CR>')                                    -- Toggle paste formatting
 map('n', '<Leader>-', '<cmd>nohlsearch<CR>')                                    -- SPACE+- to turn off search highlight
 map('n', '<F6>', '<cmd>setlocal spell!<CR>')                                    -- Toggle spellcheck
+
+-- Telescope
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<C-p>', function()                                         -- CTRL+p to open fuzzy file finder
     builtin.find_files({layout_config=calc_telescope_layout()})
   end)
-vim.keymap.set('n', '<C-b>', builtin.buffers, {})                               -- CTRL+b to open fuzzy buffer finder
-vim.keymap.set('n', '<C-g>', builtin.live_grep, {})                             -- CTRL+g to open folder-wide live grep using Ripgrep
+vim.keymap.set('n', '<C-b>', builtin.buffers, {desc='Open fuzzy buffer finder'})-- CTRL+b to open fuzzy buffer finder
+vim.keymap.set('n', '<C-g>', builtin.live_grep, {desc = 'Open live grep'})    -- CTRL+g to open folder-wide live grep using Ripgrep
+vim.keymap.set('n', '<Leader>t', '<cmd>Telescope<CR>')
+vim.keymap.set('n', '<Leader>k', builtin.keymaps, {desc = 'Open keymaps'})
 
 -- Theme
-vim.keymap.set('n', '<Leader>d', set_theme_dark)                                -- SPACE+d to set dark background
-vim.keymap.set('n', '<Leader>l', set_theme_light)                               -- SPACE+l to set light background
+vim.keymap.set('n', '<Leader>d', set_theme_dark, {desc = 'Dark theme'})         -- SPACE+d to set dark background
+vim.keymap.set('n', '<Leader>l', set_theme_light, {desc = 'Light theme'})       -- SPACE+l to set light background
 
 -- Session
 map('n', '<C-x>', '<cmd>wa<CR><cmd>mksession!<CR><cmd>qa<CR>')                  -- CTRL+x to save all buffers, save session and exit vim
@@ -85,10 +88,10 @@ map('n', '<C-f>', '<cmd>NvimTreeToggle<CR>')                                    
 map('n', '<Leader>f', '<cmd>NvimTreeFindFile<CR>')                              -- Find and reveal the current file in NERDTree
 
 -- LSP Client
-vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<Leader>g', vim.diagnostic.setloclist, opts)
+vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, {desc = 'Open error popup'})
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {desc = 'Previous error'}) 
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, {desc = 'Next error'})
+vim.keymap.set('n', '<Leader>g', vim.diagnostic.setqflist, {desc = 'Show errors for project'})
 
 local tab_completion = function()
   local _, col = unpack(vim.api.nvim_win_get_cursor(0))

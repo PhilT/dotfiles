@@ -2,6 +2,15 @@ vim.g.loaded_netrw = 1                                                          
 vim.g.loaded_netrwPlugin = 1
 vim.keymap.set('n', '<Leader>;', ':', { noremap = true })                       -- SPACE+; to get original cmdline mode, incase anything goes wrong with plugins
 
+function ReloadConfig()
+  for name,_ in pairs(package.loaded) do
+    package.loaded[name] = nil
+  end
+
+  dofile(vim.env.MYVIMRC)
+  vim.notify("Nvim configuration reloaded!", vim.log.levels.INFO)
+end
+
 require('functions')
 require('vars')
 require('opts')
@@ -18,4 +27,3 @@ require('plugins/ruby')
 require('plugins/scratch')
 require('plugins/telescope')
 require('plugins/fsharp')
-

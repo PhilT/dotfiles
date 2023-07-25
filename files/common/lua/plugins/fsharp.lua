@@ -16,8 +16,6 @@ function _G.create_fsharp_env()                                                 
   setup_lsp_client()
   init_build_mappings()
 
-  vim.cmd([[set errorformat^=\ %#%f(%l\\\,%c):\ %m,\%.%#\ at\ %.%#\ in\ %f:line\ %l]])-- Set errorformats for dotnet build and test errors
-
   if #vim.api.nvim_tabpage_list_wins(0) == 1 then                               -- Only create splits if there aren't any (E.g. Hasn't had a session reloaded)
     vim.cmd('vsplit')                                                           -- Create 3 vertical panes with the last one
     vim.cmd('vsplit')                                                           -- containing a test watcher and the todo list
@@ -63,18 +61,13 @@ function _G.init_build_mappings()                                               
   vim.keymap.set('n', '<Leader>x', function() run_command('clean') end)         -- dotnet clean (eXpunge)
   vim.keymap.set('n', '<Leader>r', function() run_command('run') end)           -- dotnet run
   vim.keymap.set('n', '<Leader>t', function() run_command('test') end)          -- dotnet test unit
+  vim.keymap.set('n', '<Leader>T', function() run_command('test') end)          -- dotnet test unit
   vim.keymap.set('n', '<Leader>v', function() run_command('visual') end)        -- dotnet test visual
-
-  --vim.api.nvim_create_autocmd('BufWritePost', { pattern = '*.fs,*.fsx',         -- Run tests on save
-  --  callback = function() run_command('test') end })
 end
 
 if file_contains('build.cmd', '^dotnet') then                                   -- If a file exists called build.cmd and at least one line starts with dotnet
   setup_lsp_client()                                                            --   then startup the F# environment
   init_build_mappings()
-
-  --FIXME: This doesn't appear to be working
-  vim.cmd([[set errorformat^=\ %#%f(%l\\\,%c):\ %m,\%.%#\ at\ %.%#\ in\ %f:line\ %l]])-- Set errorformats for dotnet build and test errors
 
   print('F# environment loaded')
 end
