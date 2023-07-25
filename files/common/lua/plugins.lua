@@ -40,6 +40,9 @@ require 'paq' {
   -- F#
   'PhilT/vim-fsharp';                                                           -- F# Syntax and Indent
 
+  -- Purescript
+  'purescript-contrib/purescript-vim'; 
+
   -- Vimscript
   'junegunn/vader.vim';                                                         -- Vimscript test framework
   'tpope/vim-scriptease';                                                       -- Some helpers for developing Vim plugins
