@@ -63,11 +63,11 @@ map('n', 'gp', '<cmd>ScratchPreview<CR>')                                       
 -- Windows
 map('n', 'zz', '<c-w>_ \\| <c-w>\\|')                                           -- Zoom in and maximize current window
 map('n', 'zo', '<c-w>=')                                                        -- Zoom out and equalize windows
+map('n', 'tt', '<cmd>sp<CR><cmd>term<CR>')                                      -- Open terminal in new tab
 
 -- Tabs
 map('n', 'ta', '<cmd>tabe<CR>')                                                 -- Add tab pane
 map('n', 'tc', '<cmd>tabc<CR>')                                                 -- Clear (remove) tab pane
-map('n', 'tt', '<cmd>tabe<CR><cmd>term<CR>')                                    -- Open terminal in new tab
 
 -- Quickfix
 local next_quickfix_entry = function()
@@ -89,7 +89,7 @@ map('n', '<Leader>f', '<cmd>NvimTreeFindFile<CR>')                              
 
 -- LSP Client
 vim.keymap.set('n', '<Leader>e', vim.diagnostic.open_float, {desc = 'Open error popup'})
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {desc = 'Previous error'}) 
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {desc = 'Previous error'})
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, {desc = 'Next error'})
 vim.keymap.set('n', '<Leader>g', vim.diagnostic.setqflist, {desc = 'Show errors for project'})
 
