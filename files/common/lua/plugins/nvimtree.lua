@@ -5,6 +5,7 @@ require("nvim-tree").setup {
       open_win_config = {
         relative = 'win',
         width = 60,
+        height = 60,
         col = 10
       }
     }

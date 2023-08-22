@@ -15,6 +15,7 @@ require 'paq' {
 
   'mtth/scratch.vim';                                                           -- go/gp - Edit/Preview Project scratchpad
   'jiangmiao/auto-pairs';                                                       -- ALT-n - Next bracket pair - Auto-pair brackets.
+  'jeetsukumaran/vim-indentwise';                                                -- [-, ]+, Previous level, Next level ([ previous, ] next, - less indent, + more indent)
   'tpope/vim-surround';                                                         -- `cs'<q>` - change from single quotes to xml tags
   'tpope/vim-repeat';                                                           -- Repeat plugin commands such as surround with `.`
   'tpope/vim-dispatch';                                                         -- Run commands asynchronously using Neovim's jobstart()

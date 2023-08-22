@@ -8,7 +8,7 @@ case $- in
       *) return;;
 esac
 
-setxkbmap -layout gb -option ctrl:swapcaps
+setxkbmap -layout gb -option ctrl:swapcaps &>/dev/null
 
 HISTCONTROL=ignoreboth:erasedups # Ignore and remove duplicate lines
 shopt -s histappend # append to the history file, don't overwrite it
@@ -152,7 +152,3 @@ export NVM_DIR="$HOME/.nvm"
 
 # Vulkan SDK
 [ -d "~/vulkan_sdk" ] && source ~/vulkan_sdk/1.3.236.0/setup-env.sh
-
-# fnm
-export PATH="/home/phil/.local/share/fnm:$PATH"
-eval "`fnm env`"
